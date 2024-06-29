@@ -7,7 +7,7 @@
  */
 
 window.GW = window.GW || {};
-window.GW.Components = window.GW.Components || {};
+window.GW.Controls = window.GW.Controls || {};
 (function Shortcuts(ns) {
 
     /** This creates the popover region for reporting shortcuts */
@@ -155,4 +155,4 @@ window.GW.Components = window.GW.Components || {};
         };
     };
     customElements.define("gw-shortcuts", ns.ShortcutsEl);
-}) (window.GW.Components.Shortcuts = window.GW.Components.Shortcuts || {});
+}) (window.GW.Controls.Shortcuts = window.GW.Controls.Shortcuts || {});
