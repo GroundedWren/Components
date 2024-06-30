@@ -146,6 +146,10 @@ window.GW.Controls = window.GW.Controls || {};
                 event.stopPropagation();
                 event.preventDefault();
             }
+            else if(this.currentLevel && event.key !== "Alt" && event.key !== "Shift" && event.key !== "Control") {
+                event.stopPropagation();
+                event.preventDefault();
+            }
         };
 
         onKeyUp = (event) => {
