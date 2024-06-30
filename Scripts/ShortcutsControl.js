@@ -19,9 +19,15 @@ window.GW.Controls = window.GW.Controls || {};
 		ns.AsiShortcutsLive = document.getElementById("gw-shortcuts-live");
 	});
 
-	/** Called as an event handler, this reports the shortcuts available to the current target element as a popover. */
+	/** Called as an event handler, this reports the shortcuts available to the current target element */
 	ns.reportShortcuts = (event) => {
-		let curEl = event.target;
+		if(event.target) {
+			ns.reportShortcutsForEl(event.target);
+		}
+	};
+	/** Reports the shortcuts available to the passed element */
+	ns.reportShortcutsForEl = function reportShortcutsForEl(element) {
+		let curEl = element;
 		let shortsIndex = {};
 		while(curEl) {
 			if(curEl.tagName === "GW-SHORTCUTS") {
@@ -42,7 +48,7 @@ window.GW.Controls = window.GW.Controls || {};
 		ns.AsiShortcutsLive.innerHTML = "";
 		ns.AsiShortcutsLive.appendChild(popover);
 		popover.showPopover();
-	};
+	}
 
 	/**
 	 * A custom element which enables shortcuts on all of its children
