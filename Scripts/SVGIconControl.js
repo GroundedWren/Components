@@ -307,8 +307,7 @@ window.GW.Controls = window.GW.Controls || {};
 			document.head.insertAdjacentHTML("beforeend",`
 			<style>
 				.${ICON_CLASS} {
-					fill: black; /*Default color*/
-					fill: var(--icon-color);
+					fill: var(--icon-color, black);
 					width: 16px;
 					height: 16px;
 				}
@@ -376,8 +375,7 @@ window.GW = window.GW || {};
 					}
 					a:has(gw-icon) {
 						display: inline-flex;
-						background-color: #BDE0F2; /*Default color*/
-						background-color: var(--link-background-color);
+						background-color: var(--link-background-color, #BDE0F2);
 						padding: 2px;
 						border-radius: 20px;
 
@@ -386,8 +384,7 @@ window.GW = window.GW || {};
 						}
 
 						path {
-							fill: #0000EE; /*Default color*/
-							fill: var(--link-color);
+							fill: var(--link-color, #0000EE);
 						}
 					}
 				</style>

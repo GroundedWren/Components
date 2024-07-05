@@ -235,8 +235,7 @@ window.GW.Controls = window.GW.Controls || {};
 					max-height: auto; /* Change these to some value if you want the images to be of consistent height */
 					min-height: auto;
 
-					border-color: black; /* default value */
-					border: 3px solid var(--border-color); /* You may replace var(--border-color) with whatever color your want */
+					border: 3px solid var(--border-color, black); /* You may replace var(--border-color) with whatever color your want */
 				}
 
 				#imagePageNum {

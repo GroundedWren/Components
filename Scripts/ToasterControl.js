@@ -35,12 +35,18 @@ window.GW.Controls = window.GW.Controls || {};
 					flex-direction: column-reverse;
 					gap: 5px;
 
-					> article {
-						border: 4px solid black;
-						border-color: var(--border-color);
+					> em {
+						background-color: var(--background-color, white);
 
-						background-color: white;
-						background-color: var(--background-color);
+						color: var(--text-color, black);
+
+						padding: 5px;
+					}
+
+					> article {
+						border: 4px solid var(--border-color, black);
+						background-color: var(--background-color, white);
+						color: var(--text-color, black);
 
 						padding: 5px;
 						width: 300px;
