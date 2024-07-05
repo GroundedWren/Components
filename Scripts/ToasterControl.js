@@ -57,6 +57,10 @@ window.GW.Controls = window.GW.Controls || {};
 							float: right;
 						}
 
+						> .gw-toast-content {
+							clear: right;
+						}
+
 						.preamble {
 							position: absolute;
 							left: -99999999px;
@@ -92,12 +96,20 @@ window.GW.Controls = window.GW.Controls || {};
 		const toaster = document.getElementById(ns.TOASTER_ASIDE_ID);
 
 		toaster.insertAdjacentHTML("afterbegin", `<article id="${toastId}">
-			${opts.omitPreamble ? "" : `<span id="${toastId}-preamble" class="preamble">${opts.persist ? "Popup" : "Toast"} message: </span>`}
+			${opts.omitPreamble
+				? "" 
+				: `<span id="${toastId}-preamble" class="preamble">${opts.persist ? "Popup" : "Toast"} message: </span>`
+			}
 			${opts.persist
-				? `<button id="${toastId}-dismiss" aria-labelledby="${toastId}-dismiss ${toastId}-preamble" class="gw-toast-dismiss" aria-live="off" onclick="GW.Controls.Toaster.onDismiss('${toastId}')">Dismiss</button>`
+				? `<button id="${toastId}-dismiss"
+						aria-labelledby="${toastId}-dismiss ${toastId}-preamble"
+						class="gw-toast-dismiss"
+						aria-live="off"
+						onclick="GW.Controls.Toaster.onDismiss('${toastId}')"
+					>Dismiss</button>`
 				: ""
 			}
-			${content}
+			<div class="gw-toast-content">${content}</div>
 		</article>`);
 
 		if(!opts.persist) {
