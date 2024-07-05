@@ -15,7 +15,7 @@ window.GW.Controls = window.GW.Controls || {};
 
 	/** This creates the toast container */
 	window.addEventListener("load", function shortcutsControlOnLoad() {
-		const toasterLabelId = ns.TOASTER_ASIDE_ID + "-Label"
+		const toasterLabelId = ns.TOASTER_ASIDE_ID + "-Label";
 
 		document.head.insertAdjacentHTML("beforeend",`
 			<style>
@@ -95,9 +95,9 @@ window.GW.Controls = window.GW.Controls || {};
 		</article>`);
 
 		if(!opts.persist) {
-			setTimeout(ns.hideToast, opts.timeout || ns.TOAST_TIMEOUT_MS, toastId)
+			setTimeout(ns.hideToast, opts.timeout || ns.TOAST_TIMEOUT_MS, toastId);
 		}
-	}
+	};
 
 	/**
 	 * Removes a toast via button click
@@ -117,7 +117,7 @@ window.GW.Controls = window.GW.Controls || {};
 				}
 			}, 0);
 		});
-	}
+	};
 
 	/**
 	 * Removes a toast message
