@@ -81,9 +81,9 @@ gw-comment-form, gw-comment-list {
 	form {
 		border: 1px solid;
 		padding: 5px;
-		border-color: var(--general-border-color, black);
+		border-color: var(--border-color, black);
 		width: fit-content;
-		background-color: var(--content-color, white);
+		background-color: var(--background-color, white);
 
 		> h1, > h2, > h3, > h4, > h5, > h6 {
 			margin: 0;
@@ -117,7 +117,7 @@ gw-comment-card {
 	.comment-article {
 		border-left: 2px solid var(--border-color, black);
 		padding: 4px;
-		background-color: var(--content-color, white);
+		background-color: var(--background-color, white);
 		display: flex;
 		flex-direction: column;
 
