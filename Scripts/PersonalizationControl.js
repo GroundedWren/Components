@@ -1,9 +1,7 @@
 /**
- * Author: Vera Konigin
- * Site: https://groundedwren.neocities.org
- * Contact: vera@groundedwren.com
- * 
- * File Description: Scripts for user site personalization
+ * @file Scripts for user site personalization.
+ * @author Vera Konigin vera@groundedwren.com
+ * https://groundedwren.neocities.org
  */
 
 window.GW = window.GW || {};

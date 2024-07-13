@@ -1,11 +1,8 @@
 /**
- * Author: Vera Konigin
- * Site: https://groundedwren.neocities.org
- * Contact: vera@groundedwren.com
- * 
- * File Description: This is a script for an image gallery control!
+ * @file This is a script for an image gallery control
+ * @author Vera Konigin vera@groundedwren.com
+ * https://groundedwren.neocities.org
  */
-
 
 window.GW = window.GW || {};
 window.GW.Controls = window.GW.Controls || {};

@@ -1,10 +1,7 @@
 /**
- * Author: Vera Konigin
- * Site: https://groundedwren.neocities.org
- * Contact: vera@groundedwren.com
- * 
- * File Description: Gizmo for reading from Google Sheets.
- *  Neocities editor users will see a lot of linter errors in this file, but none of them are real errors. The linter just doesn't understand some modern JS.
+ * @file Gizmo for reading from Google Sheets.
+ * @author Vera Konigin vera@groundedwren.com
+ * https://groundedwren.neocities.org
  */
 
 window.GW = window.GW || {};

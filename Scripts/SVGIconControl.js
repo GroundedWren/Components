@@ -1,9 +1,7 @@
 /**
- * Author: Vera Konigin
- * Site: https://groundedwren.neocities.org
- * Contact: vera@groundedwren.com
- * 
- * File Description: A web component to site SVG icons easily
+ * @file A web component to site SVG icons easily
+ * @author Vera Konigin vera@groundedwren.com
+ * https://groundedwren.neocities.org
  */
  
 window.GW = window.GW || {};

@@ -1,9 +1,7 @@
 /**
- * Author: Vera Konigin
- * Site: https://groundedwren.neocities.org
- * Contact: vera@groundedwren.com
- * 
- * File description: A control to show toast messages
+ * @file A control to show toast messages
+ * @author Vera Konigin vera@groundedwren.com
+ * https://groundedwren.neocities.org
  */
 
 window.GW = window.GW || {};

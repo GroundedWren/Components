@@ -1,9 +1,7 @@
 /**
- * Author: Vera Konigin
- * Site: https://groundedwren.neocities.org
- * Contact: vera@groundedwren.com
- * 
- * File Description: Scripts for the submenu control
+ * @file Scripts for the submenu control
+ * @author Vera Konigin vera@groundedwren.com
+ * https://groundedwren.neocities.org
  */
 
 window.GW = window.GW || {};

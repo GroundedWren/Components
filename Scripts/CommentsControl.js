@@ -1,9 +1,7 @@
 /**
- * Author: Vera Konigin
- * Site: https://groundedwren.neocities.org
- * Contact: vera@groundedwren.com
- * 
- * File Description: Comments Control
+ * @file Comments control.
+ * @author Vera Konigin vera@groundedwren.com
+ * https://groundedwren.neocities.org
  */
 
 window.GW = window.GW || {};

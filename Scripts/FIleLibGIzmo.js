@@ -1,6 +1,7 @@
 /**
- * A library to simplify loading and saving files
+ * @file A library to simplify loading and saving files.
  * @author Vera Konigin vera@groundedwren.com
+ * https://groundedwren.neocities.org
  */
 
 window.GW = window.GW || {};
