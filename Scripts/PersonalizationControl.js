@@ -1,5 +1,5 @@
 /**
- * @file Scripts for user site personalization.
+ * @file Scripts for user site personalization
  * @author Vera Konigin vera@groundedwren.com
  * https://groundedwren.neocities.org
  */

@@ -362,7 +362,7 @@ window.GW = window.GW || {};
 			this.instanceId = IconEl.instanceCount++;
 			IconEl.instanceMap[this.instanceId] = this;
 
-			if(this.instanceId === 1) {
+			if(this.instanceId === 0) {
 				document.head.insertAdjacentHTML("beforeend",`
 				<style>
 					gw-icon {

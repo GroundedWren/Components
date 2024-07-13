@@ -1,5 +1,5 @@
 /**
- * @file Gizmo for reading from Google Sheets.
+ * @file Gizmo for reading from Google Sheets
  * @author Vera Konigin vera@groundedwren.com
  * https://groundedwren.neocities.org
  */

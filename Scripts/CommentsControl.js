@@ -1,5 +1,5 @@
 /**
- * @file Comments control.
+ * @file Comments control
  * @author Vera Konigin vera@groundedwren.com
  * https://groundedwren.neocities.org
  */

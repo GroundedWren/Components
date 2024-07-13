@@ -26,7 +26,7 @@ window.GW = window.GW || {};
 			super();
 			this.instanceId = SubmenuEl.instanceCount++;
 
-			if(this.instanceId === 1) {
+			if(this.instanceId === 0) {
 				document.head.insertAdjacentHTML("beforeend",`
 				<style>
 					.gw-submenu-hidden {

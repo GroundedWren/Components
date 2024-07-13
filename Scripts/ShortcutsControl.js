@@ -1,5 +1,5 @@
 /**
- * @file A component to register and manage shortcuts.
+ * @file A component to register and manage shortcuts
  * @author Vera Konigin vera@groundedwren.com
  * https://groundedwren.neocities.org
  */
@@ -75,7 +75,7 @@ window.GW.Controls = window.GW.Controls || {};
 			this.instanceId = ShortcutsEl.instanceCount++;
 			ShortcutsEl.instanceMap[this.instanceId] = this;
 
-			if(this.instanceId === 1) {
+			if(this.instanceId === 0) {
 				document.head.insertAdjacentHTML("beforeend",`
 					<style>
 						gw-shortcuts {
