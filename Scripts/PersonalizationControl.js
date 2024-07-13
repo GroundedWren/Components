@@ -98,6 +98,7 @@ window.GW = window.GW || {};
 					flex-direction: column;
 					gap: 2px;
 					width: fit-content;
+					background-color: var(--background-color, #FFFFFF);
 				}
 
 				#sChangeWarn-${this.instanceId} {
