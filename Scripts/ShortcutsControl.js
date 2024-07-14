@@ -143,11 +143,13 @@ window.GW.Controls = window.GW.Controls || {};
 
 		onKeyDown = (event) => {
 			this.currentLevel = this.currentLevel || this.shortcutMap;
+			let prevLevel = this.currentLevel;
+
 			this.currentLevel = this.currentLevel[event.key.toUpperCase()];
 			if(this.currentLevel?.ACTION) {
 				const action = new Function(this.currentLevel.ACTION);
 				action(event);
-				this.currentLevel = null;
+				this.currentLevel = prevLevel;
 				event.stopPropagation();
 				event.preventDefault();
 			}
