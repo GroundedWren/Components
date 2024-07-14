@@ -145,7 +145,8 @@ window.GW.Controls = window.GW.Controls || {};
 			this.currentLevel = this.currentLevel || this.shortcutMap;
 			this.currentLevel = this.currentLevel[event.key.toUpperCase()];
 			if(this.currentLevel?.ACTION) {
-				eval(this.currentLevel.ACTION);
+				const action = new Function(this.currentLevel.ACTION);
+				action(event);
 				this.currentLevel = null;
 				event.stopPropagation();
 				event.preventDefault();
