@@ -39,9 +39,14 @@ window.GW.Controls = window.GW.Controls || {};
 		}
 		const popover = document.createElement("popover");
 		popover.setAttribute("popover", "auto");
-		popover.innerHTML = `<table><caption>Shortcuts</caption><tbody>${Object.keys(shortsIndex).sort().map(
-			CODE => `<tr><th scope="row">${CODE}</th><td>${shortsIndex[CODE]}</td></tr>`
-		).join("")}</tbody></table>`;
+		if(!Object.keys(shortsIndex).length) {
+			popover.innerHTML = "No shortcuts";
+		}
+		else {
+			popover.innerHTML = `<table><caption>Shortcuts</caption><tbody>${Object.keys(shortsIndex).sort().map(
+				CODE => `<tr><th scope="row">${CODE}</th><td>${shortsIndex[CODE]}</td></tr>`
+			).join("")}</tbody></table>`;
+		}
 
 		ns.AsiShortcutsLive.innerHTML = "";
 		ns.AsiShortcutsLive.appendChild(popover);
