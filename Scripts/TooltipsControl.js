@@ -19,6 +19,14 @@ window.GW = window.GW || {};
 	 * Required child elements:
 	 * 	An element with class="tool". This is the visible element that will trigger the tooltip.
 	 * 	An element with class="tip". This is the hidden element which appears on hover or focus. It will have its role set to "region".
+	 * 
+	 * This doesn't use the Shadow DOM, but there are still CSS Variables to alter appearance without modifying the CSS here directly.
+	 * CSS Variables:
+	 * 	[--border-color="black"] The color of the border on elements which have a tooltip
+	 * 	[--focus-color="red"] The outline color given to elements with tooltips when they receive focus.
+	 * 	[--background-color	="white"] The background color of the tooltip elements
+	 * 	[--text-color="black"] The color of text in the tooltip element
+	 * 	[--selected-color="#90CBDB"] The background color given to elements with a tooltip when their tooltip is showing.
 	 */
 	ns.TooltipEl = class TooltipEl extends HTMLElement {
 		//#region staticProperties
