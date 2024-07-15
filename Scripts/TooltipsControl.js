@@ -12,7 +12,7 @@ window.GW = window.GW || {};
 	 * A custom element for showing WCAG 1.4.13 conformant tooltips which may be interactive.
 	 * 
 	 * Attributes:
-	 * 	{"top" | "bottom" | "left" | "right"} preferredPos  The orientation of the tooltip if there is space
+	 * 	{"top" | "bottom" | "left" | "right"} [preferredPos="bottom"]  The orientation of the tooltip if there is space
 	 * 	{number} [showTimeout=0] Miliseconds after hover and focus the tooltip waits to appear
 	 * 	{number} [hideTImeout=500] Miliseconds after losing hover and focus the tooltip waits to vanish
 	 * 
