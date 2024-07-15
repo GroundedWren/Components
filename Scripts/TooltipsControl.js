@@ -267,7 +267,7 @@ window.GW = window.GW || {};
 		 * Tries to find a position such that the tooltip isn't cut off.
 		 */
 		setPosition() {
-			this.tipEl.classList.remove("bottom", "right", "left", "top");
+			this.tipEl.classList.remove("bottom", "top", "right", "left");
 			let positions = ["bottom", "right", "left", "top"];
 			let curPos = this.preferredPos;
 			let foundSuitable = false;
