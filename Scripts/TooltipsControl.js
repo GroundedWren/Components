@@ -159,7 +159,10 @@ window.GW = window.GW || {};
 			if (this.isInitialized) { return; }
 
 			this.showDelay = parseInt(this.getAttribute("showDelay")) || 0;
-			this.hideDelay = this.hasAttribute("hideDelay") ? parseInt(this.getAttribute("hideDelay")) : 500;
+			this.hideDelay = parseInt(this.getAttribute("hideDelay"));
+			if(isNaN(this.hideDelay)) {
+				this.hideDelay = 500;
+			}
 			this.preferredPos = (this.getAttribute("preferredPos") || "").toLowerCase();
 			if(["top", "bottom", "left", "right"].indexOf(this.preferredPos) < 0) {
 				this.preferredPos = "bottom";
