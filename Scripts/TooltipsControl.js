@@ -223,26 +223,8 @@ window.GW = window.GW || {};
 				setTimeout(this.doHide, 0);
 			});
 
-			//Put elements in the correct order and remove any extraneous children
-			this.appendChild(this.moveContentsToFragment());
+			this.insertBefore(this.toolEl, this.tipEl);
 		};
-
-		/**
-		 * Places all of the gw-tooltip's content into a fragment
-		 * @returns Document fragment
-		 */
-		moveContentsToFragment() {
-			const frag = document.createDocumentFragment();
-			frag.appendChild(this.toolEl.cloneNode(true));
-			frag.appendChild(this.tipEl.cloneNode(true));
-
-			this.toolEl = frag.getElementById(this.toolEl.id);
-			this.tipEl = frag.getElementById(this.tipEl.id);
-
-			this.innerHTML = null;
-
-			return frag;
-		}
 
 		/**
 		 * Processes interactions which may show or hide the tooltip
