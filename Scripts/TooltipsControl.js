@@ -315,7 +315,9 @@ window.GW = window.GW || {};
 		 */
 		doHide = () => {
 			if(this.shouldShow()) { return; }
-			setTimeout(() => {this.forcedHidden = false;}, this.showDelay);
+			if(this.forcedHidden) {
+				setTimeout(() => {this.forcedHidden = false;}, this.showDelay);
+			}
 
 			this.classList.remove("shown");
 			this.announce("Tooltip hidden");
