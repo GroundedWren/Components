@@ -94,6 +94,7 @@ window.GW = window.GW || {};
 							
 							&.top {
 								bottom: 100%;
+								left: 0;
 							}
 
 							&.left {
