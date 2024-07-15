@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Tooltips test page">
+	<title>Tooltips</title>
+
+    <script src="../Scripts/TooltipsControl.js"></script>
+
+	<script>
+        window.GW = window.GW || {};
+        window.GW.Pages = window.GW.Pages || {};
+        (function Tooltips(ns) {
+        }) (window.GW.Pages.Tooltips = window.GW.Pages.Tooltips || {});
+		
+		window.addEventListener("load", function onLoad() {});
+		
+		window.addEventListener("beforeunload", function onBeforeUnload(event)
+		{
+		});
+	</script>
+	
+	<style>
+		*, *::before, *::after {
+		  box-sizing: border-box;
+		}
+		
+		html, body {
+			margin: 0;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			font-size: 1em;
+		}
+		body {
+			min-height: 100vh;
+		}
+		
+		.sr-only {
+			position: absolute;
+			left: -99999999px;
+			top: 0px;
+		}
+		
+		.hide-until-focus {
+			position: absolute;
+			left: -99999999px;
+			top: 0px;
+		}
+		.hide-until-focus:focus {
+			position: revert;
+			left: revert;
+			top: revert;
+		}
+
+        :focus-visible, *[tabindex="-1"]:focus {
+            outline-width: 4px;
+            outline-color: red;
+            outline-style: solid;
+            outline-offset: 1px;
+            
+            position: relative;
+            z-index: 100 !important;
+        }
+
+        *[tabindex="-1"]:focus {
+            outline-style: dashed;
+        }
+		
+		.hidden {
+			display: none !important;
+		}
+		
+		.input-vertical {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: flex-start;
+		}
+		
+		button, label {
+			cursor: pointer;
+		}
+		
+		table, th, td {
+			border: 1px solid;
+			border-collapse: collapse;
+		}
+		table {
+			width: 100%;
+		}
+		caption {
+			font-style: italic;
+		}
+		thead {
+			border-bottom: 2px solid;
+			text-align: center;
+			font-weight: bold;
+		}
+		thead > tr > th {
+			text-align: left;
+		}
+	</style>
+	<style>
+		h1 {
+			text-align: center;
+		}
+		main {
+			max-width: 1100px;
+			margin: auto;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+	</style>
+</head>
+<body>
+	<h1>Shortcuts</h1>
+    <main>
+		<button>I'm tipless</button>
+		<gw-tooltip preferredPos="left">
+			<span class="tool">Tipped text</span>
+			<div class="tip">Hey, listen!</div>
+		</gw-tooltip>
+		<button>I'm tipless</button>
+		<gw-tooltip>
+			<div class="tip">
+				<ul>
+					<li>Hi</li>
+					<li><a href="https://www.google.com">Google</a></li>
+					<li>Hi</li>
+					<li>Hi</li>
+					<li>Hi</li>
+					<li>Hiiiiiiiiiiiiiiiiiiiiiiiiii</li>
+				</ul>
+			</div>
+			<span>I'm extraneous!</span>
+			<button class="tool">Cooler button</button>
+		</gw-tooltip>
+		<button>I'm tipless</button>
+		<gw-tooltip showDelay="500" hideDelay="0" preferredPos="right">
+			<span class="tool">I have a tooltip after a second</span>
+			<div class="tip">Hey, listen!</div>
+		</gw-tooltip>
+    </main>
+</body>
+</html>
