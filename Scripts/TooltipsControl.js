@@ -13,8 +13,8 @@ window.GW = window.GW || {};
 	 * 
 	 * Attributes:
 	 * 	{"top" | "bottom" | "left" | "right"} [preferredPos="bottom"]  The orientation of the tooltip contingent on available space
-	 * 	{number} [showTimeout=0] Miliseconds after hover and focus the tooltip waits to appear
-	 * 	{number} [hideTimeout=500] Miliseconds after losing hover and focus the tooltip waits to vanish
+	 * 	{number} [showDelay=0] Miliseconds after hover and focus the tooltip waits to appear
+	 * 	{number} [hideDelay=500] Miliseconds after losing hover and focus the tooltip waits to vanish
 	 * 
 	 * Required child elements:
 	 * 	An element with class="tool". This is the visible element that will trigger the tooltip.
@@ -41,7 +41,9 @@ window.GW = window.GW || {};
 		toolEl;
 		tipEl;
 		preferredPos;
+		showDelay;
 		showTimeout;
+		hideDelay;
 		hideTimeout;
 		announceIdx;
 		forcedHidden;
