@@ -103,7 +103,7 @@ window.GW = window.GW || {};
 
 							&.bottom {
 								top: auto;
-								left: auto;
+								left: 0;
 								right: auto;
 								bottom: auto;
 							}
