@@ -268,7 +268,7 @@ window.GW = window.GW || {};
 		 */
 		setPosition() {
 			this.tipEl.classList.remove("bottom", "top", "right", "left");
-			let positions = ["bottom", "right", "left", "top"];
+			let positions = ["bottom", "top", "right", "left"];
 			let curPos = this.preferredPos;
 			let foundSuitable = false;
 
