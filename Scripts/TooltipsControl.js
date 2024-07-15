@@ -12,9 +12,9 @@ window.GW = window.GW || {};
 	 * A custom element for showing WCAG 1.4.13 conformant tooltips which may be interactive.
 	 * 
 	 * Attributes:
-	 * 	{"top" | "bottom" | "left" | "right"} [preferredPos="bottom"]  The orientation of the tooltip if there is space
+	 * 	{"top" | "bottom" | "left" | "right"} [preferredPos="bottom"]  The orientation of the tooltip contingent on available space
 	 * 	{number} [showTimeout=0] Miliseconds after hover and focus the tooltip waits to appear
-	 * 	{number} [hideTImeout=500] Miliseconds after losing hover and focus the tooltip waits to vanish
+	 * 	{number} [hideTimeout=500] Miliseconds after losing hover and focus the tooltip waits to vanish
 	 * 
 	 * Required child elements:
 	 * 	An element with class="tool". This is the visible element that will trigger the tooltip.
@@ -22,10 +22,10 @@ window.GW = window.GW || {};
 	 * 
 	 * This doesn't use the Shadow DOM, but there are still CSS Variables to alter appearance without modifying the CSS here directly.
 	 * CSS Variables:
-	 * 	[--border-color="black"] The color of the border on elements which have a tooltip
+	 * 	[--border-color="black"] The color of the border on elements which have a tooltip.
 	 * 	[--focus-color="red"] The outline color given to elements with tooltips when they receive focus.
-	 * 	[--background-color	="white"] The background color of the tooltip elements
-	 * 	[--text-color="black"] The color of text in the tooltip element
+	 * 	[--background-color	="white"] The background color of the tooltip elements.
+	 * 	[--text-color="black"] The color of text in the tooltip element.
 	 * 	[--selected-color="#90CBDB"] The background color given to elements with a tooltip when their tooltip is showing.
 	 */
 	ns.TooltipEl = class TooltipEl extends HTMLElement {
