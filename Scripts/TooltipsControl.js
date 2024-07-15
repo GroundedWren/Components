@@ -85,8 +85,10 @@ window.GW = window.GW || {};
 							display: none;
 							position: absolute;
 
+							width: max-content;
+
 							&.right {
-								top: -100%;
+								top: -50%;
 								left: 100%;
 							}
 							
@@ -95,7 +97,7 @@ window.GW = window.GW || {};
 							}
 
 							&.left {
-								top: -100%;
+								top: -50%;
 								right: 100%;
 							}
 
