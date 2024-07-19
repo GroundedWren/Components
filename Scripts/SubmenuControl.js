@@ -16,25 +16,14 @@ window.GW = window.GW || {};
 		instanceId;
 		groupIdentifier;
 
-		//#region element properties
 		buttonEl;
 		submenuContentEl;
-		//#endregion
+		detailsEl;
 		//#endregion
 
 		constructor() {
 			super();
 			this.instanceId = SubmenuEl.instanceCount++;
-
-			if(this.instanceId === 0) {
-				document.head.insertAdjacentHTML("beforeend",`
-				<style>
-					.gw-submenu-hidden {
-						display: none !important;
-					}
-				</style>
-				`);
-			}
 		}
 
 		connectedCallback() {
@@ -53,6 +42,7 @@ window.GW = window.GW || {};
 		onRenderReady = () => {
 			this.buttonEl = document.getElementById(this.getAttribute("button"));
 			this.submenuContentEl = document.getElementById(this.getAttribute("content"));
+			this.detailsEl = document.getElementById(this.getAttribute("details"));
 
 			this.renderContent();
 
@@ -60,37 +50,45 @@ window.GW = window.GW || {};
 		};
 
 		renderContent() {
-			if(!this.buttonEl || !this.submenuContentEl) { return; }
-
-			this.buttonEl.setAttribute("aria-controls", this.submenuContentEl.id);
-			this.buttonEl.classList.add("submenu-button");
-			if(!this.buttonEl.hasAttribute("aria-expanded")) {
-				this.buttonEl.setAttribute("aria-expanded", false);
+			if(this.buttonEl && this.submenuContentEl) {
+				this.buttonEl.setAttribute("aria-controls", this.submenuContentEl.id);
+				this.buttonEl.classList.add("submenu-button");
+				if(!this.buttonEl.hasAttribute("aria-expanded")) {
+					this.buttonEl.setAttribute("aria-expanded", false);
+				}
+				
+				if(this.buttonEl.getAttribute("aria-expanded") !== "true") {
+					this.submenuContentEl.setAttribute("hidden", "true");
+				}
+				this.submenuContentEl.classList.add("submenu");
 			}
-
-			if(this.buttonEl.getAttribute("aria-expanded") !== "true") {
-				this.submenuContentEl.classList.add("gw-submenu-hidden");
-			}
-			this.submenuContentEl.classList.add("submenu");
 		}
 
 		show() {
-			this.buttonEl.setAttribute("aria-expanded", "true");
-			this.submenuContentEl.classList.remove("gw-submenu-hidden");
+			this.buttonEl?.setAttribute("aria-expanded", "true");
+			this.submenuContentEl?.removeAttribute("hidden");
+			this.detailsEl?.setAttribute("open", "true");
 		}
 
 		hide() {
-			this.buttonEl.setAttribute("aria-expanded", "false");
-			this.submenuContentEl.classList.add("gw-submenu-hidden");
+			this.buttonEl?.setAttribute("aria-expanded", "false");
+			this.submenuContentEl?.setAttribute("hidden", "true");
+			this.detailsEl?.removeAttribute("open");
 		}
 
 		//#region Handlers
 		registerHandlers() {
-			this.buttonEl.addEventListener("click", this.onSubmenuClick);
+			this.buttonEl?.addEventListener("click", this.onSubmenuClick);
+			if(this.detailsEl) {
+			  const summary = Array.from(this.detailsEl.getElementsByTagName("summary"))[0];
+			  summary?.addEventListener("click", this.onSubmenuClick);
+			}
 		}
 
-		onSubmenuClick = (_event) => {
-			if(this.buttonEl.getAttribute("aria-expanded") !== "true") {
+		onSubmenuClick = (event) => {
+			if((this.buttonEl && this.buttonEl.getAttribute("aria-expanded") !== "true")
+			  || (this.detailsEl && !this.detailsEl.hasAttribute("open"))
+			) {
 				SubmenuEl.instanceMap[this.groupIdentifier].forEach(submenuEl => {
 					if(submenuEl.instanceId !== this.instanceId) {
 						submenuEl.hide();
@@ -103,6 +101,7 @@ window.GW = window.GW || {};
 			else {
 				this.hide();
 			}
+			event.preventDefault();
 		};
 		//#endregion
 	};
