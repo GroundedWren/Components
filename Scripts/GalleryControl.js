@@ -8,7 +8,7 @@ window.GW = window.GW || {};
 window.GW.Controls = window.GW.Controls || {};
 (function Gallery(ns) {
 	/**
-	* FOR YOU TO UPDATE!
+	* FOR YOU TO UPDATE
 	* 
 	* Modify this object to describe the images you want to display on your page!
 	* If you want multiple image galleries, you can create other objects below this to describe them.
@@ -46,12 +46,12 @@ window.GW.Controls = window.GW.Controls || {};
 		instanceId;
 		curImg;
 
-		//#region element properties
 		shadow;
 		btnPrev;
 		btnNext;
 		figureContainer;
-		//#endregion
+		minImgWidth;
+		reflowWidth;
 		//#endregion
 
 		constructor() {
@@ -63,6 +63,8 @@ window.GW.Controls = window.GW.Controls || {};
 		//#region HTMLElement implementation
 		connectedCallback() {
 			this.name = this.getAttribute("name");
+			this.minImgWidth = this.getAttribute("minImgWidth");
+			this.reflowWidth = this.getAttribute("reflowWidth");
 
 			this.renderContent();
 			this.registerHandlers();
@@ -75,6 +77,10 @@ window.GW.Controls = window.GW.Controls || {};
 			this.shadow.innerHTML = `
 			<style>
 				#galleryContainer {
+					container-type: inline-size;
+				}
+
+				#gallery {
 					display: grid;
 					grid-template-columns: auto 1fr auto;
 					gap: 10px;
@@ -82,10 +88,20 @@ window.GW.Controls = window.GW.Controls || {};
 					align-items: center;
 				}
 
+				@container(max-width: ${this.reflowWidth || "0px"}) {
+					#gallery {
+						grid-template-columns: 1fr 1fr;
+						grid-template-rows: 1fr auto;
+					}
+					#figureContainer {
+						grid-row: 1;
+						grid-column: 1 / -1;
+					}
+				}
+
 				#figureContainer {
 					max-width: calc(100% - 70px); /* 70px is the width of both nav buttons */
 					overflow-x: auto;
-					text-align: center;
 				}
 
 				.nav-button {
@@ -94,21 +110,23 @@ window.GW.Controls = window.GW.Controls || {};
 			</style>
 
 			<section id="galleryContainer" aria-label="${this.name} image gallery">
-				<button id="prevImg" class="nav-button" aria-labelledby="prevTitle">
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512">
-						<title id="prevTitle">Previous</title>
-						<!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. -->
-						<path d="M9.4 278.6c-12.5-12.5-12.5-32.8 0-45.3l128-128c9.2-9.2 22.9-11.9 34.9-6.9s19.8 16.6 19.8 29.6l0 256c0 12.9-7.8 24.6-19.8 29.6s-25.7 2.2-34.9-6.9l-128-128z"></path>
-					</svg>
-				</button>
-				<div id="figureContainer"></div>
-				<button id="nextImg" class="nav-button" aria-labelledby="nextTitle">
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512">
-						<title id="nextTitle">Next</title>
-						<!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. -->
-						<path d="M246.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-9.2-9.2-22.9-11.9-34.9-6.9s-19.8 16.6-19.8 29.6l0 256c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l128-128z"></path>
-					</svg>
-				</button>
+				<div id="gallery">
+					<button id="prevImg" class="nav-button" aria-labelledby="prevTitle">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512">
+							<title id="prevTitle">Previous</title>
+							<!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. -->
+							<path d="M9.4 278.6c-12.5-12.5-12.5-32.8 0-45.3l128-128c9.2-9.2 22.9-11.9 34.9-6.9s19.8 16.6 19.8 29.6l0 256c0 12.9-7.8 24.6-19.8 29.6s-25.7 2.2-34.9-6.9l-128-128z"></path>
+						</svg>
+					</button>
+					<div id="figureContainer"></div>
+					<button id="nextImg" class="nav-button" aria-labelledby="nextTitle">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512">
+							<title id="nextTitle">Next</title>
+							<!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. -->
+							<path d="M246.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-9.2-9.2-22.9-11.9-34.9-6.9s-19.8 16.6-19.8 29.6l0 256c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l128-128z"></path>
+						</svg>
+					</button>
+				</div>
 			</section>
 			`;
 
@@ -159,6 +177,7 @@ window.GW.Controls = window.GW.Controls || {};
 			const galFig = document.createElement("gw-gallery-figure");
 			galFig.name = this.name;
 			galFig.image = this.curImg;
+			galFig.minImgWidth = this.minImgWidth;
 			galFig.onImgLoaded = () => {
 				this.figureContainer.replaceChildren(galFig);
 				this.figureContainer.ariaLive = "polite"; //we don't want to announce changes until after initial load
@@ -206,6 +225,7 @@ window.GW.Controls = window.GW.Controls || {};
 		name;
 		image;
 		onImgLoaded;
+		minImgWidth;
 
 		//#region element properties
 		shadow;
@@ -225,9 +245,13 @@ window.GW.Controls = window.GW.Controls || {};
 			this.shadow = this.attachShadow({ mode: "open" });
 			this.shadow.innerHTML = `
 			<style>
+				figure {
+					margin: 0;
+				}
+
 				#galleryImg {
 					max-width: calc(100% - 6px); /* 6px for the border */
-					min-width: 350px; /* This is the smallest size the image will be before we start a horizontal scroll instead. You can change this value to whatever. */
+					min-width: ${this.minImgWidth || "auto"};
 
 					max-height: auto; /* Change these to some value if you want the images to be of consistent height */
 					min-height: auto;
