@@ -230,21 +230,21 @@ window.GW = window.GW || {};
 		 * Processes interactions which may show or hide the tooltip
 		 * @returns {Promise<void>}
 		 */
-		onInteract = async () => {
+		onInteract = async (event) => {
 			let timeoutResolveFn
 			const timeoutPromise = new Promise(resolve => timeoutResolveFn = resolve);
 			setTimeout(timeoutResolveFn, 0);
 			await timeoutPromise; //Make sure whether we're focused or hovered is up to date
 
 			if(this.shouldShow()) {
-				if(this.classList.contains("shown")) {
+				if(this.classList.contains("shown") || event.type === "mouseout" || event.type === "focusout") {
 					return;
 				}
 				this.showTimeout = setTimeout(this.doShow, this.showDelay);
 				clearTimeout(this.hideTimeout);
 			}
 			else {
-				if(!this.classList.contains("shown")) {
+				if(!this.classList.contains("shown") || event.type === "mousein" || event.type === "focusin") {
 					return;
 				}
 				this.hideTimeout = setTimeout(this.doHide, this.hideDelay);
