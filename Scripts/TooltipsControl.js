@@ -60,6 +60,7 @@ window.GW = window.GW || {};
 				document.head.insertAdjacentHTML("beforeend", `
 				<style>
 					gw-tooltip {
+						display: inline-block;
 						position: relative;
 						width: fit-content;
 						height: fit-content;
