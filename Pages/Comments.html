@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Comments">
+  <title>Comments</title>
+  <script src="../Scripts/CommentsControl.js"></script>
+  <script src="../Scripts/GoogleSheetsReaderGizmo.js"></script>
+  <script src="../Scripts/SVGIconControl.js"></script>
+  <link href="../Styles/CommentsControl.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+  <header>
+      <h1>Comments</h1>
+  </header>
+  <main id="mainContent">
+	<gw-comment-form id="commentForm"
+		titleText="Test"
+		discordURL="https://discord.com/api/webhooks/1161141573719965706/N897T_xdWC5XuTsnQ1mG03Mt0_eHJJiqU9m23edyfbIi0HU6CUe2NgleYu2RF3LrO91A"
+		fallbackEmail="kathryn.aulabaugh@gmail.com"
+	></gw-comment-form>
+	<gw-comment-list
+		gSpreadsheetId="1Iv0lu3fNTiM7L_gLRQAcIrEMZp1zZKQBDNtAxxdpZLw"
+		gSheetId="Tester"
+		isNewestFirst="true"
+		gwCommentFormId="commentForm"
+	></gw-comment-list>
+  </main>
+</body>
+</html>
