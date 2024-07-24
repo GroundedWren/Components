@@ -314,8 +314,8 @@ window.GW = window.GW || {};
 				const commentEl = document.getElementById(`${this.idKey}-cmt-${comment.ID}`);
 				(comment.ChildIdxs || []).forEach(
 					childIdx => commentsToBuild.push({
-					parent: commentEl.articleEl,
-					comment: allComments[childIdx]
+						parent: commentEl.articleEl,
+						comment: allComments[childIdx]
 					})
 				);
 			}
