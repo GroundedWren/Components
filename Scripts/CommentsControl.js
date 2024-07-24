@@ -144,7 +144,9 @@ window.GW = window.GW || {};
 				email: this.emailInpt.value,
 				website: this.websiteInpt.value,
 				responseTo: this.respToInpt.value,
-				comment: (this.commentInpt.value || "").replaceAll("\n", "<br>"),
+				comment: (
+					this.commentInpt.value || ""
+				).replaceAll("\n", "<br>").replaceAll("(", "\\("),
 				timestamp: new Date().toUTCString(),
 			};
 			const contentAry = [];
@@ -182,7 +184,11 @@ window.GW = window.GW || {};
 				}
 			};
 
-			request.send(JSON.stringify({ content: contentAry.join("; ") }));
+			request.send(JSON.stringify({
+				embeds: [{
+					fields: Object.keys(contentObj).map(key => { return { name: key, value: contentObj[key] }})
+				}]
+			}));
 
 			localStorage.setItem("comment-name", contentObj.name);
 			localStorage.setItem("comment-email", contentObj.email);
