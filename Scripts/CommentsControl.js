@@ -485,20 +485,20 @@ window.GW = window.GW || {};
 					case ']':
 						if(linkObj.tStart !== undefined && linkObj.tStart !== i-1) {
 							linkObj.tEnd = i;
-							break;
 						}
+						else { linkObj = {}; }
+						break;
 					case '(':
 						if(linkObj.tEnd !== undefined && linkObj.tEnd === i-1) {
 							linkObj.lStart = i;
-							break;
 						}
+						else { linkObj = {}; }
+						break;
 					case ')':
 						if(linkObj.lStart !== undefined && linkObj.lStart !== i-1) {
 							linkObj.lEnd = i;
 						}
-						else {
-							linkObj = {};
-						}
+						else { linkObj = {}; }
 						break;
 				}
 				if(linkObj.lEnd !== undefined) {
