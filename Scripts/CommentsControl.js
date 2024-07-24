@@ -201,6 +201,7 @@ window.GW = window.GW || {};
 		//#region staticProperties
 		static instanceCount = 0;
 		static instanceMap = {};
+		static Data = [];
 		//#endregion
 
 		//#region instance properties
@@ -219,6 +220,7 @@ window.GW = window.GW || {};
 			super();
 			this.instanceId = CommentList.instanceCount++;
 			CommentList.instanceMap[this.instanceId] = this;
+			CommentList.Data[this.instanceId] = {};
 		}
 
 		get idKey() {
@@ -247,7 +249,7 @@ window.GW = window.GW || {};
 			`
 
 			const sheetReader = new GW.Gizmos.GoogleSheetsReader(this.gSpreadsheetId, this.gSheetId);
-			const sheetData = await sheetReader.loadData();
+			await sheetReader.loadData();
 			this.innerHTML = "";
 
 			const allComments = sheetReader.rowData;
@@ -275,42 +277,38 @@ window.GW = window.GW || {};
 				const replyId = allComments[childIdx].ResponseTo;
 				const respondeeComment = allComments[allCommentsIndex[replyId]];
 
-				respondeeComment.childrenIdxs = respondeeComment.childrenIdxs || [];
-				respondeeComment.childrenIdxs.push(childIdx);
+				respondeeComment.ChildIdxs = respondeeComment.ChildIdxs || [];
+				respondeeComment.ChildIdxs.push(childIdx);
 			});
 
 			let commentsToBuild = [];
 			topLevelCommentIdxs.forEach(
 				topCommentIdx => commentsToBuild.push({
 					parent: this.containerEl,
-					parentId: null,
 					comment: allComments[topCommentIdx]
 				})
 			);
 
 			while (commentsToBuild.length > 0) {
-				let { parent, parentId, comment } = commentsToBuild.shift();
+				let { parent, comment } = commentsToBuild.shift();
 				if (!comment.Timestamp) {
 					continue;
 				}
+
+				CommentList.Data[this.instanceId][comment.ID] = comment;
+
 				parent.insertAdjacentHTML("beforeend", `
 				<gw-comment-card  id="${this.idKey}-cmt-${comment.ID}"
-					commentId="${comment.ID || ""}"
-					replyToId="${parentId || ""}"
-					numChildren="${(comment.childrenIdxs || []).length}"
-					commenterName="${comment["Display Name"] || ""}"
-					isoTimestamp="${comment.Timestamp.toISOString()}"
-					websiteURL="${comment.Website || ""}"
-					commentText="${comment.Comment || ""}"
-					gwCommentFormId="${this.gwCommentFormId || ""}"
+					listInstance=${this.instanceId}
+					commentId=${comment.ID}
+					gwCommentFormId=${this.gwCommentFormId || ""}
 				></gw-comment-card>
 				`);
 
 				const commentEl = document.getElementById(`${this.idKey}-cmt-${comment.ID}`);
-				(comment.childrenIdxs || []).forEach(
+				(comment.ChildIdxs || []).forEach(
 					childIdx => commentsToBuild.push({
 					parent: commentEl.articleEl,
-					parentId: comment.ID,
 					comment: allComments[childIdx]
 					})
 				);
@@ -344,15 +342,16 @@ window.GW = window.GW || {};
 		//#region instance properties
 		instanceId;
 		isInitialized;
+
 		commentId;
+		gwCommentFormId;
+
 		replyToId;
 		numChildren;
 		commenterName;
-		isoTimestamp;
 		datetime;
 		websiteURL;
 		commentText;
-		gwCommentFormId;
 
 		//#region element properties
 		articleEl;
@@ -373,16 +372,18 @@ window.GW = window.GW || {};
 		//#region HTMLElement implementation
 		connectedCallback() {
 			if (this.isInitialized) { return; }
-
+			
 			this.commentId = this.getAttribute("commentId");
-			this.replyToId = this.getAttribute("replyToId");
-			this.numChildren = this.getAttribute("numChildren");
-			this.commenterName = this.getAttribute("commenterName");
-			this.isoTimestamp = this.getAttribute("isoTimestamp");
-			this.datetime = new Date(this.isoTimestamp);
-			this.websiteURL = this.getAttribute("websiteURL");
-			this.commentText = this.getAttribute("commentText");
 			this.gwCommentFormId = this.getAttribute("gwCommentFormId");
+
+			const commentData = ns.CommentList.Data[this.getAttribute("listInstance")][this.commentId];
+
+			this.replyToId = commentData.ResponseTo;
+			this.numChildren = (commentData.ChildIdxs || []).length;
+			this.commenterName = commentData["Display Name"];
+			this.datetime = commentData.Timestamp;
+			this.websiteURL = commentData.Website;
+			this.commentText = this.parseCommentText(commentData.Comment);
 
 			this.renderContent();
 			this.registerHandlers();
@@ -419,7 +420,7 @@ window.GW = window.GW || {};
 					${commenterNameEl}
 					<div class="comment-header-right">
 						<time id="${this.idKey}-timestamp"
-							datetime="${this.isoTimestamp}"
+							datetime="${this.datetime.toISOString()}"
 							tabindex="-1"
 						>${displayTimestamp}</time>
 						<button id="${this.idKey}-show" class="show-comment">Show #${this.commentId}</button>
@@ -470,6 +471,49 @@ window.GW = window.GW || {};
 			this.timestamp.focus();
 		};
 		//#endregion
+
+		parseCommentText(commentString) {
+			let commentText = "";
+			let linkObj = {};
+
+			for(let i = 0; i < commentString.length; i++){
+				let char = commentString.charAt(i);
+				switch (char) {
+					case '[':
+						linkObj = {tStart: i};
+						break;
+					case ']':
+						if(linkObj.tStart !== undefined && linkObj.tStart !== i-1) {
+							linkObj.tEnd = i;
+							break;
+						}
+					case '(':
+						if(linkObj.tEnd !== undefined && linkObj.tEnd === i-1) {
+							linkObj.lStart = i;
+							break;
+						}
+					case ')':
+						if(linkObj.lStart !== undefined && linkObj.lStart !== i-1) {
+							linkObj.lEnd = i;
+						}
+						else {
+							linkObj = {};
+						}
+						break;
+				}
+				if(linkObj.lEnd !== undefined) {
+					const linkText = commentString.substring(linkObj.tStart + 1, linkObj.tEnd);
+					const linkURL = commentString.substring(linkObj.lStart + 1, linkObj.lEnd);
+					commentText = commentText.substring(0, commentText.length - (i - linkObj.tStart));
+					commentText += `<a href="${linkURL}" target="_blank">${linkText}</a>`;
+					linkObj = {};
+				}
+				else {
+					commentText += char;
+				}
+			}
+			return commentText;
+		}
 	};
 	customElements.define("gw-comment-card", ns.CommentCard);
 }) (window.GW.Controls = window.GW.Controls || {});
