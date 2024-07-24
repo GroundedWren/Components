@@ -144,7 +144,7 @@ window.GW = window.GW || {};
 				email: this.emailInpt.value,
 				website: this.websiteInpt.value,
 				responseTo: this.respToInpt.value,
-				comment: this.commentInpt.value,
+				comment: (this.commentInpt.value || "").replaceAll("\n", "<br>"),
 				timestamp: new Date().toUTCString(),
 			};
 			const contentAry = [];
