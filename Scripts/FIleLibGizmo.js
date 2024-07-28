@@ -13,7 +13,7 @@ window.GW.Gizmos = window.GW.Gizmos || {};
 	 * @param {string} fileType The file's MIME type (e.g. text/plain, application/json)
 	 * @param {string} extension The file's extension (e.g. txt, json)
 	 * @param {string} suggestedName The name of the saved file (optional)
-	 * @returns {Promise<void>} A promise which resolves once the file is saved
+	 * @returns {Promise<string>} A promise which resolves once the file is saved with the file name
 	 */
 	ns.saveToFile = async (text, fileType, extension, suggestedName) => {
 		if(!window.showSaveFilePicker) {
@@ -28,6 +28,7 @@ window.GW.Gizmos = window.GW.Gizmos || {};
 		const writable = await fileHandle.createWritable();
 		writable.write(text);
 		await writable.close();
+		return fileHandle.name.split(".")[0];
 	};
 	function saveToFileAlt(text, fileType, extension, suggestedName) {
 		let downloadLinkEl = document.getElementById("gwFileDownloadLink");
