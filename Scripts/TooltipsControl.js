@@ -216,12 +216,25 @@ window.GW = window.GW || {};
 
 			// Soft dismiss
 			document.addEventListener("keydown", (event) => {
-				if(event.key !== 'Escape' || !this.classList.contains("shown")) {
-					return;
+				switch (event.key) {
+					case 'Escape':
+					case 'Backspace':
+						if(this.classList.contains("shown")) {
+							this.forcedHidden = true;
+							if(this.matches(":focus-within")) {
+								this.toolEl.focus();
+							}
+							setTimeout(this.doHide, 0);
+						}
+						break;
+					case 'F1':
+						if(this.toolEl.matches(":focus-within") && !this.classList.contains("shown")) {
+							event.preventDefault();
+							this.forcedHidden = false;
+							setTimeout(this.doShow, 0);
+						}
+						break;
 				}
-				this.forcedHidden = true;
-				this.toolEl.focus();
-				setTimeout(this.doHide, 0);
 			});
 
 			this.insertBefore(this.toolEl, this.tipEl);
@@ -259,7 +272,7 @@ window.GW = window.GW || {};
 		doShow = () => {
 			if(!this.shouldShow()) { return; }
 			this.classList.add("shown");
-			this.announce("Tooltip shown");
+			this.announce("Tooltip shown.");
 			
 			this.setPosition();
 		};
@@ -303,7 +316,9 @@ window.GW = window.GW || {};
 			}
 
 			this.classList.remove("shown");
-			this.announce("Tooltip hidden");
+			this.announce("Tooltip hidden."
+				+ (this.forcedHidden && this.toolEl.matches(":focus-within") ? " Press F1 to show." : "")
+			);
 		};
 
 		/**
