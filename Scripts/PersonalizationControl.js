@@ -139,7 +139,7 @@ window.GW = window.GW || {};
 				}
 
 				button[aria-expanded="true"], button[aria-pressed="true"] {
-					border-width: 2px;
+					background-color: var(--selected-color);
 					font-weight: bold;
 				}
 
