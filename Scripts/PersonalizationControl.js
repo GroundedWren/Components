@@ -141,7 +141,6 @@ window.GW = window.GW || {};
 				button[aria-expanded="true"], button[aria-pressed="true"] {
 					background-color: var(--selected-color, #90CBDB);
 					font-weight: bold;
-					font-style: italic;
 				}
 
 				:focus-visible, *[tabindex="-1"]:focus {
