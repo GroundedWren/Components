@@ -26,7 +26,7 @@ window.GW = window.GW || {};
 	 * 	[--focus-color="red"] The outline color given to elements with tooltips when they receive focus.
 	 * 	[--background-color	="white"] The background color of the tooltip elements.
 	 * 	[--text-color="black"] The color of text in the tooltip element.
-	 * 	[--selected-color="#90CBDB"] The background color given to elements with a tooltip when their tooltip is showing.
+	 * 	[--mark-color="#FCC5F1"] The background color given to elements with a tooltip when their tooltip is showing.
 	 */
 	ns.TooltipEl = class TooltipEl extends HTMLElement {
 		//#region staticProperties
@@ -115,7 +115,7 @@ window.GW = window.GW || {};
 						
 						&.shown {
 							.tool {
-								background-color: var(--selected-color, #90CBDB);
+								background-color: var(--mark-color, #FCC5F1);
 							}
 
 							.tip {
