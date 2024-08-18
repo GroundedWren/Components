@@ -126,7 +126,7 @@ window.GW = window.GW || {};
 						}
 					}
 					
-					#GWTooltipsLive {
+					#asiGWTooltipsLive {
 						position: absolute;
 						left: -99999999px;
 						top: 0px;
@@ -138,8 +138,8 @@ window.GW = window.GW || {};
 				</style>
 				`);
 
-				document.body.insertAdjacentHTML("beforeend", `<aside id="GWTooltipsLive" aria-live="polite"></aside>`)
-				TooltipEl.liveEl = document.getElementById("GWTooltipsLive");
+				document.body.insertAdjacentHTML("beforeend", `<aside id="asiGWTooltipsLive" aria-live="polite"></aside>`)
+				TooltipEl.liveEl = document.getElementById("asiGWTooltipsLive");
 
 				document.body.insertAdjacentHTML("beforeend", `<span id="GWTooltipsGroupLabel">Has tooltip on hover or focus</span>`);
 				document.body.insertAdjacentHTML("beforeend", `<span id="GWTooltipsRegionLabel">Tooltip</span>`);
