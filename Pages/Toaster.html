@@ -18,7 +18,9 @@
 					{
 						persist: document.getElementById("cbxPersist").checked,
 						omitPreamble: document.getElementById("cbxOmitPreamble").checked,
-						timeout: document.getElementById("numTimeout").value || null
+						invisible: document.getElementById("cbxInvisible").checked || null,
+						timeout: document.getElementById("numTimeout").value || null,
+						delay: document.getElementById("numDelay").value || null,
 					}
 				)
 
@@ -159,7 +161,9 @@
         <form onsubmit="GW.Pages.Toaster.showToast(event)">
 			<label><input id="cbxPersist" type="checkbox"> Persist?</label>
 			<label><input id="cbxOmitPreamble" type="checkbox"> Omit preamble?</label>
+			<label><input id="cbxInvisible" type="checkbox"> Invisible?</label>
 			<label>Timeout (ms)<input id="numTimeout" type="number"></label>
+			<label>Delay (ms)<input id="numDelay" type="number"></label>
 			<label>Content<textarea id="txaContent"></textarea></label>
 			<input type="Submit" value="Submit">
 		</form>

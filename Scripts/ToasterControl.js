@@ -46,6 +46,12 @@ window.GW.Controls = window.GW.Controls || {};
 					}
 
 					> article {
+						&.invisible {
+							position: absolute;
+							left: -99999999px;
+							top: 0px;
+						}
+
 						border: 4px solid var(--border-color, black);
 						background-color: var(--background-color, white);
 						color: var(--text-color, black);
@@ -88,16 +94,22 @@ window.GW.Controls = window.GW.Controls || {};
 	 * @param {object} opts Display options. Optional.
 	 * @param {boolean} opts.omitPreamble Whether to exclude the screenreader-only preamble explaining this is a toast
 	 * @param {boolean} opts.persist Whether this message should persist until dismissed
+	 * @param {int} opts.invisible Whether the message should be invisible
 	 * @param {int} opts.timeout Milliseconds until the toast vanishes (no effect with opts.persist set)
+	 * @param {int} opts.delay Milliseconds until the toast shows
 	 */
-	ns.showToast = (content, opts) =>  {
+	ns.showToast = async (content, opts) =>  {
 		opts = opts || {};
 		ns.ToastCount++;
 		const toastId = `gwToast-${ns.ToastCount}`;
 
 		const toaster = document.getElementById(ns.TOASTER_ASIDE_ID);
 
-		toaster.insertAdjacentHTML("afterbegin", `<article id="${toastId}">
+		if(opts.delay !== null && opts.delay !== undefined) {
+			await new Promise(resolve => setTimeout(resolve, opts.delay));
+		}
+
+		toaster.insertAdjacentHTML("afterbegin", `<article id="${toastId}" class="${opts.invisible ? "invisible" : ""}">
 			${opts.omitPreamble
 				? "" 
 				: `<span id="${toastId}-preamble" class="preamble">${opts.persist ? "Popup" : "Toast"} message: </span>`
