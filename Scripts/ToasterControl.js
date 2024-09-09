@@ -94,7 +94,7 @@ window.GW.Controls = window.GW.Controls || {};
 	 * @param {object} opts Display options. Optional.
 	 * @param {boolean} opts.omitPreamble Whether to exclude the screenreader-only preamble explaining this is a toast
 	 * @param {boolean} opts.persist Whether this message should persist until dismissed
-	 * @param {int} opts.invisible Whether the message should be invisible
+	 * @param {boolean} opts.invisible Whether the message should be invisible
 	 * @param {int} opts.timeout Milliseconds until the toast vanishes (no effect with opts.persist set)
 	 * @param {int} opts.delay Milliseconds until the toast shows
 	 */
