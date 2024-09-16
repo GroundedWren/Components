@@ -43,6 +43,10 @@ window.GW.Controls = window.GW.Controls || {};
 		document.head.insertAdjacentHTML("beforeend",`
 		<style>
 			.gw-gallery-container {
+				*, *::before, *::after {
+					box-sizing: border-box;
+				}
+				
 				container-type: inline-size;
 
 				.gallery {
