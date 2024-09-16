@@ -7,6 +7,7 @@
 window.GW = window.GW || {};
 window.GW.Controls = window.GW.Controls || {};
 (function Gallery(ns) {
+	//#region Data
 	/**
 	* FOR YOU TO UPDATE
 	* 
@@ -35,24 +36,55 @@ window.GW.Controls = window.GW.Controls || {};
 			},
 		}
 	};
+	//#endregion
 
+	//#region GalleryEl
+	window.addEventListener("load", function galleryElOnLoad() {
+		document.head.insertAdjacentHTML("beforeend",`
+		<style>
+			.gw-gallery-container {
+				container-type: inline-size;
+
+				.gallery {
+					display: grid;
+					grid-template-columns: auto 1fr auto;
+					gap: 10px;
+					justify-items: center;
+					align-items: stretch;
+				}
+
+				.figure-container {
+					max-width: 100%;
+					overflow-x: auto;
+				}
+				.nav-button {
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					
+					width: 35px;
+				}
+			}
+		</style>
+		`);
+	});
 	ns.GalleryEl = class GalleryEl extends HTMLElement {
-		//#region staticProperties
+		//static properties
 		static instanceCount = 0;
 		static instanceMap = {};
 		//#endregion
 
-		//#region instance properties
+		//instance properties
 		instanceId;
 		curImg;
 
-		shadow;
 		btnPrev;
 		btnNext;
 		figureContainer;
 		minImgWidth;
+		minImgHeight;
+		maxImgHeight;
 		reflowWidth;
-		//#endregion
 
 		constructor() {
 			super();
@@ -60,11 +92,35 @@ window.GW.Controls = window.GW.Controls || {};
 			GalleryEl.instanceMap[this.instanceId] = this;
 		}
 
+		get idKey() {
+			return `gw-gallery-${this.instanceId}`;
+		}
+
 		//#region HTMLElement implementation
 		connectedCallback() {
 			this.name = this.getAttribute("name");
 			this.minImgWidth = this.getAttribute("minImgWidth");
+			this.minImgHeight = this.getAttribute("minImgHeight");
+			this.maxImgHeight = this.getAttribute("maxImgHeight");
 			this.reflowWidth = this.getAttribute("reflowWidth");
+
+			if(this.reflowWidth) {
+				document.head.insertAdjacentHTML("beforeend", `
+				<style>
+					#${this.idKey}-container {
+						@container(max-width: ${this.reflowWidth || "0px"}) {
+							.gallery {
+								grid-template-columns: 1fr 1fr;
+								grid-template-rows: 1fr auto;
+							}
+							.figure-container {
+								grid-row: 1;
+								grid-column: 1 / -1;
+							}
+						}
+					}
+				</style>`);
+			}
 
 			this.renderContent();
 			this.registerHandlers();
@@ -73,53 +129,18 @@ window.GW.Controls = window.GW.Controls || {};
 
 		renderContent() {
 			//Markup
-			this.shadow = this.attachShadow({ mode: "open" });
-			this.shadow.innerHTML = `
-			<style>
-				#galleryContainer {
-					container-type: inline-size;
-				}
-
-				#gallery {
-					display: grid;
-					grid-template-columns: auto 1fr auto;
-					gap: 10px;
-					justify-items: center;
-					align-items: center;
-				}
-
-				@container(max-width: ${this.reflowWidth || "0px"}) {
-					#gallery {
-						grid-template-columns: 1fr 1fr;
-						grid-template-rows: 1fr auto;
-					}
-					#figureContainer {
-						grid-row: 1;
-						grid-column: 1 / -1;
-					}
-				}
-
-				#figureContainer {
-					max-width: calc(100% - 70px); /* 70px is the width of both nav buttons */
-					overflow-x: auto;
-				}
-
-				.nav-button {
-					width: 35px;
-				}
-			</style>
-
-			<section id="galleryContainer" aria-label="${this.name} image gallery">
-				<div id="gallery">
-					<button id="prevImg" class="nav-button" aria-labelledby="prevTitle">
+			this.innerHTML = `
+			<section id="${this.idKey}-container" class="gw-gallery-container" aria-label="${this.name} image gallery">
+				<div class="gallery">
+					<button id="${this.idKey}-prevImg" class="nav-button" aria-labelledby="prevTitle">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512">
 							<title id="prevTitle">Previous</title>
 							<!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. -->
 							<path d="M9.4 278.6c-12.5-12.5-12.5-32.8 0-45.3l128-128c9.2-9.2 22.9-11.9 34.9-6.9s19.8 16.6 19.8 29.6l0 256c0 12.9-7.8 24.6-19.8 29.6s-25.7 2.2-34.9-6.9l-128-128z"></path>
 						</svg>
 					</button>
-					<div id="figureContainer"></div>
-					<button id="nextImg" class="nav-button" aria-labelledby="nextTitle">
+					<div class="figure-container"></div>
+					<button id="${this.idKey}-nextImg" class="nav-button" aria-labelledby="nextTitle">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512">
 							<title id="nextTitle">Next</title>
 							<!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. -->
@@ -131,9 +152,9 @@ window.GW.Controls = window.GW.Controls || {};
 			`;
 
 			//element properties
-			this.btnPrev = this.shadow.getElementById(`prevImg`);
-			this.btnNext = this.shadow.getElementById(`nextImg`);
-			this.figureContainer = this.shadow.getElementById(`figureContainer`);
+			this.btnPrev = document.getElementById(`${this.idKey}-prevImg`);
+			this.btnNext = document.getElementById(`${this.idKey}-nextImg`);
+			this.figureContainer = this.querySelector(`.figure-container`);
 		}
 
 		//#region Handlers
@@ -178,6 +199,9 @@ window.GW.Controls = window.GW.Controls || {};
 			galFig.name = this.name;
 			galFig.image = this.curImg;
 			galFig.minImgWidth = this.minImgWidth;
+			galFig.minImgHeight = this.minImgHeight;
+			galFig.maxImgHeight = this.maxImgHeight;
+
 			galFig.onImgLoaded = () => {
 				this.figureContainer.replaceChildren(galFig);
 				this.figureContainer.ariaLive = "polite"; //we don't want to announce changes until after initial load
@@ -213,24 +237,47 @@ window.GW.Controls = window.GW.Controls || {};
 		//#endregion
 	};
 	customElements.define("gw-gallery", ns.GalleryEl);
+	//#endregion
 
+	//#region FigureEl
+	window.addEventListener("load", function galleryFigureOnLoad() {
+		document.head.insertAdjacentHTML("beforeend",`
+		<style>
+			.gw-gallery-figure {
+				box-sizing: border-box;
+				margin: 0;
+
+				img {
+					max-width: 100%;
+					min-width: auto;
+
+					max-height: none;
+					min-height: auto;
+
+					border: 3px solid var(--border-color, black);
+				}
+
+				.page-num {
+					float: right;
+					margin-left: 2px;
+				}
+			}
+		</style>
+		`);
+	});
 	ns.FigureEl = class FigureEl extends HTMLElement {
-		//#region staticProperties
+		//static properties
 		static instanceCount = 0;
 		static instanceMap = {};
-		//#endregion
 
-		//#region instance properties
+		//instance properties
 		instanceId;
 		name;
 		image;
 		onImgLoaded;
 		minImgWidth;
 
-		//#region element properties
-		shadow;
-		//#endregion
-		//#endregion
+		galleryImg;
 
 		constructor() {
 			super();
@@ -241,45 +288,30 @@ window.GW.Controls = window.GW.Controls || {};
 		renderContent() {
 			const imageList = ns[this.name].imageList;
 			const imageInfo = ns[this.name].imageInfo[this.image];
+
 			//Markup
-			this.shadow = this.attachShadow({ mode: "open" });
-			this.shadow.innerHTML = `
-			<style>
-				figure {
-					margin: 0;
-				}
-
-				#galleryImg {
-					max-width: calc(100% - 6px); /* 6px for the border */
-					min-width: ${this.minImgWidth || "auto"};
-
-					max-height: auto; /* Change these to some value if you want the images to be of consistent height */
-					min-height: auto;
-
-					border: 3px solid var(--border-color, black); /* You may replace var(--border-color) with whatever color your want */
-				}
-
-				#imagePageNum {
-					float: right;
-					margin-left: 2px;
-				}
-			</style>
-
-			<figure>
-				<img id="galleryImg" alt="${imageInfo.alt}">
+			this.innerHTML = `
+			<figure class="gw-gallery-figure">
+				<img
+					alt="${imageInfo.alt}"
+					style="min-width: ${this.minImgWidth || auto}; max-height: ${this.maxImgHeight || "none"}; min-height: ${this.minImgHeight || "auto"}"
+				>
 				<figcaption>
 					<span>${imageInfo.title}</span>
-					<time datetime="${imageInfo.date.toISOString()}">(${imageInfo.date.toLocaleDateString(undefined, { year: 'numeric', month: 'numeric', day: 'numeric' })})</time>
-					<span id="imagePageNum">#${imageList.indexOf(this.image)+1} of ${imageList.length}</span>
+					<time datetime="${imageInfo.date.toISOString()}">(${
+						imageInfo.date.toLocaleDateString(undefined, { year: 'numeric', month: 'numeric', day: 'numeric' })
+					})</time>
+					<span class="page-num">#${imageList.indexOf(this.image)+1} of ${imageList.length}</span>
 				</figcaption>
 			</figure>
 			`;
 
 			//element properties
-			this.galleryImg = this.shadow.getElementById(`galleryImg`);
+			this.galleryImg = this.querySelector(`img`);
 			this.galleryImg.onload = this.onImgLoaded;
 			this.galleryImg.src=`${ns[this.name].imageFolder}/${this.image}.${imageInfo.extension}`;
 		}
 	};
 	customElements.define("gw-gallery-figure", ns.FigureEl);
+	//endregion
 }) (window.GW.Controls.Gallery = window.GW.Controls.Gallery || {});
