@@ -138,6 +138,14 @@ window.GW = window.GW || {};
 					min-height: 30px;
 				}
 
+				/** https://browserstrangeness.bitbucket.io/css_hacks.html#safari **/
+				@supports (-webkit-hyphens:none) {
+					select {
+						background-color: white;
+						color: black;
+					}
+				}
+
 				button[aria-expanded="true"], button[aria-pressed="true"] {
 					background-color: var(--selected-color);
 					font-weight: bold;
