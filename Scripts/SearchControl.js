@@ -8,40 +8,6 @@ window.GW.Controls = window.GW.Controls || {};
 (function Search(ns) {
 	ns.Data = ns.Data || {};
 
-	window.addEventListener("load", function searchElOnLoad() {
-		document.head.insertAdjacentHTML("beforeend", `
-		<style>
-			gw-search {
-				display: flex;
-				justify-content: center;
-				padding-block-start: 3px;
-
-				form {
-					border: 0;
-				}
-				
-				label {
-					display: flex;
-					flex-direction: row;
-					align-items: center;
-					gap: 2px;
-				}
-
-				svg {
-					width: 22px;
-					height: 22px;
-				}
-				
-				[popover="auto"] {
-					text-align: center;
-					ol {
-						text-align: start;
-						padding-inline: 40px;
-					}
-				}
-			}	
-		</style>`);
-	});
 	ns.SearchEl = class SearchEl extends HTMLElement {
 		static InstanceCount = 0;
 		static InstanceMap = {};
@@ -54,6 +20,41 @@ window.GW.Controls = window.GW.Controls || {};
 			super();
 			this.InstanceId = SearchEl.InstanceCount++;
 			SearchEl.InstanceMap[this.InstanceId] = this;
+
+			if(this.InstanceId === 0) {
+				document.head.insertAdjacentHTML("beforeend", `
+				<style>
+					gw-search {
+						display: flex;
+						justify-content: center;
+						padding-block-start: 3px;
+		
+						form {
+							border: 0;
+						}
+						
+						label {
+							display: flex;
+							flex-direction: row;
+							align-items: center;
+							gap: 2px;
+						}
+		
+						svg {
+							width: 22px;
+							height: 22px;
+						}
+						
+						[popover="auto"] {
+							text-align: center;
+							ol {
+								text-align: start;
+								padding-inline: 40px;
+							}
+						}
+					}	
+				</style>`);
+			}
 		}
 
 		getId(key) {
