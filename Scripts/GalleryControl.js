@@ -67,6 +67,9 @@ window.GW.Controls = window.GW.Controls || {};
 					justify-content: center;
 					
 					width: 35px;
+					path {
+						fill: var(--icon-color);
+					}
 				}
 			}
 		</style>
