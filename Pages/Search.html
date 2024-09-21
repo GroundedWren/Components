@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Search test page">
+	<title>Search</title>
+
+    <script src="../Scripts/SearchControl.js"></script>
+
+	<style>
+		*, *::before, *::after {
+		  box-sizing: border-box;
+		}
+		
+		html, body {
+			margin: 0;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			font-size: 1em;
+		}
+		body {
+			min-height: 100vh;
+		}
+		
+		.sr-only {
+			position: absolute;
+			left: -99999999px;
+			top: 0px;
+		}
+		
+		.hide-until-focus {
+			position: absolute;
+			left: -99999999px;
+			top: 0px;
+		}
+		.hide-until-focus:focus {
+			position: revert;
+			left: revert;
+			top: revert;
+		}
+
+        :focus-visible, *[tabindex="-1"]:focus {
+            outline-width: 4px;
+            outline-color: red;
+            outline-style: solid;
+            outline-offset: 1px;
+            
+            position: relative;
+            z-index: 100 !important;
+        }
+
+        *[tabindex="-1"]:focus {
+            outline-style: dashed;
+        }
+		
+		.hidden {
+			display: none !important;
+		}
+		
+		.input-vertical {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: flex-start;
+		}
+		
+		button, label {
+			cursor: pointer;
+		}
+		
+		table, th, td {
+			border: 1px solid;
+			border-collapse: collapse;
+		}
+		table {
+			width: 100%;
+		}
+		caption {
+			font-style: italic;
+		}
+		thead {
+			border-bottom: 2px solid;
+			text-align: center;
+			font-weight: bold;
+		}
+		thead > tr > th {
+			text-align: left;
+		}
+	</style>
+	<style>
+
+	</style>
+	<script>
+		GW.Controls.Search.Data.Test = {
+        "Home" : {
+          URL: "https://groundedwren.neocities.org/index.html",
+          Category: "Grounded Wren",
+          Terms: ["HOME", "INDEX"]
+        },
+        "Contact" : {
+          URL: "https://groundedwren.neocities.org/pages/contact.html",
+          Category: "Grounded Wren",
+          Terms: ["CONTACT", "VERA"]
+        },
+        "Controls Index" : {
+          URL: "https://groundedwren.neocities.org/pages/controls/index.html",
+          Category: "Controls",
+          Terms: ["CONTROLS", "CONTROL", "INDEX"]
+        },
+        "Gallery" : {
+          URL: "https://groundedwren.neocities.org/pages/controls/galleryDemo.html",
+          Category: "Controls",
+          Terms: ["GALLERY", "CONTROLS", "CONTROL", "COMIC", "IMAGE"]
+        },
+        "Personalization" : {
+          URL: "https://groundedwren.neocities.org/pages/controls/personalizationDemo.html",
+          Category: "Controls",
+          Terms: ["PERSONALIZATION", "THEME", "COLOR", "COLORS", "THEMES", "FONT", "CONTROLS", "CONTROL"]
+        },
+        "Submenu" : {
+          URL: "https://groundedwren.neocities.org/pages/controls/submenuDemo.html",
+          Category: "Controls",
+          Terms: ["SUBMENU", "DETAILS", "EXPAND", "COLLAPSE", "COLLAPSIBLE", "MENU", "CONTROLS", "CONTROL"]
+        },
+        "SVG Icon" : {
+          URL: "https://groundedwren.neocities.org/pages/controls/svgIconsDemo.html",
+          Category: "Controls",
+          Terms: ["SVG", "ICON", "ICONS", "FONTAWESOME", "CONTROLS", "CONTROL"]
+        },
+        "Guestbook" : {
+          URL: "https://groundedwren.neocities.org/pages/controls/guestbookDemo.html",
+          Category: "Controls",
+          Terms: ["GUESTBOOK", "COMMENTS", "DISCORD", "WEBHOOK", "GOOGLE", "SHEETS", "CONTROLS", "CONTROL"]
+        },
+        "Shortcuts" : {
+          URL: "https://groundedwren.neocities.org/pages/controls/shortcutsDemo.html",
+          Category: "Controls",
+          Terms: ["SHORTCUTS", "SHORTCUT", "HOTKEY", "SHORT", "ACCESSKEY", "KEYBOARD", "CONTROLS", "CONTROL"]
+        },
+        "Toaster" : {
+          URL: "https://groundedwren.neocities.org/pages/controls/toasterDemo.html",
+          Category: "Controls",
+          Terms: ["TOASTER", "TOAST", "MESSAGE", "ALERT", "POPUP", "SNACKBAR", "CONTROLS", "CONTROL"]
+        },
+        "Tooltips" : {
+          URL: "https://groundedwren.neocities.org/pages/controls/tooltipsDemo.html",
+          Category: "Controls",
+          Terms: ["TOOLTIPS", "TOOLTIP", "TOOL", "TIP", "HOVER", "FOCUS", "BUBBLE", "CONTROLS", "CONTROL"]
+        },
+        "Gizmos Index" : {
+          URL: "https://groundedwren.neocities.org/pages/gizmos/index.html",
+          Category: "Gizmos",
+          Terms: ["GIZMOS", "GIZMO", "INDEX"]
+        },
+        "FileLib" : {
+          URL: "https://groundedwren.neocities.org/pages/gizmos/fileLibDemo.html",
+          Category: "Gizmos",
+          Terms: ["FILELIB", "FILE", "LOAD", "SAVE", "PICKER", "IO", "GIZMOS", "GIZMO"]
+        },
+        "Google Sheets Reader" : {
+          URL: "https://groundedwren.neocities.org/pages/gizmos/googleSheetsReaderDemo.html",
+          Category: "Gizmos",
+          Terms: ["GOOGLE", "SHEETS", "READER", "DATABASE", "GET", "SPREADSHEET", "SHEET", "GIZMOS", "GIZMO"]
+        },
+        "Fragment Siter" : {
+          URL: "https://groundedwren.neocities.org/pages/gizmos/fragmentSiterDemo.html",
+          Category: "Gizmos",
+          Terms: ["FRAGMENT", "SITER", "COMPONENT", "IMPORT", "HTML", "GIZMOS", "GIZMO"]
+        },
+        "Tools Index" : {
+          URL: "https://groundedwren.neocities.org/pages/tools/index.html",
+          Category: "Tools",
+          Terms: ["TOOL", "TOOLS", "INDEX"]
+        },
+        "Flexbox Visualization" : {
+          URL: "https://groundedwren.neocities.org/pages/tools/flexboxVis.html",
+          Category: "Tools",
+          Terms: ["FLEXBOX", "FLEX", "BOX", "CSS", "VISUALIZER", "VISUAL", "VIS", "VIZ", "TOOL", "TOOLS"]
+        },
+        "CSS Palette Builder" : {
+          URL: "https://groundedwren.neocities.org/pages/tools/palette.html",
+          Category: "Tools",
+          Terms: ["CSS", "PALETTE", "BUILDER", "THEME", "COLOR", "COLORS", "THEMES", "VARIABLES", "TOOL", "TOOLS"]
+        },
+        "Date/Time" : {
+          URL: "https://groundedwren.neocities.org/pages/tools/dateTime.html",
+          Category: "Tools",
+          Terms: ["DATE", "TIME", "DATE/TIME", "JAVASCRIPT", "JS", "TIMEZONE", "TIMEZONES", "TOOL", "TOOLS"]
+        },
+        "Tutorials Index" : {
+          URL: "https://groundedwren.neocities.org/pages/tutorials/index.html",
+          Category: "Tutorials",
+          Terms: ["TUTORIALS", "TUTORIAL", "LESSON", "EXAMPLE", "INDEX"]
+        },
+        "Tabs Pattern" : {
+          URL: "https://groundedwren.neocities.org/pages/tutorials/tabsPattern.html",
+          Category: "Tutorials",
+          Terms: ["TAB", "TABS", "PAGE", "PAGES", "PATTERN", "TUTORIALS", "TUTORIAL", "LESSON", "EXAMPLE"]
+        },
+      };
+	</script>
+</head>
+<body>
+	<h1>Search</h1>
+    <main>
+        <gw-search dataKey="Test"></gw-search>
+    </main>
+</body>
+</html>

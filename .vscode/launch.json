@@ -7,8 +7,8 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Open Shortcuts.html",
-            "file": ".\\Pages\\Gallery.html",
+            "name": "Open Test Page.html",
+            "file": ".\\Pages\\Search.html",
 			"runtimeArgs": ["--disable-web-security"]
         }
     ]
