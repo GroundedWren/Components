@@ -43,6 +43,10 @@ window.GW.Controls = window.GW.Controls || {};
 						svg {
 							width: 22px;
 							height: 22px;
+							
+							path {
+								fill: var(--icon-color);
+							}
 						}
 						
 						[popover="auto"] {
