@@ -39,42 +39,6 @@ window.GW.Controls = window.GW.Controls || {};
 	//#endregion
 
 	//#region GalleryEl
-	window.addEventListener("load", function galleryElOnLoad() {
-		document.head.insertAdjacentHTML("beforeend",`
-		<style>
-			.gw-gallery-container {
-				*, *::before, *::after {
-					box-sizing: border-box;
-				}
-				
-				container-type: inline-size;
-
-				.gallery {
-					display: grid;
-					grid-template-columns: auto 1fr auto;
-					gap: 10px;
-					justify-items: center;
-					align-items: stretch;
-				}
-
-				.figure-container {
-					max-width: 100%;
-					overflow-x: auto;
-				}
-				.nav-button {
-					display: flex;
-					flex-direction: column;
-					justify-content: center;
-					
-					width: 35px;
-					path {
-						fill: var(--icon-color);
-					}
-				}
-			}
-		</style>
-		`);
-	});
 	ns.GalleryEl = class GalleryEl extends HTMLElement {
 		//static properties
 		static instanceCount = 0;
@@ -97,6 +61,42 @@ window.GW.Controls = window.GW.Controls || {};
 			super();
 			this.instanceId = GalleryEl.instanceCount++;
 			GalleryEl.instanceMap[this.instanceId] = this;
+
+			if(this.instanceId === 0) {
+				document.head.insertAdjacentHTML("beforeend",`
+				<style>
+					.gw-gallery-container {
+						*, *::before, *::after {
+							box-sizing: border-box;
+						}
+						
+						container-type: inline-size;
+		
+						.gallery {
+							display: grid;
+							grid-template-columns: auto 1fr auto;
+							gap: 10px;
+							justify-items: center;
+							align-items: stretch;
+						}
+		
+						.figure-container {
+							max-width: 100%;
+							overflow-x: auto;
+						}
+						.nav-button {
+							display: flex;
+							flex-direction: column;
+							justify-content: center;
+							
+							width: 35px;
+							path {
+								fill: var(--icon-color);
+							}
+						}
+					}
+				</style>`);
+			}
 		}
 
 		get idKey() {
@@ -247,31 +247,6 @@ window.GW.Controls = window.GW.Controls || {};
 	//#endregion
 
 	//#region FigureEl
-	window.addEventListener("load", function galleryFigureOnLoad() {
-		document.head.insertAdjacentHTML("beforeend",`
-		<style>
-			.gw-gallery-figure {
-				box-sizing: border-box;
-				margin: 0;
-
-				img {
-					max-width: 100%;
-					min-width: auto;
-
-					max-height: none;
-					min-height: auto;
-
-					border: 3px solid var(--border-color, black);
-				}
-
-				.page-num {
-					float: right;
-					margin-left: 2px;
-				}
-			}
-		</style>
-		`);
-	});
 	ns.FigureEl = class FigureEl extends HTMLElement {
 		//static properties
 		static instanceCount = 0;
@@ -290,6 +265,31 @@ window.GW.Controls = window.GW.Controls || {};
 			super();
 			this.instanceId = FigureEl.instanceCount++;
 			FigureEl.instanceMap[this.instanceId] = this;
+
+			if(this.instanceId === 0) {
+				document.head.insertAdjacentHTML("beforeend",`
+				<style>
+					.gw-gallery-figure {
+						box-sizing: border-box;
+						margin: 0;
+		
+						img {
+							max-width: 100%;
+							min-width: auto;
+		
+							max-height: none;
+							min-height: auto;
+		
+							border: 3px solid var(--border-color, black);
+						}
+		
+						.page-num {
+							float: right;
+							margin-left: 2px;
+						}
+					}
+				</style>`);
+			}
 		}
 
 		renderContent() {
