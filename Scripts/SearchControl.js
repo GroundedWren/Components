@@ -65,7 +65,7 @@ window.GW.Controls = window.GW.Controls || {};
 			return `gw-search-${this.InstanceId}-${key}`;
 		}
 		getRef(key) {
-			return document.getElementById(this.getId(key));
+			return this.querySelector(`#${this.getId(key)}`);
 		}
 
 		get FormEl() {
