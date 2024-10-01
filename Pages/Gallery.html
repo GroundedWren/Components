@@ -99,11 +99,36 @@
             flex-grow: 1;
         }
 	</style>
+	<script>
+		GW.Controls.Gallery.Data = GW.Controls.Gallery.Data || {};
+		GW.Controls.Gallery.Data.Example2 = {
+		ImageList: [ //The filenames of your images in the order you want them to appear. The default is for the gallery to start at the latest (last) image.
+			"Slide1",
+			"Slide2",
+		],
+		ImageFolder: "https://groundedwren.neocities.org/img", //Where all the image files on your site live
+		ImageInfo: {
+			"Slide1": {
+				Title: "Title One", //This is the display name for your image
+				Date: new Date("October 10, 2023"), //This is the date which will display by your image title
+				Alt: "Alternative text 1", //This is text displayed to those using screen readers or visually when the image doesn't load
+				Extension: "png" //The file type of your image
+			},
+			"Slide2": {
+				Title: "Title Two",
+				Date: new Date("October 11, 2023"),
+				Alt: "Alternative text 2",
+				Extension: "png"
+			},
+		}
+	};
+	</script>
 </head>
 <body>
 	<h1>Gallery</h1>
     <main>
         <gw-gallery name="Example1" minImgWidth="350px" reflowWidth="550px"></gw-gallery>
+		<gw-gallery name="Example2" minImgWidth="350px" reflowWidth="550px" startAt="0"></gw-gallery>
     </main>
 </body>
 </html>

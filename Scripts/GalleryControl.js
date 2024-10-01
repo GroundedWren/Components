@@ -15,24 +15,25 @@ window.GW.Controls = window.GW.Controls || {};
 	* If you want multiple image galleries, you can create other objects below this to describe them.
 	* "Example1" should be changed to the "name" you give to your <gw-gallery> element :)
 	*/
-	ns.Example1 = {
-		imageList: [ //The filenames of your images in the order you want them to appear. The default is for the gallery to start at the latest (last) image.
+	ns.Data = ns.Data || {};
+	ns.Data.Example1 = {
+		ImageList: [ //The filenames of your images in the order you want them to appear. The default is for the gallery to start at the latest (last) image.
 			"Slide1",
 			"Slide2",
 		],
-		imageFolder: "https://groundedwren.neocities.org/img", //Where all the image files on your site live
-		imageInfo: {
+		ImageFolder: "https://groundedwren.neocities.org/img", //Where all the image files on your site live
+		ImageInfo: {
 			"Slide1": {
-				title: "Title One", //This is the display name for your image
-				date: new Date("October 10, 2023"), //This is the date which will display by your image title
-				alt: "Alternative text 1", //This is text displayed to those using screen readers or visually when the image doesn't load
-				extension: "png" //The file type of your image
+				Title: "Title One", //This is the display name for your image
+				Date: new Date("October 10, 2023"), //This is the date which will display by your image title
+				Alt: "Alternative text 1", //This is text displayed to those using screen readers or visually when the image doesn't load
+				Extension: "png" //The file type of your image
 			},
 			"Slide2": {
-				title: "Title Two",
-				date: new Date("October 11, 2023"),
-				alt: "Alternative text 2",
-				extension: "png"
+				Title: "Title Two",
+				Date: new Date("October 11, 2023"),
+				Alt: "Alternative text 2",
+				Extension: "png"
 			},
 		}
 	};
@@ -41,28 +42,29 @@ window.GW.Controls = window.GW.Controls || {};
 	//#region GalleryEl
 	ns.GalleryEl = class GalleryEl extends HTMLElement {
 		//static properties
-		static instanceCount = 0;
-		static instanceMap = {};
+		static InstanceCount = 0;
+		static InstanceMap = {};
 		//#endregion
 
 		//instance properties
-		instanceId;
-		curImg;
+		InstanceId;
+		CurImg;
 
-		btnPrev;
-		btnNext;
-		figureContainer;
-		minImgWidth;
-		minImgHeight;
-		maxImgHeight;
-		reflowWidth;
+		BtnPrev;
+		BtnNext;
+		FigureContainer;
+		MinImgWidth;
+		MinImgHeight;
+		MaxImgHeight;
+		ReflowWidth;
+		StartAt;
 
 		constructor() {
 			super();
-			this.instanceId = GalleryEl.instanceCount++;
-			GalleryEl.instanceMap[this.instanceId] = this;
+			this.InstanceId = GalleryEl.InstanceCount++;
+			GalleryEl.InstanceMap[this.InstanceId] = this;
 
-			if(this.instanceId === 0) {
+			if(this.InstanceId === 0) {
 				document.head.insertAdjacentHTML("beforeend",`
 				<style>
 					.gw-gallery-container {
@@ -99,23 +101,24 @@ window.GW.Controls = window.GW.Controls || {};
 			}
 		}
 
-		get idKey() {
-			return `gw-gallery-${this.instanceId}`;
+		get IdKey() {
+			return `gw-gallery-${this.InstanceId}`;
 		}
 
 		//#region HTMLElement implementation
 		connectedCallback() {
-			this.name = this.getAttribute("name");
-			this.minImgWidth = this.getAttribute("minImgWidth");
-			this.minImgHeight = this.getAttribute("minImgHeight");
-			this.maxImgHeight = this.getAttribute("maxImgHeight");
-			this.reflowWidth = this.getAttribute("reflowWidth");
+			this.Name = this.getAttribute("name");
+			this.MinImgWidth = this.getAttribute("minImgWidth");
+			this.MinImgHeight = this.getAttribute("minImgHeight");
+			this.MaxImgHeight = this.getAttribute("maxImgHeight");
+			this.ReflowWidth = this.getAttribute("reflowWidth");
+			this.StartAt = parseInt(this.getAttribute("startAt"));
 
-			if(this.reflowWidth) {
+			if(this.ReflowWidth) {
 				document.head.insertAdjacentHTML("beforeend", `
 				<style>
-					#${this.idKey}-container {
-						@container(max-width: ${this.reflowWidth || "0px"}) {
+					#${this.IdKey}-container {
+						@container(max-width: ${this.ReflowWidth || "0px"}) {
 							.gallery {
 								grid-template-columns: 1fr 1fr;
 								grid-template-rows: 1fr auto;
@@ -137,9 +140,9 @@ window.GW.Controls = window.GW.Controls || {};
 		renderContent() {
 			//Markup
 			this.innerHTML = `
-			<section id="${this.idKey}-container" class="gw-gallery-container" aria-label="${this.name} image gallery">
+			<section id="${this.IdKey}-container" class="gw-gallery-container" aria-label="${this.Name} image gallery">
 				<div class="gallery">
-					<button id="${this.idKey}-prevImg" class="nav-button" aria-labelledby="prevTitle">
+					<button id="${this.IdKey}-prevImg" class="nav-button" aria-labelledby="prevTitle">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512">
 							<title id="prevTitle">Previous</title>
 							<!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. -->
@@ -147,7 +150,7 @@ window.GW.Controls = window.GW.Controls || {};
 						</svg>
 					</button>
 					<div class="figure-container"></div>
-					<button id="${this.idKey}-nextImg" class="nav-button" aria-labelledby="nextTitle">
+					<button id="${this.IdKey}-nextImg" class="nav-button" aria-labelledby="nextTitle">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512">
 							<title id="nextTitle">Next</title>
 							<!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. -->
@@ -159,16 +162,16 @@ window.GW.Controls = window.GW.Controls || {};
 			`;
 
 			//element properties
-			this.btnPrev = document.getElementById(`${this.idKey}-prevImg`);
-			this.btnNext = document.getElementById(`${this.idKey}-nextImg`);
-			this.figureContainer = this.querySelector(`.figure-container`);
+			this.BtnPrev = this.querySelector(`#${this.IdKey}-prevImg`);
+			this.BtnNext = this.querySelector(`#${this.IdKey}-nextImg`);
+			this.FigureContainer = this.querySelector(`.figure-container`);
 		}
 
 		//#region Handlers
 		registerHandlers() {
-			this.btnPrev.onclick = () => {
-				const imageList = ns[this.name].imageList;
-				let curIdx = imageList.indexOf(this.curImg);
+			this.BtnPrev.onclick = () => {
+				const imageList = ns.Data[this.Name].ImageList;
+				let curIdx = imageList.indexOf(this.CurImg);
 				if(curIdx < 0) { curIdx = 0; }
 
 				const newIdx = curIdx === 0
@@ -177,9 +180,9 @@ window.GW.Controls = window.GW.Controls || {};
 				this.loadImage(imageList[newIdx]);
 			};
 
-			this.btnNext.onclick = () => {
-				const imageList = ns[this.name].imageList;
-				let curIdx = imageList.indexOf(this.curImg);
+			this.BtnNext.onclick = () => {
+				const imageList = ns.Data[this.Name].ImageList;
+				let curIdx = imageList.indexOf(this.CurImg);
 				if(curIdx < 0) { curIdx = 0; }
 
 				const newIdx = curIdx === (imageList.length - 1)
@@ -190,28 +193,31 @@ window.GW.Controls = window.GW.Controls || {};
 
 			window.addEventListener("load", () => {  
 				const urlParams = new URLSearchParams(window.location.search);
-				const imageList = ns[this.name].imageList;
+				const imageList = ns.Data[this.Name].ImageList;
+				const fallbackImgIdx = (!isNaN(this.StartAt) && this.StartAt >= 0 && this.StartAt < imageList.length)
+					? this.StartAt
+					: imageList.length - 1;
 
-				const imageName = urlParams.has(this.name)
-					? urlParams.get(this.name)
-					: imageList[imageList.length - 1];
+				const imageName = urlParams.has(this.Name)
+					? urlParams.get(this.Name)
+					: imageList[fallbackImgIdx];
 
 				this.loadImage(imageName);
 			});
 		}
 
 		loadImage(imageName) {
-			this.curImg = imageName;
+			this.CurImg = imageName;
 			const galFig = document.createElement("gw-gallery-figure");
-			galFig.name = this.name;
-			galFig.image = this.curImg;
-			galFig.minImgWidth = this.minImgWidth;
-			galFig.minImgHeight = this.minImgHeight;
-			galFig.maxImgHeight = this.maxImgHeight;
+			galFig.Name = this.Name;
+			galFig.Image = this.CurImg;
+			galFig.MinImgWidth = this.MinImgWidth;
+			galFig.MinImgHeight = this.MinImgHeight;
+			galFig.MaxImgHeight = this.MaxImgHeight;
 
-			galFig.onImgLoaded = () => {
-				this.figureContainer.replaceChildren(galFig);
-				this.figureContainer.ariaLive = "polite"; //we don't want to announce changes until after initial load
+			galFig.ImgLoadedCallback = () => {
+				this.FigureContainer.replaceChildren(galFig);
+				this.FigureContainer.ariaLive = "polite"; //we don't want to announce changes until after initial load
 				this.updateLocation(imageName);
 			};
 			galFig.renderContent();
@@ -226,7 +232,7 @@ window.GW.Controls = window.GW.Controls || {};
 				return acc;
 			}, {});
 
-			params[this.name] = imageName;
+			params[this.Name] = imageName;
 
 			const paramsStr = Object.keys(params).reduce((acc, cur) => {
 				if(!acc.length)
@@ -249,24 +255,24 @@ window.GW.Controls = window.GW.Controls || {};
 	//#region FigureEl
 	ns.FigureEl = class FigureEl extends HTMLElement {
 		//static properties
-		static instanceCount = 0;
-		static instanceMap = {};
+		static InstanceCount = 0;
+		static InstanceMap = {};
 
 		//instance properties
-		instanceId;
-		name;
-		image;
-		onImgLoaded;
-		minImgWidth;
+		InstanceId;
+		Name;
+		Image;
+		ImgLoadedCallback;
+		MinImgWidth;
 
-		galleryImg;
+		GalleryImg;
 
 		constructor() {
 			super();
-			this.instanceId = FigureEl.instanceCount++;
-			FigureEl.instanceMap[this.instanceId] = this;
+			this.InstanceId = FigureEl.InstanceCount++;
+			FigureEl.InstanceMap[this.InstanceId] = this;
 
-			if(this.instanceId === 0) {
+			if(this.InstanceId === 0) {
 				document.head.insertAdjacentHTML("beforeend",`
 				<style>
 					.gw-gallery-figure {
@@ -296,33 +302,33 @@ window.GW.Controls = window.GW.Controls || {};
 		}
 
 		renderContent() {
-			const imageList = ns[this.name].imageList;
-			const imageInfo = ns[this.name].imageInfo[this.image];
+			const imageList = ns.Data[this.Name].ImageList;
+			const imageInfo = ns.Data[this.Name].ImageInfo[this.Image];
 
 			//Markup
 			this.innerHTML = `
 			<figure class="gw-gallery-figure">
 				<img
-					alt="${imageInfo.alt}"
-					style="min-width: ${this.minImgWidth || auto}; max-height: ${this.maxImgHeight || "none"}; min-height: ${this.minImgHeight || "auto"}; "
+					alt="${imageInfo.Alt}"
+					style="min-width: ${this.MinImgWidth || auto}; max-height: ${this.MaxImgHeight || "none"}; min-height: ${this.MinImgHeight || "auto"}; "
 				>
 				<figcaption>
-					<span>${imageInfo.title}</span>
-					<time datetime="${imageInfo.date.toISOString()}">(${
-						imageInfo.date.toLocaleDateString(undefined, { year: 'numeric', month: 'numeric', day: 'numeric' })
+					<span>${imageInfo.Title}</span>
+					<time datetime="${imageInfo.Date.toISOString()}">(${
+						imageInfo.Date.toLocaleDateString(undefined, { year: 'numeric', month: 'numeric', day: 'numeric' })
 					})</time>
-					<span class="page-num">#${imageList.indexOf(this.image)+1} of ${imageList.length}</span>
+					<span class="page-num">#${imageList.indexOf(this.Image)+1} of ${imageList.length}</span>
 				</figcaption>
 			</figure>
 			`;
 
 			//element properties
-			this.galleryImg = this.querySelector(`img`);
-			this.galleryImg.onload = () => {
-				setTimeout(() => { this.galleryImg.style.opacity = "1"; }, 10);
-				this.onImgLoaded();
+			this.GalleryImg = this.querySelector(`img`);
+			this.GalleryImg.onload = () => {
+				setTimeout(() => { this.GalleryImg.style.opacity = "1"; }, 50);
+				this.ImgLoadedCallback();
 			};
-			this.galleryImg.src=`${ns[this.name].imageFolder}/${this.image}.${imageInfo.extension}`;
+			this.GalleryImg.src=`${ns.Data[this.Name].ImageFolder}/${this.Image}.${imageInfo.Extension}`;
 		}
 	};
 	customElements.define("gw-gallery-figure", ns.FigureEl);
