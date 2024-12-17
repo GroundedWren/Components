@@ -147,8 +147,8 @@ window.GW = window.GW || {};
 				}
 
 				button[aria-expanded="true"], button[aria-pressed="true"] {
-					background-color: var(--selected-color);
-					box-shadow: 0px 0px 3px 1px var(--link-color) inset
+					background-color: var(--selected-color, #90CBDB);
+					box-shadow: 0px 0px 3px 1px var(--link-color, #0000EE) inset
 				}
 
 				:focus-visible, *[tabindex="-1"]:focus {
