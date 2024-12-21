@@ -172,3 +172,4 @@ window.GW.Controls = window.GW.Controls || {};
 	};
 	customElements.define("gw-shortcuts", ns.ShortcutsEl);
 }) (window.GW.Controls.Shortcuts = window.GW.Controls.Shortcuts || {});
+GW?.Controls?.Veil?.clearDefer("GW.Controls.Search");

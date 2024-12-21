@@ -343,3 +343,4 @@ window.GW = window.GW || {};
 	};
 	customElements.define("gw-tooltip", ns.TooltipEl);
 }) (window.GW.Controls = window.GW.Controls || {});
+GW?.Controls?.Veil?.clearDefer("GW.Controls.TooltipEl");

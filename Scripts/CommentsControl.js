@@ -202,6 +202,7 @@ window.GW = window.GW || {};
 		//#endregion
 	};
 	customElements.define("gw-comment-form", ns.CommentForm);
+	GW?.Controls?.Veil?.clearDefer("GW.Controls.CommentForm");
 
 	ns.CommentList = class CommentList extends HTMLElement {
 		//#region staticProperties
@@ -338,6 +339,7 @@ window.GW = window.GW || {};
 		//#endregion
 	};
 	customElements.define("gw-comment-list", ns.CommentList);
+	GW?.Controls?.Veil?.clearDefer("GW.Controls.CommentList");
 
 	ns.CommentCard = class CommentCard extends HTMLElement {
 		//#region staticProperties
@@ -522,4 +524,5 @@ window.GW = window.GW || {};
 		}
 	};
 	customElements.define("gw-comment-card", ns.CommentCard);
+	GW?.Controls?.Veil?.clearDefer("GW.Controls.CommentCard");
 }) (window.GW.Controls = window.GW.Controls || {});

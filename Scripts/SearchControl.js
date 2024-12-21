@@ -162,3 +162,4 @@ window.GW.Controls = window.GW.Controls || {};
 	}
 	customElements.define("gw-search", ns.SearchEl);
 }) (window.GW.Controls.Search = window.GW.Controls.Search || {});
+GW?.Controls?.Veil?.clearDefer("GW.Controls.Search");

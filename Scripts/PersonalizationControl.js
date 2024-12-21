@@ -235,3 +235,4 @@ window.GW = window.GW || {};
 	};
 	customElements.define("gw-personalization", ns.PersonalizationEl);
 }) (window.GW.Controls = window.GW.Controls || {});
+GW?.Controls?.Veil?.clearDefer("GW.Controls.PersonalizationEl");

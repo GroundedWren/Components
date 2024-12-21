@@ -106,4 +106,5 @@ window.GW = window.GW || {};
 		//#endregion
 	};
 	customElements.define("gw-submenu", ns.SubmenuEl);
+	GW?.Controls?.Veil?.clearDefer("GW.Controls.SubmenuEl");
 }) (window.GW.Controls = window.GW.Controls || {});

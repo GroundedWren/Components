@@ -159,3 +159,4 @@ window.GW.Controls = window.GW.Controls || {};
 		document.getElementById(toastId)?.remove();
 	};
 }) (window.GW.Controls.Toaster = window.GW.Controls.Toaster || {}); 
+GW?.Controls?.Veil?.clearDefer("GW.Controls.Toaster");

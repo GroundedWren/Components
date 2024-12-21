@@ -636,6 +636,7 @@ window.GW.Controls = window.GW.Controls || {};
 	};
 	//#endregion
 }) (window.GW.Controls.SVGLib = window.GW.Controls.SVGLib || {});
+GW?.Controls?.Veil?.clearDefer("GW.Controls.SVGLib");
 
 window.GW = window.GW || {};
 (function Controls(ns) {
@@ -732,4 +733,5 @@ window.GW = window.GW || {};
 		}
 	};
 	customElements.define("gw-icon", ns.IconEl);
+	GW?.Controls?.Veil?.clearDefer("GW.Controls.IconEl");
 }) (window.GW.Controls = window.GW.Controls || {});
