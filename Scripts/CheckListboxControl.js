@@ -91,6 +91,10 @@ window.GW.Controls = window.GW.Controls || {};
 			}
 		}
 
+		/**
+		 * Sets up the state and interactivity of the listbox.
+		 * Call this if the options or selection are programatically changed.
+		 */
 		renderContent = () => {
 			this.FieldsetEl.setAttribute("role", "listbox");
 			this.ActiveDescendant = null;
@@ -133,6 +137,11 @@ window.GW.Controls = window.GW.Controls || {};
 			this.IsInitialized = true;
 		};
 
+		/**
+		 * Enables an input for type-ahead functionality
+		 * @param {string} text Input's text
+		 * @param {HTMLElement} inputEl Input element
+		 */
 		addToKeyMap(text, inputEl) {
 			let currentLevel = this.KeyMap;
 			text.split("").forEach(character => {
@@ -181,6 +190,11 @@ window.GW.Controls = window.GW.Controls || {};
 			}
 		};
 
+		/**
+		 * Finds a type-ahead match
+		 * @param {string} key Latest typed character
+		 * @returns {HTMLElement | null}
+		 */
 		getFirstMatch(key) {
 			const keyTimestamp = new Date();
 			if(keyTimestamp - this.LastKeyTimestamp > CheckListboxEl.ResetMs) {
@@ -210,6 +224,10 @@ window.GW.Controls = window.GW.Controls || {};
 			return sequenceObj.InputElAry[0];
 		}
 
+		/**
+		 * Updates what the active input is
+		 * @param {HTMLElement} inputEl The newly active input
+		 */
 		setActiveInput(inputEl) {
 			if(this.ActiveDescendant) {
 				this.querySelector(`#${this.ActiveDescendant}`).setAttribute("tabindex", "-1");
