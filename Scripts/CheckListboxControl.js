@@ -124,7 +124,9 @@ window.GW.Controls = window.GW.Controls || {};
 					"aria-hidden": "true",
 					"tab-index": "-1",
 					"inert": "true"
-				}).forEach(([attribute, value]) => inputEl.setAttribute(attribute, value));
+				}).forEach(
+					([attribute, value]) => inputEl.setAttribute(attribute, value)
+				);
 
 				Object.entries({
 					"id": labelEl.id || this.getId(this.IdIter++),
