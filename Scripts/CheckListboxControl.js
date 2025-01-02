@@ -172,15 +172,11 @@ window.GW.Controls = window.GW.Controls || {};
 			switch(event.key) {
 				case "ArrowRight":
 				case "ArrowDown":
-					if(event.target.nextElementSibling) {
-						newOptionEl = event.target.nextElementSibling;
-					}
+					newOptionEl = this.getAdjacentOption(event.target, "nextElementSibling");
 					break;
 				case "ArrowLeft":
 				case "ArrowUp":
-					if(event.target.previousElementSibling) {
-						newOptionEl = event.target.previousElementSibling;
-					}
+					newOptionEl = this.getAdjacentOption(event.target, "previousElementSibling");
 					break;
 				case "Home":
 					newOptionEl = this.querySelector(`[role="option"]:first-of-type`);
@@ -200,6 +196,15 @@ window.GW.Controls = window.GW.Controls || {};
 				this.setActiveOption(newOptionEl);
 			}
 		};
+
+		getAdjacentOption(optionEl, accessAttrName) {
+			let curEl = optionEl;
+			do {
+				curEl = curEl[accessAttrName];
+			} while(curEl && !curEl.matches(`[role="option"]`));
+			
+			return curEl;
+		}
 
 		onOptionKeyup = (event) => {
 			switch(event.key) {
