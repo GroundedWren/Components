@@ -97,6 +97,8 @@ window.GW.Controls = window.GW.Controls || {};
 		 * Call this if the options or selection are programatically changed.
 		 */
 		renderContent = () => {
+			this.IsInitialized = false;
+			
 			this.FieldsetEl.setAttribute("role", "listbox");
 			this.ActiveDescendant = null;
 			this.KeyMap = {};
