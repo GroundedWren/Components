@@ -268,7 +268,9 @@ window.GW.Controls = window.GW.Controls || {};
 				this.querySelector(`#${this.ActiveDescendant}`).setAttribute("tabindex", "-1");
 			}
 			optionEl.setAttribute("tabindex", "0");
-			optionEl.focus();
+			if(this.IsInitialized) {
+				optionEl.focus();
+			}
 			setTimeout(() => {
 				if(optionEl.querySelector("input").checked !== (optionEl.getAttribute("aria-selected") === "true")) {
 					optionEl.querySelector("input").click();
