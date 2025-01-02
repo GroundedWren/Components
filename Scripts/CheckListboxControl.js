@@ -197,6 +197,12 @@ window.GW.Controls = window.GW.Controls || {};
 			}
 		};
 
+		/**
+		 * Finds the next adjacent option using the specified access attribute
+		 * @param {HTMLElement} optionEl The current option to search from
+		 * @param {string} accessAttrName "nextElementSibling" or "previousElementSibling"
+		 * @returns The next adjacent option, if it exists
+		 */
 		getAdjacentOption(optionEl, accessAttrName) {
 			let curEl = optionEl;
 			do {
