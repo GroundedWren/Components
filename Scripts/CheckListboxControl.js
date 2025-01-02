@@ -219,6 +219,7 @@ window.GW.Controls = window.GW.Controls || {};
 			switch(event.key) {
 				case " ":
 					this.onOptionClick(event);
+					event.preventDefault();
 					break;
 			}
 		};
