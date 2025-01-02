@@ -256,9 +256,6 @@ window.GW.Controls = window.GW.Controls || {};
 				}
 			}
 
-			if (sequenceObj.OptionElAry.length === 1) {
-				this.CurKeySequence = [];
-			}
 			return sequenceObj.OptionElAry[0];
 		}
 
