@@ -34,6 +34,7 @@ window.GW.Controls = window.GW.Controls || {};
 							background-color: var(--button-face-color, #C8C8C8);
 							border-radius: 20px;
 							display: flex;
+							align-items: center;
 							gap: 2px;
 
 							> svg {
