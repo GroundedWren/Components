@@ -61,8 +61,8 @@ window.GW.Controls = window.GW.Controls || {};
 			return this.querySelector("legend");
 		}
 
-		get InputElAry() {
-			return [...this.querySelectorAll("input")];
+		get LabelElAry() {
+			return [...this.querySelectorAll("label")];
 		}
 
 		get ActiveDescendant() {
@@ -109,28 +109,36 @@ window.GW.Controls = window.GW.Controls || {};
 			}
 			
 			let hasChecked = false;
-			this.InputElAry.forEach(inputEl => {
-				if(!inputEl.hasAttribute("data-checklistbox-listening")) {
-					inputEl.addEventListener("click", this.onInputClick);
-					inputEl.addEventListener("keydown", this.onInputKeydown);
-					inputEl.setAttribute("data-checklistbox-listening", "true");
+			this.LabelElAry.forEach(labelEl => {
+				if(!labelEl.hasAttribute("data-checklistbox-listening")) {
+					labelEl.addEventListener("click", this.onOptionClick);
+					labelEl.addEventListener("keydown", this.onOptionKeydown);
+					labelEl.addEventListener("keyup", this.onOptionKeyup);
+					labelEl.setAttribute("data-checklistbox-listening", "true");
 				}
+				const inputEl = labelEl.querySelector("input");
 				Object.entries({
-					"id": inputEl.id || this.getId(this.IdIter++),
+					"aria-hidden": "true",
+					"tab-index": "-1",
+					"inert": "true"
+				}).forEach(([attribute, value]) => inputEl.setAttribute(attribute, value));
+
+				Object.entries({
+					"id": labelEl.id || this.getId(this.IdIter++),
 					"role": "option",
 					"tabindex": "-1",
-					"aria-selected": inputEl.checked}
-				).forEach(
-					([attribute, value]) => inputEl.setAttribute(attribute, value)
+					"aria-selected": inputEl.checked
+				}).forEach(
+					([attribute, value]) => labelEl.setAttribute(attribute, value)
 				);
 
-				this.addToKeyMap(inputEl.parentElement.innerText.toLowerCase(), inputEl);
+				this.addToKeyMap(labelEl.innerText.toLowerCase(), labelEl);
 
 				if(!this.ActiveDescendant || (!hasChecked && inputEl.checked)) {
 					if(inputEl.checked) {
 						hasChecked = true;
 					}
-					this.setActiveInput(inputEl);
+					this.setActiveOption(labelEl);
 				}
 			});
 
@@ -138,62 +146,72 @@ window.GW.Controls = window.GW.Controls || {};
 		};
 
 		/**
-		 * Enables an input for type-ahead functionality
-		 * @param {string} text Input's text
-		 * @param {HTMLElement} inputEl Input element
+		 * Enables an option for type-ahead functionality
+		 * @param {string} text Option's text
+		 * @param {HTMLElement} optionEl Option element
 		 */
-		addToKeyMap(text, inputEl) {
+		addToKeyMap(text, optionEl) {
 			let currentLevel = this.KeyMap;
 			text.split("").forEach(character => {
 				currentLevel[character] = currentLevel[character] || {};
 				currentLevel = currentLevel[character];
-				(currentLevel.InputElAry = currentLevel.InputElAry || []).push(inputEl);
+				(currentLevel.OptionElAry = currentLevel.OptionElAry || []).push(optionEl);
 			});
 		}
 
-		onInputClick = (event) => {
-			const inputEl = event.target;
-			inputEl.setAttribute("aria-selected", inputEl.checked);
-			this.setActiveInput(inputEl);
+		onOptionClick = (event) => {
+			const optionEl = event.target;
+			optionEl.setAttribute("aria-selected", optionEl.getAttribute("aria-selected") !== "true");
+			this.setActiveOption(optionEl);
 		};
 
-		onInputKeydown = (event) => {
-			let newInputEl = null;
-			const labelEl = event.target.parentElement;
+		onOptionKeydown = (event) => {
+			let newOptionEl = null;
 
 			switch(event.key) {
 				case "ArrowRight":
 				case "ArrowDown":
-					if(labelEl.nextElementSibling) {
-						newInputEl = labelEl.nextElementSibling.querySelector("input");
+					if(event.target.nextElementSibling) {
+						newOptionEl = event.target.nextElementSibling;
 					}
 					break;
 				case "ArrowLeft":
 				case "ArrowUp":
-					if(labelEl.previousElementSibling) {
-						newInputEl = labelEl.previousElementSibling.querySelector("input");
+					if(event.target.previousElementSibling) {
+						newOptionEl = event.target.previousElementSibling;
 					}
 					break;
 				case "Home":
-					newInputEl = this.querySelector(`label:first-of-type input`);
+					newOptionEl = this.querySelector(`[role="option"]:first-of-type`);
 					break;
 				case "End":
-					newInputEl = this.querySelector(`label:last-of-type input`);
+					newOptionEl = this.querySelector(`[role="option"]:last-of-type`);
 					break;
+				case "Enter":
+					this.onOptionClick(event);
+					return;
 				default:
-					newInputEl = this.getFirstMatch(event.key.toLowerCase());
+					newOptionEl = this.getFirstMatch(event.key.toLowerCase());
 					break;
 			}
-			if(newInputEl) {
+			if(newOptionEl) {
 				event.preventDefault();
-				this.setActiveInput(newInputEl);
+				this.setActiveOption(newOptionEl);
+			}
+		};
+
+		onOptionKeyup = (event) => {
+			switch(event.key) {
+				case " ":
+					this.onOptionClick(event);
+					break;
 			}
 		};
 
 		/**
 		 * Finds a type-ahead match
 		 * @param {string} key Latest typed character
-		 * @returns {HTMLElement | null}
+		 * @returns {HTMLElement | null} Option element match
 		 */
 		getFirstMatch(key) {
 			const keyTimestamp = new Date();
@@ -207,8 +225,8 @@ window.GW.Controls = window.GW.Controls || {};
 			let sequenceObj = this.KeyMap;
 			this.CurKeySequence.forEach(key => sequenceObj = sequenceObj[key] || {});
 
-			if(!sequenceObj.InputElAry) {
-				if(this.KeyMap[key]?.InputElAry) {
+			if(!sequenceObj.OptionElAry) {
+				if(this.KeyMap[key]?.OptionElAry) {
 					this.CurKeySequence = [key];
 					sequenceObj = this.KeyMap[key];
 				}
@@ -218,23 +236,24 @@ window.GW.Controls = window.GW.Controls || {};
 				}
 			}
 
-			if (sequenceObj.InputElAry.length === 1) {
+			if (sequenceObj.OptionElAry.length === 1) {
 				this.CurKeySequence = [];
 			}
-			return sequenceObj.InputElAry[0];
+			return sequenceObj.OptionElAry[0];
 		}
 
 		/**
-		 * Updates what the active input is
-		 * @param {HTMLElement} inputEl The newly active input
+		 * Updates what the active option is
+		 * @param {HTMLElement} inputEl The newly active option
 		 */
-		setActiveInput(inputEl) {
+		setActiveOption(optionEl) {
 			if(this.ActiveDescendant) {
 				this.querySelector(`#${this.ActiveDescendant}`).setAttribute("tabindex", "-1");
 			}
-			inputEl.setAttribute("tabindex", "0");
-			inputEl.focus();
-			this.ActiveDescendant = inputEl.id;
+			optionEl.setAttribute("tabindex", "0");
+			optionEl.focus();
+			optionEl.querySelector("input").checked = optionEl.getAttribute("aria-selected") === "true";
+			this.ActiveDescendant = optionEl.id;
 		}
 	}
 	customElements.define("gw-check-listbox", ns.CheckListboxEl);
