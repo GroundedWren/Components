@@ -162,6 +162,10 @@ window.GW.Controls = window.GW.Controls || {};
 
 		onOptionClick = (event) => {
 			const optionEl = event.target;
+			if(!optionEl.matches(`[role="option"]`)) {
+				return;
+			}
+
 			optionEl.setAttribute("aria-selected", optionEl.getAttribute("aria-selected") !== "true");
 			this.setActiveOption(optionEl);
 		};
@@ -268,7 +272,11 @@ window.GW.Controls = window.GW.Controls || {};
 			}
 			optionEl.setAttribute("tabindex", "0");
 			optionEl.focus();
-			optionEl.querySelector("input").checked = optionEl.getAttribute("aria-selected") === "true";
+			setTimeout(() => {
+				if(optionEl.querySelector("input").checked !== (optionEl.getAttribute("aria-selected") === "true")) {
+					optionEl.querySelector("input").click();
+				}
+			}, 0);
 			this.ActiveDescendant = optionEl.id;
 		}
 	}
