@@ -133,7 +133,7 @@ window.GW.Controls = window.GW.Controls || {};
 					([attribute, value]) => labelEl.setAttribute(attribute, value)
 				);
 
-				this.addToKeyMap(labelEl.innerText.toLowerCase(), labelEl);
+				this.addToKeyMap(labelEl.innerText.trim().toLowerCase(), labelEl);
 
 				if(!this.ActiveDescendant || (!hasChecked && inputEl.checked)) {
 					if(inputEl.checked) {
@@ -186,6 +186,9 @@ window.GW.Controls = window.GW.Controls || {};
 					break;
 				case "Enter":
 					this.onOptionClick(event);
+					return;
+				case " ":
+					event.preventDefault();
 					return;
 				default:
 					newOptionEl = this.getFirstMatch(event.key.toLowerCase());
