@@ -96,9 +96,7 @@ window.GW.Controls = window.GW.Controls || {};
 		 * Sets up the state and interactivity of the listbox.
 		 * Call this if the options or selection are programatically changed.
 		 */
-		renderContent = () => {
-			this.IsInitialized = false;
-			
+		renderContent = () => {		
 			this.FieldsetEl.setAttribute("role", "listbox");
 			this.ActiveDescendant = null;
 			this.KeyMap = {};
