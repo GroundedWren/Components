@@ -79,7 +79,7 @@ window.GW = window.GW || {};
 						}
 
 						textarea {
-							padding-block-start: 1.4em;
+							padding-block-start: 1.4rem;
 						}
 
 						&:not(:focus-within, :hover) {
