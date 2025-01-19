@@ -8,7 +8,6 @@ window.GW.Controls = window.GW.Controls || {};
 (function TEMPLATE(ns) {
 	ns.TEMPLATEEl = class TEMPLATEEl extends HTMLElement {
 		static InstanceCount = 0;
-		static InstanceMap = {};
 
 		InstanceId;
 		IsInitialized;
@@ -16,7 +15,6 @@ window.GW.Controls = window.GW.Controls || {};
 		constructor() {
 			super();
 			this.InstanceId = TEMPLATEEl.InstanceCount++;
-			TEMPLATEEl.InstanceMap[this.InstanceId] = this;
 
 			if(this.InstanceId === 0) {
 				document.head.insertAdjacentHTML("beforeend", `
