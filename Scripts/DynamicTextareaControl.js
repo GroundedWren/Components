@@ -151,7 +151,7 @@ window.GW = window.GW || {};
 		onToggleClick = (event) => {
 			event.stopPropagation();
 			ns.DynamicTextareaEl.EditorMode = !ns.DynamicTextareaEl.EditorMode;
-			localStorage.setItem("gw-dynamic-textarea-editor-mode", ns.DynamicTextareaEl ? "on" : "off");
+			localStorage.setItem("gw-dynamic-textarea-editor-mode", ns.DynamicTextareaEl.EditorMode ? "on" : "off");
 
 			ns.DynamicTextareaEl.AsiPolite.insertAdjacentHTML("afterbegin", `
 				<article id="${this.getId("msg-" + ++this.MessageIdx)}">
