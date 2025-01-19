@@ -26,23 +26,29 @@ window.GW.Controls = window.GW.Controls || {};
 			if(this.InstanceId === 0) {
 				document.head.insertAdjacentHTML("beforeend", `
 				<style>
-					gw-check-listbox fieldset {
-						border-color: var(--link-color, #0000EE);
-						background-color: var(--button-face-color, #C8C8C8);
-
-						legend {
-							background-color: var(--button-face-color, #C8C8C8);
-							border-radius: 20px;
-							display: flex;
-							align-items: center;
-							gap: 2px;
-
-							> svg {
-								width: 1em;
-								height: 1em;
-							}
+					gw-check-listbox {
+						.selsDesc {
+							display: none;
 						}
-					}	
+						
+						fieldset {
+							border-color: var(--link-color, #0000EE);
+							background-color: var(--button-face-color, #C8C8C8);
+
+							legend {
+								background-color: var(--button-face-color, #C8C8C8);
+								border-radius: 20px;
+								display: flex;
+								align-items: center;
+								gap: 2px;
+
+								> svg {
+									width: 1em;
+									height: 1em;
+								}
+							}
+						}	
+					}
 				</style>`);
 			}
 		}
@@ -60,6 +66,10 @@ window.GW.Controls = window.GW.Controls || {};
 
 		get LegendEl() {
 			return this.querySelector("legend");
+		}
+
+		get SelDescEl() {
+			return this.querySelector(".selsDesc");
 		}
 
 		get LabelElAry() {
@@ -108,6 +118,14 @@ window.GW.Controls = window.GW.Controls || {};
 				);
 				this.LegendEl.setAttribute("data-checklistbox-has-icon", "true");
 			}
+
+			if(!this.SelDescEl) {
+				this.insertAdjacentHTML("afterbegin", `<aside id="${this.getId("selsDesc")}" class="selsDesc"></aside>`);
+				this.FieldsetEl.setAttribute(
+					"aria-describedby",
+					this.FieldsetEl.getAttribute("aria-describedby") + " " + this.getId("selsDesc")
+				);
+			}
 			
 			let hasChecked = false;
 			this.LabelElAry.forEach(labelEl => {
@@ -143,6 +161,8 @@ window.GW.Controls = window.GW.Controls || {};
 					}
 					this.setActiveOption(labelEl);
 				}
+				
+				this.updateSelsDesc();
 			});
 
 			this.IsInitialized = true;
@@ -169,6 +189,7 @@ window.GW.Controls = window.GW.Controls || {};
 			}
 
 			optionEl.setAttribute("aria-checked", optionEl.getAttribute("aria-checked") !== "true");
+			this.updateSelsDesc();
 			this.setActiveOption(optionEl);
 		};
 
@@ -279,6 +300,13 @@ window.GW.Controls = window.GW.Controls || {};
 				}
 			}, 0);
 			this.ActiveDescendant = optionEl.id;
+		}
+
+		updateSelsDesc() {
+			const selectionsList = this.LabelElAry.filter(
+				label => label.getAttribute("aria-checked") === "true"
+			).map(label => label.innerText).join(", ");
+			this.SelDescEl.innerHTML = selectionsList ? `Selections: ${selectionsList}` : "No selections"
 		}
 	}
 	customElements.define("gw-check-listbox", ns.CheckListboxEl);
