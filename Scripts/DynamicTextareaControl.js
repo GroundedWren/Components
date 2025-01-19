@@ -218,7 +218,7 @@ window.GW = window.GW || {};
 				event.preventDefault();
 	
 				let containedStr = origValue.substring(lineStart, origEnd);
-				lines = containedStr.split("\n");
+				let lines = containedStr.split("\n");
 				const origLineZeroLen = lines[0].length;
 				lines = lines.map(line => {
 					if(event.shiftKey) {
