@@ -38,6 +38,7 @@ window.GW = window.GW || {};
 							position: absolute;
 							top: 0;
 							right: 0;
+							z-index: 999;
 
 							display: grid;
 							grid-auto-flow: column;
@@ -45,13 +46,17 @@ window.GW = window.GW || {};
 							align-items: center;
 							justify-content: end;
 
-							margin: 2px;
+							margin: 3px;
 
 							background-color: var(--background-color-2, #F2F2F2);
 							svg {
 								width: 0.8em;
 								aspect-ratio: 1 / 1;
 								padding: 1px;
+
+								path {
+									fill: var(--icon-color);
+								}
 
 								&.checked {
 									display: none;
