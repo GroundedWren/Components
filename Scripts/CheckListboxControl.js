@@ -130,7 +130,7 @@ window.GW.Controls = window.GW.Controls || {};
 					"id": labelEl.id || this.getId(this.IdIter++),
 					"role": "option",
 					"tabindex": "-1",
-					"aria-selected": inputEl.checked
+					"aria-checked": inputEl.checked
 				}).forEach(
 					([attribute, value]) => labelEl.setAttribute(attribute, value)
 				);
@@ -168,7 +168,7 @@ window.GW.Controls = window.GW.Controls || {};
 				return;
 			}
 
-			optionEl.setAttribute("aria-selected", optionEl.getAttribute("aria-selected") !== "true");
+			optionEl.setAttribute("aria-checked", optionEl.getAttribute("aria-checked") !== "true");
 			this.setActiveOption(optionEl);
 		};
 
@@ -274,7 +274,7 @@ window.GW.Controls = window.GW.Controls || {};
 				optionEl.focus();
 			}
 			setTimeout(() => {
-				if(optionEl.querySelector("input").checked !== (optionEl.getAttribute("aria-selected") === "true")) {
+				if(optionEl.querySelector("input").checked !== (optionEl.getAttribute("aria-checked") === "true")) {
 					optionEl.querySelector("input").click();
 				}
 			}, 0);
