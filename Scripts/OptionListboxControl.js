@@ -1,12 +1,12 @@
 /**
- * @file Control for a listbox of checkboxes
+ * @file Control for a listbox of optionboxes
  * @author Vera Konigin vera@groundedwren.com
  */
  
 window.GW = window.GW || {};
 window.GW.Controls = window.GW.Controls || {};
-(function CheckListbox(ns) {
-	ns.CheckListboxEl = class CheckListboxEl extends HTMLElement {
+(function OptionListbox(ns) {
+	ns.OptionListboxEl = class OptionListboxEl extends HTMLElement {
 		static InstanceCount = 0;
 		static ResetMs = 500;
 
@@ -19,16 +19,12 @@ window.GW.Controls = window.GW.Controls || {};
 
 		constructor() {
 			super();
-			this.InstanceId = CheckListboxEl.InstanceCount++;
+			this.InstanceId = OptionListboxEl.InstanceCount++;
 
 			if(this.InstanceId === 0) {
 				document.head.insertAdjacentHTML("beforeend", `
 				<style>
-					gw-check-listbox {
-						.selsDesc {
-							display: none;
-						}
-						
+					gw-option-listbox {
 						fieldset {
 							border-color: var(--link-color, #0000EE);
 							background-color: var(--button-face-color, #C8C8C8);
@@ -52,7 +48,7 @@ window.GW.Controls = window.GW.Controls || {};
 		}
 
 		getId(key) {
-			return `gw-check-listbox-${this.InstanceId}-${key}`;
+			return `gw-option-listbox-${this.InstanceId}-${key}`;
 		}
 		getRef(key) {
 			return this.querySelector(`#${this.getId(key)}`);
@@ -64,10 +60,6 @@ window.GW.Controls = window.GW.Controls || {};
 
 		get LegendEl() {
 			return this.querySelector("legend");
-		}
-
-		get SelDescEl() {
-			return this.querySelector(".selsDesc");
 		}
 
 		get LabelElAry() {
@@ -104,36 +96,28 @@ window.GW.Controls = window.GW.Controls || {};
 		renderContent = () => {
 			Object.entries({
 				"role": "listbox",
-				"aria-multiselectable": "true",
+				"aria-multiselectable": "false",
 			}).forEach(
 				([attribute, value]) => this.FieldsetEl.setAttribute(attribute, value)
 			);
 			this.ActiveDescendant = null;
 			this.KeyMap = {};
 
-			if(!this.LegendEl.hasAttribute("data-checklistbox-has-icon")) {
+			if(!this.LegendEl.hasAttribute("data-optionlistbox-has-icon")) {
 				this.LegendEl.insertAdjacentHTML(
 					"beforeend",
 					`<svg viewBox="0 0 576 512" class="gw-icon" aria-hidden="true"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. --><title>Use arrow keys or type an option to navigate.</title><path d="M64 64C28.7 64 0 92.7 0 128V384c0 35.3 28.7 64 64 64H512c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64H64zm16 64h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V144c0-8.8 7.2-16 16-16zM64 240c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V240zm16 80h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V336c0-8.8 7.2-16 16-16zm80-176c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H176c-8.8 0-16-7.2-16-16V144zm16 80h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H176c-8.8 0-16-7.2-16-16V240c0-8.8 7.2-16 16-16zM160 336c0-8.8 7.2-16 16-16H400c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H176c-8.8 0-16-7.2-16-16V336zM272 128h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H272c-8.8 0-16-7.2-16-16V144c0-8.8 7.2-16 16-16zM256 240c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H272c-8.8 0-16-7.2-16-16V240zM368 128h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H368c-8.8 0-16-7.2-16-16V144c0-8.8 7.2-16 16-16zM352 240c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H368c-8.8 0-16-7.2-16-16V240zM464 128h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H464c-8.8 0-16-7.2-16-16V144c0-8.8 7.2-16 16-16zM448 240c0-8.8 7.2-16 16-16h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H464c-8.8 0-16-7.2-16-16V240zm16 80h32c8.8 0 16 7.2 16 16v32c0 8.8-7.2 16-16 16H464c-8.8 0-16-7.2-16-16V336c0-8.8 7.2-16 16-16z"></path></svg>`
 				);
-				this.LegendEl.setAttribute("data-checklistbox-has-icon", "true");
-			}
-
-			if(!this.SelDescEl) {
-				this.insertAdjacentHTML("afterbegin", `<aside id="${this.getId("selsDesc")}" class="selsDesc"></aside>`);
-				this.FieldsetEl.setAttribute(
-					"aria-describedby",
-					[this.FieldsetEl.getAttribute("aria-describedby"), this.getId("selsDesc")].filter(id => !!id).join(" ")
-				);
+				this.LegendEl.setAttribute("data-optionlistbox-has-icon", "true");
 			}
 			
 			let hasChecked = false;
 			this.LabelElAry.forEach(labelEl => {
-				if(!labelEl.hasAttribute("data-checklistbox-listening")) {
-					labelEl.addEventListener("click", this.onOptionClick);
+				if(!labelEl.hasAttribute("data-optionlistbox-listening")) {
+					labelEl.addEventListener("click", (event) => this.clickOption(event.target));
 					labelEl.addEventListener("keydown", this.onOptionKeydown);
 					labelEl.addEventListener("keyup", this.onOptionKeyup);
-					labelEl.setAttribute("data-checklistbox-listening", "true");
+					labelEl.setAttribute("data-optionlistbox-listening", "true");
 				}
 				const inputEl = labelEl.querySelector("input");
 				Object.entries({
@@ -161,8 +145,6 @@ window.GW.Controls = window.GW.Controls || {};
 					}
 					this.setActiveOption(labelEl);
 				}
-				
-				this.updateSelsDesc();
 			});
 
 			this.IsInitialized = true;
@@ -181,17 +163,6 @@ window.GW.Controls = window.GW.Controls || {};
 				(currentLevel.OptionElAry = currentLevel.OptionElAry || []).push(optionEl);
 			});
 		}
-
-		onOptionClick = (event) => {
-			const optionEl = event.target;
-			if(!optionEl.matches(`[role="option"]`)) {
-				return;
-			}
-
-			optionEl.setAttribute("aria-selected", optionEl.getAttribute("aria-selected") !== "true");
-			this.updateSelsDesc();
-			this.setActiveOption(optionEl);
-		};
 
 		onOptionKeydown = (event) => {
 			let newOptionEl = null;
@@ -212,18 +183,22 @@ window.GW.Controls = window.GW.Controls || {};
 					newOptionEl = this.querySelector(`[role="option"]:last-of-type`);
 					break;
 				case "Enter":
-					this.onOptionClick(event);
+					newOptionEl = event.target;
 					return;
 				case " ":
 					event.preventDefault();
 					return;
 				default:
 					newOptionEl = this.getFirstMatch(event.key.toLowerCase());
+					if(newOptionEl && newOptionEl.id === this.ActiveDescendant) {
+						event.preventDefault();
+						return;
+					}
 					break;
 			}
 			if(newOptionEl) {
 				event.preventDefault();
-				this.setActiveOption(newOptionEl);
+				this.clickOption(newOptionEl);
 			}
 		};
 
@@ -245,7 +220,7 @@ window.GW.Controls = window.GW.Controls || {};
 		onOptionKeyup = (event) => {
 			switch(event.key) {
 				case " ":
-					this.onOptionClick(event);
+					this.clickOption(event.target);
 					event.preventDefault();
 					break;
 			}
@@ -258,7 +233,7 @@ window.GW.Controls = window.GW.Controls || {};
 		 */
 		getFirstMatch(key) {
 			const keyTimestamp = new Date();
-			if(keyTimestamp - this.LastKeyTimestamp > CheckListboxEl.ResetMs) {
+			if(keyTimestamp - this.LastKeyTimestamp > OptionListboxEl.ResetMs) {
 				this.CurKeySequence = [];
 			}
 			this.LastKeyTimestamp = keyTimestamp;
@@ -294,21 +269,29 @@ window.GW.Controls = window.GW.Controls || {};
 			if(this.IsInitialized) {
 				optionEl.focus();
 			}
-			setTimeout(() => {
-				if(optionEl.querySelector("input").checked !== (optionEl.getAttribute("aria-selected") === "true")) {
-					optionEl.querySelector("input").click();
-				}
-			}, 0);
 			this.ActiveDescendant = optionEl.id;
 		}
 
-		updateSelsDesc() {
-			const selectionsList = this.LabelElAry.filter(
-				label => label.getAttribute("aria-selected") === "true"
-			).map(label => label.innerText).join(", ");
-			this.SelDescEl.innerHTML = selectionsList ? `Selections: ${selectionsList}` : "No selections"
+		clickOption = function clickOption(optionEl) {
+			if(!optionEl.matches(`[role="option"]`)) {
+				return;
+			}
+
+			this.setActiveOption(optionEl);
+
+			const isNowSelected = optionEl.getAttribute("aria-selected") !== "true";
+			optionEl.setAttribute("aria-selected", isNowSelected);
+			optionEl.querySelector("input").checked = isNowSelected;
+
+			if(isNowSelected) {
+				this.LabelElAry.forEach(labelEl => {
+					if(labelEl !== optionEl) {
+						labelEl.setAttribute("aria-selected", "false");
+					}
+				});
+			}
 		}
 	}
-	customElements.define("gw-check-listbox", ns.CheckListboxEl);
-}) (window.GW.Controls.CheckListbox = window.GW.Controls.CheckListbox || {});
-GW?.Controls?.Veil?.clearDefer("GW.Controls.CheckListbox");
+	customElements.define("gw-option-listbox", ns.OptionListboxEl);
+}) (window.GW.Controls.OptionListbox = window.GW.Controls.OptionListbox || {});
+GW?.Controls?.Veil?.clearDefer("GW.Controls.OptionListbox");
