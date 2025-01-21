@@ -106,8 +106,13 @@ window.GW.Controls = window.GW.Controls || {};
 		 * Sets up the state and interactivity of the listbox.
 		 * Call this if the options or selection are programatically changed.
 		 */
-		renderContent = () => {		
-			this.FieldsetEl.setAttribute("role", "listbox");
+		renderContent = () => {
+			Object.entries({
+				"role": "listbox",
+				"aria-multiselectable": "true",
+			}).forEach(
+				([attribute, value]) => this.FieldsetEl.setAttribute(attribute, value)
+			);
 			this.ActiveDescendant = null;
 			this.KeyMap = {};
 
@@ -123,7 +128,7 @@ window.GW.Controls = window.GW.Controls || {};
 				this.insertAdjacentHTML("afterbegin", `<aside id="${this.getId("selsDesc")}" class="selsDesc"></aside>`);
 				this.FieldsetEl.setAttribute(
 					"aria-describedby",
-					this.FieldsetEl.getAttribute("aria-describedby") + " " + this.getId("selsDesc")
+					[this.FieldsetEl.getAttribute("aria-describedby"), this.getId("selsDesc")].filter(id => !!id).join(" ")
 				);
 			}
 			
@@ -148,7 +153,7 @@ window.GW.Controls = window.GW.Controls || {};
 					"id": labelEl.id || this.getId(this.IdIter++),
 					"role": "option",
 					"tabindex": "-1",
-					"aria-checked": inputEl.checked
+					"aria-selected": inputEl.checked
 				}).forEach(
 					([attribute, value]) => labelEl.setAttribute(attribute, value)
 				);
@@ -188,7 +193,7 @@ window.GW.Controls = window.GW.Controls || {};
 				return;
 			}
 
-			optionEl.setAttribute("aria-checked", optionEl.getAttribute("aria-checked") !== "true");
+			optionEl.setAttribute("aria-selected", optionEl.getAttribute("aria-selected") !== "true");
 			this.updateSelsDesc();
 			this.setActiveOption(optionEl);
 		};
@@ -295,7 +300,7 @@ window.GW.Controls = window.GW.Controls || {};
 				optionEl.focus();
 			}
 			setTimeout(() => {
-				if(optionEl.querySelector("input").checked !== (optionEl.getAttribute("aria-checked") === "true")) {
+				if(optionEl.querySelector("input").checked !== (optionEl.getAttribute("aria-selected") === "true")) {
 					optionEl.querySelector("input").click();
 				}
 			}, 0);
@@ -304,7 +309,7 @@ window.GW.Controls = window.GW.Controls || {};
 
 		updateSelsDesc() {
 			const selectionsList = this.LabelElAry.filter(
-				label => label.getAttribute("aria-checked") === "true"
+				label => label.getAttribute("aria-selected") === "true"
 			).map(label => label.innerText).join(", ");
 			this.SelDescEl.innerHTML = selectionsList ? `Selections: ${selectionsList}` : "No selections"
 		}
