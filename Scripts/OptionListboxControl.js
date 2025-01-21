@@ -290,6 +290,7 @@ window.GW.Controls = window.GW.Controls || {};
 					}
 				});
 			}
+			this.dispatchEvent(new Event("option-click"));
 		}
 	}
 	customElements.define("gw-option-listbox", ns.OptionListboxEl);
