@@ -24,8 +24,11 @@ window.GW = window.GW || {};
 							width: 16px;
 							height: 16px;
 							path {
-								fill: var(--icon-color);
+								fill: var(--icon-color, #000000);
 							}
+						}
+						[role="tab"][aria-selected="true"] {
+							background-color: var(--selected-color, #90CBDB);
 						}
 					}	
 				</style>`);
@@ -138,6 +141,7 @@ window.GW = window.GW || {};
 			const clickedTab = event.currentTarget;
 			this.TabAry.forEach(tabEl => {
 				tabEl.setAttribute("aria-selected", tabEl === clickedTab);
+				tabEl.setAttribute("tabindex", tabEl === clickedTab ? "0" : "-1");
 				this.updateIcon(tabEl);
 			});
 			clickedTab.focus();
