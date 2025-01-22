@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<title>Tab</title>
+	
+	<script src="../Scripts/TablistControl.js"></script>
+	<style>
+		main {
+			max-width: 1100px;
+			margin-inline: auto;
+		}
+
+		.panels {
+			border: 4px groove black;
+			box-sizing: border-box;
+			display: flex;
+			align-items: stretch;
+
+			> article {
+				flex-grow: 1;
+				padding:2px;
+				background-color: lightblue;
+			}
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<a class="hide-until-focus full" href="#main">Skip to content</a>
+	</header>
+	<main id="main">
+		<gw-tablist container="main">
+			<fieldset>
+				<legend>Pages</legend>
+				<button aria-selected="true" aria-controls="artOne">One</button>
+				<button aria-controls="artTwo">Two</button>
+				<button aria-controls="artThree">Three</button>
+			</fieldset>
+		</gw-tablist>
+		<div class="panels">
+			<article id="artOne">
+				<p>Uno</p>
+			</article>
+			<article id="artTwo">
+				<p>Dos</p>
+			</article>
+			<article id="artThree">
+				<p>Tres</p>
+			</article>
+		</div>
+	</main>
+</body>
+</html>
