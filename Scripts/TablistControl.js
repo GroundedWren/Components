@@ -96,7 +96,7 @@ window.GW = window.GW || {};
 				displaySelectorLines.push(`&:has([aria-controls="${panelId}"][aria-selected="false"]) #${panelId}`);
 			});
 
-			if(!this.hasSelected) {
+			if(!hasSelected) {
 				this.querySelector("button").setAttribute("tabindex", "0");
 			}
 
