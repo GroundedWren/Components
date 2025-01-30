@@ -118,6 +118,7 @@ window.GW = window.GW || {};
 					flex-direction: row;
 					align-items: center;
 					gap: 5px;
+					margin: 2px;
 				}
 
 				.input-vertical-line {
