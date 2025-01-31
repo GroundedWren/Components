@@ -99,7 +99,6 @@ window.GW.Controls = window.GW.Controls || {};
 
 		/**
 		 * Sets up the state and interactivity of the listbox.
-		 * Call this if the options or selection are programatically changed.
 		 */
 		renderContent = () => {
 			Object.entries({
@@ -144,6 +143,8 @@ window.GW.Controls = window.GW.Controls || {};
 					([attribute, value]) => inputEl.setAttribute(attribute, value)
 				);
 
+				this.#overwriteInputChecked(labelEl, inputEl);
+
 				Object.entries({
 					"id": labelEl.id || this.getId(this.IdIter++),
 					"role": "option",
@@ -165,7 +166,19 @@ window.GW.Controls = window.GW.Controls || {};
 				this.updateSelsDesc();
 			});
 
+			if(!this.IsInitialized) {
+				new MutationObserver(this.onMutation).observe(
+					this,
+					{childList: true, subtree: true}
+				);
+			}
 			this.IsInitialized = true;
+		};
+
+		onMutation = (mutationList) => {
+			if(mutationList.filter(mutation => mutation.target.id !== this.getId("selsDesc")).length) {
+				this.renderContent();
+			}
 		};
 
 		/**
@@ -307,6 +320,40 @@ window.GW.Controls = window.GW.Controls || {};
 				label => label.getAttribute("aria-selected") === "true"
 			).map(label => label.innerText).join(", ");
 			this.SelDescEl.innerHTML = selectionsList ? `Selections: ${selectionsList}` : "No selections"
+		}
+
+		#overwriteInputChecked(labelEl, inputEl) {
+			const inputCheckedDesc = Object.getOwnPropertyDescriptor(
+				Object.getPrototypeOf(inputEl),
+				"checked"
+			);
+			const originalSet = inputCheckedDesc.set;
+			inputCheckedDesc.set = this.#createDelegate(
+				inputCheckedDesc,
+				function(labelEl, inputEl, customHandler, originalSet, value) {
+					customHandler(labelEl, value);
+
+					const newSet = this.set;
+					this.set = originalSet;
+					Object.defineProperty(inputEl, "checked", this);
+
+					inputEl.checked = value;
+
+					this.set = newSet;
+					Object.defineProperty(inputEl, "checked", this);
+				},
+				[labelEl, inputEl, this.#customInputChecked, originalSet]
+			);
+			Object.defineProperty(inputEl, "checked", inputCheckedDesc);
+		}
+		#customInputChecked = (labelEl, value) => {
+			labelEl.setAttribute("aria-selected", value ? "true" : "false");
+			this.updateSelsDesc();
+		}
+		#createDelegate = function(context, method, args) {
+			return function generatedFunction() {
+				return method.apply(context, (args || []).concat(...arguments));
+			}
 		}
 	}
 	customElements.define("gw-check-listbox", ns.CheckListboxEl);

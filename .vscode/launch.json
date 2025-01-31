@@ -8,7 +8,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Open Test Page.html",
-            "file": ".\\Pages\\Switch.html",
+            "file": ".\\Pages\\CheckListbox.html",
 			"runtimeArgs": ["--disable-web-security"]
         }
     ]
