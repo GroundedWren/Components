@@ -167,7 +167,7 @@ window.GW.Controls = window.GW.Controls || {};
 			});
 
 			if(!this.IsInitialized) {
-				new MutationObserver(this.onMutation).observe(
+				new MutationObserver(this.#onMutation).observe(
 					this,
 					{childList: true, subtree: true}
 				);
@@ -175,7 +175,7 @@ window.GW.Controls = window.GW.Controls || {};
 			this.IsInitialized = true;
 		};
 
-		onMutation = (mutationList) => {
+		#onMutation = (mutationList) => {
 			if(mutationList.filter(mutation => mutation.target.id !== this.getId("selsDesc")).length) {
 				this.renderContent();
 			}
