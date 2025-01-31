@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Switch control demo">
+	<title>Switch</title>
+	
+	<script src="../Scripts/SwitchControl.js"></script>
+	<style>
+		main {
+			max-width: 1100px;
+			margin-inline: auto;
+
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			gap: 20px;
+		}
+		gw-switch {
+			min-width: 30px;
+		}
+		label {
+			display: inline-flex;
+			align-items: center;
+			gap: 2px;
+		}
+	</style>
+	<script>
+		onUpdate = (event) => {
+			event.preventDefault();
+			const data = new FormData(event.target);
+			document.getElementById("spnNested").innerText = data.get("nested");
+		};
+	</script>
+</head>
+<body>
+	<header>
+		<a class="hide-until-focus full" href="#main">Skip to content</a>
+	</header>
+	<main id="main">
+		<fieldset>
+			<legend>Nested</legend>
+			<label><span id="spnNested">Dark mode:</span><gw-switch><input type="checkbox"></gw-switch></label>
+		</fieldset>
+		<fieldset>
+			<legend>For attribute</legend>
+			<label for="cbx2">Reduce motion:</label><gw-switch><input id="cbx2" type="checkbox"></gw-switch>
+		</fieldset>
+		<fieldset>
+			<legend>aria-labelledby</legend>
+			<label id="lblby">Reduce contrast:</label><gw-switch><input type="checkbox" aria-labelledby="lblby"></gw-switch>
+		</fieldset>
+		<fieldset>
+			<legend>More attrs</legend>
+			<label>Edna mode:<gw-switch><input type="checkbox" aria-describedby="asiDesc" aria-details="asiDeet"></gw-switch></label>
+			<aside id="asiDesc">Description here</aside>
+			<aside id="asiDeet">Details here</aside>
+		</fieldset>
+		<form onsubmit="onUpdate(event)">
+			<h2>Update attributes</h2>
+			<label>Nested text<input type="text" name="nested"></label>
+			<button type="submit">Submit</button>
+		</form>
+	</main>
+</body>
+</html>
