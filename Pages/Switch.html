@@ -31,6 +31,11 @@
 			event.preventDefault();
 			const data = new FormData(event.target);
 			document.getElementById("spnNested").innerText = data.get("nested");
+			if(data.get("all") === "on") {
+				document.querySelectorAll("gw-switch").forEach(switchEl => {
+					switchEl.InputEl.checked = true
+				});
+			}
 		};
 	</script>
 </head>
@@ -53,13 +58,14 @@
 		</fieldset>
 		<fieldset>
 			<legend>More attrs</legend>
-			<label>Edna mode:<gw-switch><input type="checkbox" aria-describedby="asiDesc" aria-details="asiDeet"></gw-switch></label>
+			<label>Edna mode:<gw-switch><input type="checkbox" aria-describedby="asiDesc" aria-details="asiDeet" checked></gw-switch></label>
 			<aside id="asiDesc">Description here</aside>
 			<aside id="asiDeet">Details here</aside>
 		</fieldset>
 		<form onsubmit="onUpdate(event)">
 			<h2>Update attributes</h2>
 			<label>Nested text<input type="text" name="nested"></label>
+			<label><input name="all" type="checkbox">Set all to true?</label>
 			<button type="submit">Submit</button>
 		</form>
 	</main>
