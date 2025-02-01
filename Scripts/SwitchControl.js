@@ -13,6 +13,7 @@ window.GW.Controls = window.GW.Controls || {};
 		IsInitialized;
 		LabelIdx = 0;
 		ParentLabelObserver = null;
+		ForLabelObserver = null;
 
 		constructor() {
 			super();
@@ -72,7 +73,7 @@ window.GW.Controls = window.GW.Controls || {};
 				}
 			}
 			else {
-				this.setupParentLabelObserver();
+				this.renderA11yProps();
 			}
 		}
 
@@ -103,15 +104,19 @@ window.GW.Controls = window.GW.Controls || {};
 			this.addEventListener("keyup", this.onKeyup);
 			this.addEventListener("click", this.onClick);
 
-			this.copyInputA11y();
-
 			this.#overrideInputProps();
-			
-			this.setupParentLabelObserver();
-			this.copyParentLabelA11y();
+
+			this.renderA11yProps();
 
 			this.IsInitialized = true;
 		};
+
+		renderA11yProps() {
+			this.copyInputA11y();
+
+			this.setupParentLabelObserver();
+			this.copyParentLabelA11y();
+		}
 
 		#overrideInputProps() {
 			const checkedDescriptor = Object.getOwnPropertyDescriptor(
@@ -186,10 +191,20 @@ window.GW.Controls = window.GW.Controls || {};
 			});
 			
 			if(this.InputEl.id) {
-				const labelIds = [];
+				const labelIds = []; //There should really only be one
 				document.querySelectorAll(`[for="${this.InputEl.id}"]`).forEach(labelEl => {
+					this.ForLabelObserver?.disconnect();
+
 					labelEl.id = labelEl.id || this.getId(`label-${++this.LabelIdx}`);
 					labelIds.push(labelEl.id);
+
+					this.ForLabelObserver = new MutationObserver((mutationList) => {
+						setTimeout(this.copyInputA11y, 0);
+					});
+				this.ForLabelObserver.observe(
+					labelEl,
+					{attributes: true, childList: false, subtree: false}
+				)
 				});
 				this.setAttribute(
 					"aria-labelledby",
@@ -203,7 +218,8 @@ window.GW.Controls = window.GW.Controls || {};
 		setupParentLabelObserver() {
 			this.ParentLabelObserver?.disconnect();
 			if(this.ParentLabelEl) {
-				this.ParentLabelObserver = new MutationObserver(this.copyParentLabelA11y).observe(
+				this.ParentLabelObserver = new MutationObserver(this.copyParentLabelA11y);
+				this.ParentLabelObserver.observe(
 					this.ParentLabelEl,
 					{characterData: true, childList: true, subtree: true}
 				);
