@@ -323,28 +323,28 @@ window.GW.Controls = window.GW.Controls || {};
 		}
 
 		#overwriteInputChecked(labelEl, inputEl) {
-			const inputCheckedDesc = Object.getOwnPropertyDescriptor(
+			const checkedDescriptor = Object.getOwnPropertyDescriptor(
 				Object.getPrototypeOf(inputEl),
 				"checked"
 			);
-			const originalSet = inputCheckedDesc.set;
-			inputCheckedDesc.set = this.#createDelegate(
-				inputCheckedDesc,
-				function(labelEl, inputEl, customHandler, originalSet, value) {
+			const originalSet = checkedDescriptor.set;
+			checkedDescriptor.set = this.#createDelegate(
+				inputEl,
+				function(checkedDescriptor, labelEl, customHandler, originalSet, value) {
 					customHandler(labelEl, value);
 
-					const newSet = this.set;
-					this.set = originalSet;
-					Object.defineProperty(inputEl, "checked", this);
+					const newSet = checkedDescriptor.set;
+					checkedDescriptor.set = originalSet;
+					Object.defineProperty(this, "checked", checkedDescriptor);
 
-					inputEl.checked = value;
+					this.checked = value;
 
-					this.set = newSet;
-					Object.defineProperty(inputEl, "checked", this);
+					checkedDescriptor.set = newSet;
+					Object.defineProperty(this, "checked", checkedDescriptor);
 				},
-				[labelEl, inputEl, this.#customInputChecked, originalSet]
+				[checkedDescriptor, labelEl, this.#customInputChecked, originalSet]
 			);
-			Object.defineProperty(inputEl, "checked", inputCheckedDesc);
+			Object.defineProperty(inputEl, "checked", checkedDescriptor);
 		}
 		#customInputChecked = (labelEl, value) => {
 			labelEl.setAttribute("aria-selected", value ? "true" : "false");

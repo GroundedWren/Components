@@ -127,7 +127,7 @@ window.GW.Controls = window.GW.Controls || {};
 					([attribute, value]) => inputEl.setAttribute(attribute, value)
 				);
 
-				this.#overwriteInputChecked(labelEl, inputEl);
+				this.#overwriteInputChecked(inputEl);
 
 				Object.entries({
 					"id": labelEl.id || this.getId(this.IdIter++),
@@ -300,29 +300,29 @@ window.GW.Controls = window.GW.Controls || {};
 			this.dispatchEvent(new Event("option-click"));
 		}
 
-		#overwriteInputChecked(labelEl, inputEl) {
-			const inputCheckedDesc = Object.getOwnPropertyDescriptor(
+		#overwriteInputChecked(inputEl) {
+			const checkedDescriptor = Object.getOwnPropertyDescriptor(
 				Object.getPrototypeOf(inputEl),
 				"checked"
 			);
-			const originalSet = inputCheckedDesc.set;
-			inputCheckedDesc.set = this.#createDelegate(
-				inputCheckedDesc,
-				function(inputEl, customHandler, originalSet, value) {
-					const newSet = this.set;
-					this.set = originalSet;
-					Object.defineProperty(inputEl, "checked", this);
+			const originalSet = checkedDescriptor.set;
+			checkedDescriptor.set = this.#createDelegate(
+				inputEl,
+				function(checkedDescriptor, originalSet, customHandler, value) {
+					const newSet = checkedDescriptor.set;
+					checkedDescriptor.set = originalSet;
+					Object.defineProperty(this, "checked", checkedDescriptor);
 
-					inputEl.checked = value;
+					this.checked = value;
 
-					this.set = newSet;
-					Object.defineProperty(inputEl, "checked", this);
+					checkedDescriptor.set = newSet;
+					Object.defineProperty(this, "checked", checkedDescriptor);
 
 					customHandler();
 				},
-				[inputEl, this.#customInputChecked, originalSet]
+				[checkedDescriptor, originalSet, this.#customInputChecked]
 			);
-			Object.defineProperty(inputEl, "checked", inputCheckedDesc);
+			Object.defineProperty(inputEl, "checked", checkedDescriptor);
 		}
 		#customInputChecked = () => {
 			this.IsInitialized = false;
@@ -333,7 +333,7 @@ window.GW.Controls = window.GW.Controls || {};
 					this.setActiveOption(labelEl);
 				}
 			});
-			this.IsInitialized
+			this.IsInitialized = true;
 		}
 		#createDelegate = function(context, method, args) {
 			return function generatedFunction() {
