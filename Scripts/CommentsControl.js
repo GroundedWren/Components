@@ -105,8 +105,8 @@ window.GW = window.GW || {};
 					<span>Comments are manually approved</span>
 				</div>
 				<div class="form-footer">
-					<input id="${this.idKey}-reset" type="reset" value="Reset">
 					<input id="${this.idKey}-submit" type="submit" value="Submit">
+					<input id="${this.idKey}-reset" type="reset" value="Reset">
 				</div>
 			</form>
 			`;
