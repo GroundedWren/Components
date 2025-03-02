@@ -96,7 +96,7 @@ window.GW = window.GW || {};
 			}
 		}
 
-		/** Handler invoked when the element is disconnected from the document */
+		/** Handler invoked when the element is ready to render */
 		renderContent = () => {
 			// DOM manipulation here
 			this.IsInitialized = true;
