@@ -18,7 +18,7 @@ window.GW = window.GW || {};
 
 			> div {
 				display: grid;
-				grid-template-columns: minmax(200px, auto) minmax(600px, 1fr);
+				grid-template-columns: minmax(200px, 300px) minmax(600px, 1fr);
 				align-items: start;
 
 				@container (max-width: 800px) {
@@ -28,13 +28,26 @@ window.GW = window.GW || {};
 
 				> *:first-child {
 					position: sticky;
-					top: 0;
+					top: 5px;
 					padding-inline: 5px;
+					background-color: var(--background-color, #FFFFFF);
+					margin-inline: 5px;
 
 					@container (max-width: 800px) {
 						position: static;
 						width: 350px;
 						margin-inline: auto;
+					}
+
+					h1, h2, h3, h4, h5, h6 {
+						margin-block-start: 0;
+						background-color: var(--accent-color, #d5b3d9);
+						text-align: center;
+						margin-inline: -5px;
+					}
+
+					ol {
+						padding-inline-start: 20px;
 					}
 
 					li {
@@ -51,6 +64,12 @@ window.GW = window.GW || {};
 							height: 1lh;
 							padding-inline: 12px;
 							cursor: pointer;
+
+							svg {
+								width: inherit;
+								height: inherit;
+								fill: var(--icon-color, ##000000);
+							}
 						}
 
 						&:has([aria-expanded="true"]) {
@@ -127,7 +146,7 @@ window.GW = window.GW || {};
 						> hgroup {
 							display: grid;
 							grid-auto-flow: column;
-							grid-auto-columns: max-content;
+							grid-auto-columns: minmax(0, max-content);
 							align-items: center;
 							gap: 5px;
 
@@ -136,9 +155,17 @@ window.GW = window.GW || {};
 							p.h-link {
 								margin: 0;
 								opacity: 0;
-								svg {
-									height: 24h;
-									width: 24px;
+								a {
+									display: flex;
+
+									background-color: var(--link-background-color, #BDE0F2);
+									border-radius: 20px;
+									padding: 4px;
+									svg {
+										height: 24px;
+										width: 24px;
+										fill: var(--link-color, #0000EE);
+									}
 								}
 							}
 							p:not(.h-link) {
@@ -146,7 +173,7 @@ window.GW = window.GW || {};
 								font-style: italic;
 							}
 						}
-						&:is(:focus-within, :hover):not(:has(article:is(:focus-within, :hover))) {
+						&:focus-within:not(:has(article:focus-within)), &:hover:not(:has(article:hover)) {
 							> hgroup p.h-link {
 								opacity: 1;
 							}
@@ -481,6 +508,7 @@ window.GW = window.GW || {};
 			treeItem.setAttribute("tabindex", "-1");
 			newTreeItem.setAttribute("tabindex", "0");
 			newTreeItem.focus();
+			event.preventDefault();
 		};
 
 		#getNextTreeItem(liElement) {
