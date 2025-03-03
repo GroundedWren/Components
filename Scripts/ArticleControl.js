@@ -76,13 +76,61 @@ window.GW = window.GW || {};
 					max-width: 1100px;
 					margin-inline: auto;
 
+					h1, h2, h3, h4, h5, h6 {
+						background-color: var(--accent-color, #d5b3d9);
+						margin: 0;
+						padding-inline: 3px;
+					}
+					h3 {
+						margin-inline-start: 1ch;
+					}
+					h4 {
+						background-color: color-mix(in hsl, var(--accent-color, #d5b3d9), transparent 25%);
+						margin-inline-start: 2ch;
+					}
+					h5 {
+						background-color: color-mix(in hsl, var(--accent-color, #d5b3d9), transparent 40%);
+						margin-inline-start: 3ch;
+					}
+					h6 {
+						background-color: transparent;
+						margin-inline-start: 4ch;
+					}
+
 					article {
+						+ article, > article:first-of-type {
+							padding-block-start: 15px;
+						}
+						
+						> *:not(h1, h2, h3, h4, h5, h6, hgroup, article) {
+							padding-inline: 4px;
+						}
+
+						&:has(article + *:not(article)) {
+							> article {
+								position: relative;
+								margin-inline-start: 4px;
+
+								&::before {
+									content: "";
+									position: absolute;
+									top: 15px;
+									left: -4px;
+									height: calc(100% - 15px);
+									border-inline-start: 4px solid var(--accent-color, #d5b3d9);
+								}
+							}
+						}
+
 						> hgroup {
 							display: grid;
 							grid-auto-flow: column;
 							grid-auto-columns: max-content;
 							align-items: center;
 							gap: 5px;
+
+							background: linear-gradient(to right, color-mix(in hsl, var(--accent-color, #d5b3d9), transparent 70%), transparent);
+
 							p.h-link {
 								margin: 0;
 								opacity: 0;
