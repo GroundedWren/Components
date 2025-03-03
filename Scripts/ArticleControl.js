@@ -29,8 +29,10 @@ window.GW = window.GW || {};
 				> *:first-child {
 					position: sticky;
 					top: 0;
+					padding-inline: 5px;
 
 					@container (max-width: 800px) {
+						position: static;
 						width: 350px;
 						margin-inline: auto;
 					}
@@ -292,6 +294,7 @@ window.GW = window.GW || {};
 				currentLevel = currentLevel || articleEntry.Level;
 
 				articleEntry.Heading.id = articleEntry.Heading.id || this.#createIdForElem(articleEntry.Heading);
+				articleEntry.Heading.setAttribute("tabindex", "-1");
 				articleEntry.Element.setAttribute("aria-labelledby", articleEntry.Heading.id);
 
 				const hParent = articleEntry.Heading.parentElement;
