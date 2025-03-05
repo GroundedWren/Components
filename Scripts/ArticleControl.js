@@ -119,8 +119,18 @@ window.GW = window.GW || {};
 					}
 
 					article {
+						position: relative;
+						z-index: 1;
+
 						+ article, > article:first-of-type {
-							padding-block-start: 15px;
+							&::before {
+								content: "";
+								display: block;
+								height: 15px;
+							}
+						}
+						+ article::before {
+							background-color: var(--background-color, #FFFFFF);
 						}
 						
 						> *:not(h1, h2, h3, h4, h5, h6, hgroup, article) {
@@ -132,7 +142,7 @@ window.GW = window.GW || {};
 								position: relative;
 								margin-inline-start: 4px;
 
-								&::before {
+								&::after {
 									content: "";
 									position: absolute;
 									top: 15px;
@@ -150,7 +160,29 @@ window.GW = window.GW || {};
 							align-items: center;
 							gap: 5px;
 
-							background: linear-gradient(to right, color-mix(in hsl, var(--accent-color, #d5b3d9), transparent 70%), transparent);
+							height: 2.5em;
+							margin-inline-start: 1px;
+
+							position: sticky;
+							top: 0;
+
+							&::before, &::after {
+								content: "";
+								background-color: var(--background-color, #FFFFFF);
+								display: block;
+								height: 2.5em;
+								width: 100%;
+								position: absolute;
+								z-index: -2;
+							}
+							&::before {
+								background-color: var(--background-color, #FFFFFF);
+								z-index: -2;
+							}
+							&::after {
+								background: linear-gradient(to right, color-mix(in hsl, var(--accent-color, #d5b3d9), transparent 70%), transparent);
+								z-index: -1;
+							}
 
 							p.h-link {
 								margin: 0;
