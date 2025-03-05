@@ -25,6 +25,7 @@ window.GW.Controls = window.GW.Controls || {};
 
 				#${ns.TOASTER_ASIDE_ID} {
 					position: fixed;
+					z-index: 999;
 					bottom: 0;
 					right: 0;
 					padding: 5px;
