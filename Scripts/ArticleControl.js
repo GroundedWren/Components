@@ -35,7 +35,8 @@ window.GW = window.GW || {};
 
 					@container (max-width: 800px) {
 						position: static;
-						width: 350px;
+						max-width: 350px;
+						width: 100%;
 						margin-inline: auto;
 					}
 
@@ -160,7 +161,7 @@ window.GW = window.GW || {};
 							align-items: center;
 							gap: 5px;
 
-							height: 2.5em;
+							min-height: 2.5em;
 							margin-inline-start: 1px;
 
 							position: sticky;
@@ -170,7 +171,7 @@ window.GW = window.GW || {};
 								content: "";
 								background-color: var(--background-color, #FFFFFF);
 								display: block;
-								height: 2.5em;
+								height: 100%;
 								width: 100%;
 								position: absolute;
 								z-index: -2;
