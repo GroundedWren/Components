@@ -375,9 +375,11 @@ window.GW = window.GW || {};
 				else {
 					hGroup = hParent;
 				}
+
+				const linkKey = `a-${articleEntry.Heading.id}`;
 				articleEntry.Heading.insertAdjacentHTML("afterend",
 					`<p class="h-link">
-						<a
+						<a id=${this.getId(linkKey)}
 							href="#${articleEntry.Heading.id}"
 							aria-labelledby="${articleEntry.Heading.id} ${this.getId("spnHLnkLbl")}"
 						>
@@ -385,6 +387,12 @@ window.GW = window.GW || {};
 						</a>
 					</p>`
 				);
+				this.getRef(linkKey).addEventListener("click", () => {
+					navigator.clipboard.writeText(
+						`${window.location.origin}${window.location.pathname}#${articleEntry.Heading.id}`
+					);
+					GW.Controls.Toaster?.showToast("Copied to clipboard");
+				});
 
 				const node = this.#createElement("li", {"role": "none"});
 				node.insertAdjacentHTML("afterbegin",
