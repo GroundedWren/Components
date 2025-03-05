@@ -173,9 +173,18 @@ window.GW = window.GW || {};
 								font-style: italic;
 							}
 						}
-						&:focus-within:not(:has(article:focus-within)), &:hover:not(:has(article:hover)) {
-							> hgroup p.h-link {
-								opacity: 1;
+						&:hover {
+							&:not(:has(article:hover)) {
+								> hgroup p.h-link {
+									opacity: 1;
+								}
+							}
+						}
+						&:focus-within {
+							&:not(:has(article:focus-within)) {
+								> hgroup p.h-link {
+									opacity: 1;
+								}
 							}
 						}
 						
