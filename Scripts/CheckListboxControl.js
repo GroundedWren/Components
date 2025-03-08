@@ -89,7 +89,11 @@ window.GW.Controls = window.GW.Controls || {};
 		connectedCallback() {
 			if(!this.IsInitialized) {
 				if(document.readyState === "loading") {
-					document.addEventListener("DOMContentLoaded", this.renderContent);
+					document.addEventListener("DOMContentLoaded", () => {
+						if(!this.IsInitialized) {
+							this.renderContent();
+						}
+					});
 				}
 				else {
 					this.renderContent();
@@ -100,7 +104,7 @@ window.GW.Controls = window.GW.Controls || {};
 		/**
 		 * Sets up the state and interactivity of the listbox.
 		 */
-		renderContent = () => {
+		renderContent () {
 			Object.entries({
 				"role": "listbox",
 				"aria-multiselectable": "true",
@@ -179,7 +183,7 @@ window.GW.Controls = window.GW.Controls || {};
 			if(mutationList.filter(mutation => mutation.target.id !== this.getId("selsDesc")).length) {
 				this.renderContent();
 			}
-		};
+		}
 
 		/**
 		 * Enables an option for type-ahead functionality
