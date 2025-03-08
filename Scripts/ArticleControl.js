@@ -16,13 +16,17 @@ window.GW = window.GW || {};
 			display: block;
 			container-type: inline-size;
 
+			* {
+				box-sizing: border-box;
+			}
+
 			> div {
 				display: grid;
 				grid-template-columns: minmax(200px, 300px) minmax(600px, 1fr);
 				align-items: start;
 
 				@container (max-width: 800px) {
-					grid-template-columns: auto;
+					grid-template-columns: 100%;
 					grid-template-rows: auto auto;
 				}
 
@@ -116,14 +120,17 @@ window.GW = window.GW || {};
 					}
 					h6 {
 						background-color: transparent;
-						margin-inline-start: 4ch;
+						margin-inline-start: 5ch;
 					}
 
 					article {
 						position: relative;
 						z-index: 1;
+						width: 100%;
 
-						+ article, > article:first-of-type {
+						background-color: var(--background-color);
+
+						+ article, article:first-of-type {
 							&::before {
 								content: "";
 								display: block;
@@ -133,12 +140,8 @@ window.GW = window.GW || {};
 						+ article::before {
 							background-color: var(--background-color, #FFFFFF);
 						}
-						
-						> *:not(h1, h2, h3, h4, h5, h6, hgroup, article) {
-							padding-inline: 4px;
-						}
 
-						&:has(article + *:not(article)) {
+						&:has(> article + *:not(article)) {
 							> article {
 								position: relative;
 								margin-inline-start: 4px;
@@ -150,6 +153,24 @@ window.GW = window.GW || {};
 									left: -4px;
 									height: calc(100% - 15px);
 									border-inline-start: 4px solid var(--accent-color, #d5b3d9);
+								}
+							}
+						}
+
+						.content {
+							padding-inline: 4px;
+							width: 100%;
+							overflow-x: auto;
+
+							&:first-of-type > p:first-of-type {
+								margin-block-start: 0;
+							}
+							> p:last-of-type {
+								margin-block-end: 0;
+							}
+							&:last-of-type {
+								> *:last-child {
+									margin-block-end: 0 !important;
 								}
 							}
 						}
@@ -166,6 +187,13 @@ window.GW = window.GW || {};
 
 							position: sticky;
 							top: 0;
+							z-index: 1;
+
+							h1, h2, h3, h4, h5, h6 {
+								height: 100%;
+								display: flex;
+								align-items: center;
+							}
 
 							&::before, &::after {
 								content: "";
@@ -219,13 +247,6 @@ window.GW = window.GW || {};
 									opacity: 1;
 								}
 							}
-						}
-						
-						> p:first-of-type {
-							margin-block-start: 0;
-						}
-						> p:last-of-type {
-							margin-block-end: 0;
 						}
 					}
 				}
@@ -292,7 +313,7 @@ window.GW = window.GW || {};
 		 * @returns The element associated with the key
 		 */
 		getRef(key, elem) {
-			return (elem || this).querySelector(`#${this.getId(key)}`);
+			return (elem || this).querySelector(`#${CSS.escape(this.getId(key))}`);
 		}
 
 		/** Handler invoked when the element is attached to the page */
@@ -446,6 +467,34 @@ window.GW = window.GW || {};
 				currentNode = node;
 				currentParent.append(currentNode);
 				articleStack.unshift(...this.#getArticleEntries(articleEntry.Element));
+
+				let contentElement = null;
+				let lastElement = null;
+				[...articleEntry.Element.children].forEach(childElement => {
+					if(!childElement.matches(`hgroup, article`)) {
+						if(!contentElement) {
+							contentElement = this.#createElement("div", {"class": "content"});
+							if(lastElement) {
+								lastElement.insertAdjacentElement("afterend", contentElement);
+							}
+							else {
+								articleEntry.Element.append(contentElement);
+							}
+							lastElement = contentElement;
+						}
+						contentElement.append(childElement);
+					}
+					else {
+						if(lastElement) {
+							lastElement.insertAdjacentElement("afterend", childElement);
+						}
+						else {
+							articleEntry.Element.append(childElement);
+						}
+						lastElement = childElement;
+						contentElement = null;
+					}
+				});
 			}
 			this.NavEl.append(treeRoot);
 
