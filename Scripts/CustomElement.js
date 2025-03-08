@@ -60,7 +60,7 @@ window.GW = window.GW || {};
 		 * @returns The element associated with the key
 		 */
 		getRef(key) {
-			return this.querySelector(`#${this.getId(key)}`);
+			return this.querySelector(`#${CSS.escape(this.getId(key))}`);
 		}
 
 		/** Handler invoked when the element is attached to the page */
@@ -88,7 +88,11 @@ window.GW = window.GW || {};
 			TEMPLATE.InstanceMap[this.InstanceId] = this;
 			if(!this.IsInitialized) {
 				if(document.readyState === "loading") {
-					document.addEventListener("DOMContentLoaded", this.renderContent);
+					document.addEventListener("DOMContentLoaded", () => {
+						if(!this.IsInitialized) {
+							this.renderContent();
+						}
+					});
 				}
 				else {
 					this.renderContent();
@@ -96,11 +100,11 @@ window.GW = window.GW || {};
 			}
 		}
 
-		/** Handler invoked when the element is ready to render */
-		renderContent = () => {
+		/** Invoked when the element is ready to render */
+		renderContent() {
 			// DOM manipulation here
 			this.IsInitialized = true;
-		};
+		}
 	}
 	if(!customElements.get(ns.TEMPLATE.Name)) {
 		customElements.define(ns.TEMPLATE.Name, ns.TEMPLATE);

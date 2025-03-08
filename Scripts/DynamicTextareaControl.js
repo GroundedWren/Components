@@ -137,7 +137,7 @@ window.GW = window.GW || {};
 			return `${DynamicTextareaEl.Name}-${this.InstanceId}-${key}`;
 		}
 		getRef(key) {
-			return this.querySelector(`#${this.getId(key)}`);
+			return this.querySelector(`#${CSS.escape(this.getId(key))}`);
 		}
 
 		get TextArea() {
@@ -159,7 +159,11 @@ window.GW = window.GW || {};
 				observer.observe(this, {attributes: true, childList: false, subtree: false});
 
 				if(document.readyState === "loading") {
-					document.addEventListener("DOMContentLoaded", this.renderContent);
+					document.addEventListener("DOMContentLoaded", () => {
+						if(!this.IsInitialized) {
+							this.renderContent();
+						}
+					});
 				}
 				else {
 					this.renderContent();
@@ -174,7 +178,7 @@ window.GW = window.GW || {};
 			delete DynamicTextareaEl.InstanceMap[this.InstanceId];
 		}
 
-		renderContent = () => {
+		renderContent() {
 			this.insertAdjacentHTML("afterbegin", `
 				<aside id="${this.getId("asiInstruct")}" aria-hidden="true"></aside>
 				<label id="${this.getId("lblToggle")}" class="mode-toggle" aria-hidden="true">
@@ -195,7 +199,7 @@ window.GW = window.GW || {};
 			this.updateState();
 
 			this.IsInitialized = true;
-		};
+		}
 
 		onToggleClick = (event) => {
 			event.stopPropagation();

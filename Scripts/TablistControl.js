@@ -39,7 +39,7 @@ window.GW = window.GW || {};
 			return `gw-tablist-${this.InstanceId}-${key}`;
 		}
 		getRef(key) {
-			return this.querySelector(`#${this.getId(key)}`);
+			return this.querySelector(`#${CSS.escape(this.getId(key))}`);
 		}
 
 		get TabAry() {
@@ -55,7 +55,11 @@ window.GW = window.GW || {};
 		connectedCallback() {
 			if(!this.IsInitialized) {
 				if(document.readyState === "loading") {
-					document.addEventListener("DOMContentLoaded", this.renderContent);
+					document.addEventListener("DOMContentLoaded", () => {
+						if(!this.IsInitialized) {
+							this.renderContent();
+						}						
+					});
 				}
 				else {
 					this.renderContent();
@@ -63,7 +67,7 @@ window.GW = window.GW || {};
 			}
 		}
 
-		renderContent = () => {
+		renderContent() {
 			this.FieldsetEl.setAttribute("role", "tablist");
 
 			if(this.LegendEl) {
@@ -110,7 +114,7 @@ window.GW = window.GW || {};
 			</style>`);
 
 			this.IsInitialized = true;
-		};
+		}
 
 		onTabKeydown = (event) => {
 			const tabEl = event.target;

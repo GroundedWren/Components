@@ -55,7 +55,7 @@ window.GW.Controls = window.GW.Controls || {};
 			return `gw-check-listbox-${this.InstanceId}-${key}`;
 		}
 		getRef(key) {
-			return this.querySelector(`#${this.getId(key)}`);
+			return this.querySelector(`#${CSS.escape(this.getId(key))}`);
 		}
 
 		get FieldsetEl() {

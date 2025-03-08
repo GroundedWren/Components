@@ -51,7 +51,7 @@ window.GW.Controls = window.GW.Controls || {};
 			return `gw-option-listbox-${this.InstanceId}-${key}`;
 		}
 		getRef(key) {
-			return this.querySelector(`#${this.getId(key)}`);
+			return this.querySelector(`#${CSS.escape(this.getId(key))}`);
 		}
 
 		get FieldsetEl() {
@@ -81,7 +81,11 @@ window.GW.Controls = window.GW.Controls || {};
 		connectedCallback() {
 			if(!this.IsInitialized) {
 				if(document.readyState === "loading") {
-					document.addEventListener("DOMContentLoaded", this.renderContent);
+					document.addEventListener("DOMContentLoaded", () => {
+						if(!this.IsInitialized) {
+							this.renderContent();
+						}
+					});
 				}
 				else {
 					this.renderContent();
@@ -92,7 +96,7 @@ window.GW.Controls = window.GW.Controls || {};
 		/**
 		 * Sets up the state and interactivity of the listbox.
 		 */
-		renderContent = () => {
+		renderContent() {
 			Object.entries({
 				"role": "listbox",
 				"aria-multiselectable": "false",
@@ -155,7 +159,7 @@ window.GW.Controls = window.GW.Controls || {};
 				);
 			}
 			this.IsInitialized = true;
-		};
+		}
 
 		/**
 		 * Enables an option for type-ahead functionality
