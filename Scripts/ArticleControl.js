@@ -223,7 +223,7 @@ window.GW = window.GW || {};
 							p:is(.h-link, .nav-links) {
 								opacity: 0;
 
-								a svg {
+								a svg path {
 									fill: var(--link-color, #0000EE);
 								}
 							}
