@@ -34,8 +34,14 @@ window.GW = window.GW || {};
 					position: sticky;
 					top: 5px;
 					padding-inline: 5px;
+					margin-block-start: 5px;
 					background-color: var(--background-color, #FFFFFF);
 					margin-inline: 5px;
+
+					@container (min-width: 800px) {
+						max-height: calc(100vh - 5px);
+						overflow-y: auto;
+					}
 
 					@container (max-width: 800px) {
 						position: static;
