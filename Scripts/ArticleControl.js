@@ -50,11 +50,24 @@ window.GW = window.GW || {};
 						margin-inline: auto;
 					}
 
-					h1, h2, h3, h4, h5, h6 {
-						margin-block-start: 0;
+					div:has(h1, h2, h3, h4, h5, h6 ){
 						background-color: var(--accent-color, #d5b3d9);
-						text-align: center;
 						margin-inline: -5px;
+						display: flex;
+						flex-direction: row;
+						justify-content: center;
+						align-items: baseline;
+						gap: 4px;
+
+						h1, h2, h3, h4, h5, h6 {
+							margin-block: 0;
+							text-align: center;
+						}
+						svg {
+							width: 16px;
+							height: 16px;
+							fill: var(--icon-color);
+						}
 					}
 
 					ol {
@@ -408,7 +421,14 @@ window.GW = window.GW || {};
 					<span id="${this.getId("spnHLnkLbl")}" style="display: none;">page heading</span>
 					<span id="${this.getId("spnPrevLnkLbl")}" style="display: none;">previous heading</span>
 					<span id="${this.getId("spnFirstLnkLbl")}" style="display: none;">first heading</span>
-					<${navHTag} id="${this.getId("hContents")}">Contents</${navHTag}>
+					<div>
+						<${navHTag} id="${this.getId("hContents")}">Contents</${navHTag}>
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+							<!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc. -->
+							<title>Tree View</title>
+							<path d="M64 32C64 14.3 49.7 0 32 0S0 14.3 0 32v96V384c0 35.3 28.7 64 64 64H256V384H64V160H256V96H64V32zM288 192c0 17.7 14.3 32 32 32H544c17.7 0 32-14.3 32-32V64c0-17.7-14.3-32-32-32H445.3c-8.5 0-16.6-3.4-22.6-9.4L409.4 9.4c-6-6-14.1-9.4-22.6-9.4H320c-17.7 0-32 14.3-32 32V192zm0 288c0 17.7 14.3 32 32 32H544c17.7 0 32-14.3 32-32V352c0-17.7-14.3-32-32-32H445.3c-8.5 0-16.6-3.4-22.6-9.4l-13.3-13.3c-6-6-14.1-9.4-22.6-9.4H320c-17.7 0-32 14.3-32 32V480z"/>
+						</svg>
+					</div>
 				</nav>`
 			);
 			this.NavEl = this.LayoutEl.querySelector("nav");
