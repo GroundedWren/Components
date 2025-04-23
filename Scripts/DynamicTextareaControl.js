@@ -93,7 +93,7 @@ window.GW = window.GW || {};
 		InstanceId;
 		IsInitialized;
 
-		TabBuffer = [];
+		EditorBuffer = [];
 		MessageIdx = 0;
 		AsiPolite = null;
 
@@ -232,9 +232,9 @@ window.GW = window.GW || {};
 		}
 
 		onTxaKeydown = (event) => {
-			if(event.key === "z" && event.ctrlKey && this.TabBuffer.length) {
+			if(event.key === "z" && event.ctrlKey && this.EditorBuffer.length) {
 				event.preventDefault();
-				const bufferObj = this.TabBuffer.pop();
+				const bufferObj = this.EditorBuffer.pop();
 
 				this.TextArea.value = bufferObj.Value;
 				this.TextArea.selectionStart = bufferObj.SelStart;
@@ -250,16 +250,16 @@ window.GW = window.GW || {};
 			if(DynamicTextareaEl.EditorMode) {
 				if(event.key === "Tab") {
 					this.onTxaTab(event);
-					return;
 				}
-				if(event.key === "Enter") {
+				else if(event.key === "Enter") {
 					this.onTxaEnter(event);
-					return;
 				}
-			}
-
-			if(event.key !== "Tab" && event.key.length === 1) {
-				this.TabBuffer = [];
+				else if(event.key.length === 1 
+					|| event.key === "Backspace"
+					|| event.key === "Delete"
+				) {
+					this.EditorBuffer = [];
+				}
 			}
 		};
 
@@ -312,7 +312,7 @@ window.GW = window.GW || {};
 					this.TextArea.selectionStart = this.TextArea.selectionEnd = (origStart + 1);
 				}
 			}
-			this.TabBuffer.push({Value: origValue, SelStart: origStart, SelEnd: origEnd});
+			this.EditorBuffer.push({Value: origValue, SelStart: origStart, SelEnd: origEnd});
 		};
 	
 		onTxaEnter = (event) => {
@@ -329,6 +329,8 @@ window.GW = window.GW || {};
 			let insertStr = "\n" + "\t".repeat(charIdx - lineStart);
 			this.TextArea.value = origValue.substring(0, origStart) + insertStr + origValue.substring(origEnd);
 			this.TextArea.selectionStart = this.TextArea.selectionEnd = (origStart + insertStr.length);
+
+			this.EditorBuffer.push({Value: origValue, SelStart: origStart, SelEnd: origEnd});
 	
 			event.preventDefault();
 		};
