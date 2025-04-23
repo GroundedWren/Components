@@ -29,6 +29,8 @@ window.GW = window.GW || {};
 				grid-auto-flow: column;
 				gap: 2px;
 				align-items: center;
+				min-height: 24px;
+				min-width: 24px;
 				justify-content: end;
 
 				margin: 3px;
@@ -72,7 +74,7 @@ window.GW = window.GW || {};
 			}
 
 			textarea {
-				padding-block-start: 1.4rem;
+				padding-block-start: max(26px, 1.4rem);
 				min-width: 22ch;
 			}
 
