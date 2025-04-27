@@ -355,6 +355,8 @@ window.GW = window.GW || {};
 			});
 
 			this.updateState();
+			this.doCodeHighlight();
+			this.updateCodePosition();
 
 			this.IsInitialized = true;
 		}
