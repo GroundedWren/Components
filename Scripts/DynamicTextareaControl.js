@@ -440,6 +440,9 @@ window.GW = window.GW || {};
 				else if(event.key === "Enter") {
 					this.onTxaEnter(event);
 				}
+				else if(event.key === "Home") {
+					this.onTxaHome(event);
+				}
 				else if(event.key.length === 1 
 					|| event.key === "Backspace"
 					|| event.key === "Delete"
@@ -451,10 +454,7 @@ window.GW = window.GW || {};
 		};
 
 		onTxaTab = (event) => {
-			const origValue = this.TextArea.value;
-			const origStart = this.TextArea.selectionStart;
-			const origEnd = this.TextArea.selectionEnd;
-			const lineStart = origValue.lastIndexOf("\n", origStart - 1) + 1;
+			const {OrigValue: origValue, OrigStart: origStart, OrigEnd: origEnd, LineStart: lineStart} = this.getTxaData();
 	
 			if(origStart !== origEnd) {
 				event.preventDefault();
@@ -503,10 +503,7 @@ window.GW = window.GW || {};
 		};
 	
 		onTxaEnter = (event) => {
-			const origValue = this.TextArea.value;
-			const origStart = this.TextArea.selectionStart;
-			const origEnd = this.TextArea.selectionEnd;
-			const lineStart = origValue.lastIndexOf("\n", origStart - 1) + 1;
+			const {OrigValue: origValue, OrigStart: origStart, OrigEnd: origEnd, LineStart: lineStart} = this.getTxaData();
 	
 			let charIdx = lineStart;
 			while(origValue[charIdx] === "\t") {
@@ -521,6 +518,30 @@ window.GW = window.GW || {};
 	
 			event.preventDefault();
 		};
+
+		onTxaHome = (event) => {
+			const {OrigValue: origValue, OrigStart: origStart, LineStart: lineStart} = this.getTxaData();
+
+			let charIdx = lineStart;
+			while(origValue[charIdx] === "\t") {
+				charIdx++;
+			}
+
+			if(origStart > charIdx) {
+				this.TextArea.selectionStart = charIdx;
+				this.TextArea.selectionEnd = charIdx;
+				event.preventDefault();
+			}
+		};
+
+		getTxaData() {
+			return {
+				OrigValue: this.TextArea.value,
+				OrigStart: this.TextArea.selectionStart,
+				OrigEnd: this.TextArea.selectionEnd,
+				LineStart: this.TextArea.value.lastIndexOf("\n", this.TextArea.selectionStart - 1) + 1
+			}
+		}
 
 		doCodeHighlight = () => {
 			if(!Prism) { return; }
