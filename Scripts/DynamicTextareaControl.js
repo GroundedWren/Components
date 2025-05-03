@@ -520,7 +520,7 @@ window.GW = window.GW || {};
 		};
 
 		onTxaHome = (event) => {
-			const {OrigValue: origValue, OrigStart: origStart, LineStart: lineStart} = this.getTxaData();
+			const {OrigValue: origValue, OrigStart: origStart, OrigEnd: origEnd, LineStart: lineStart} = this.getTxaData();
 
 			let charIdx = lineStart;
 			while(origValue[charIdx] === "\t") {
@@ -529,7 +529,12 @@ window.GW = window.GW || {};
 
 			if(origStart > charIdx) {
 				this.TextArea.selectionStart = charIdx;
-				this.TextArea.selectionEnd = charIdx;
+				this.TextArea.selectionEnd = event.shiftKey ? origEnd : charIdx;
+				event.preventDefault();
+			}
+			else if(origStart === charIdx) {
+				this.TextArea.selectionStart = lineStart;
+				this.TextArea.selectionEnd = event.shiftKey ? origEnd : lineStart;
 				event.preventDefault();
 			}
 		};
