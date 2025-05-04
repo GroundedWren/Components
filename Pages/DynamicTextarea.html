@@ -9,6 +9,23 @@
 	<script src="../Scripts/DynamicTextareaControl.js"></script>
 
 	<script src="../../../Prism/prism.js" data-manual></script>
+
+	<style>
+		label:has(> :focus-visible), *:not(label) > :focus-visible, *[tabindex="-1"]:focus {
+			outline-width: 4px !important;
+			outline-color: red !important;
+			outline-style: solid !important;
+			outline-offset: 1px !important;
+			position: relative !important;
+			z-index: 100 !important;
+		}
+		label > :focus-visible {
+			outline: none !important;
+		}
+		*[tabindex="-1"]:focus {
+			outline-style: dashed !important;
+		}
+	</style>
 </head>
 <body>
 	<header>
