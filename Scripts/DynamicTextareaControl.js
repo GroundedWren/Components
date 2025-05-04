@@ -123,9 +123,6 @@ window.GW = window.GW || {};
 					border-color: transparent;
 				}
 			}
-			textarea {
-				scrollbar-width: none;
-			}
 			
 			&[data-language] {
 				background-color: #2d2d2d;
@@ -361,6 +358,9 @@ window.GW = window.GW || {};
 				this.updateCodePosition();
 			});
 
+			const resizeObs = new ResizeObserver(this.adjustCodeSize);
+			resizeObs.observe(this.TextArea);
+
 			this.updateState();
 			this.doCodeHighlight();
 			this.updateCodePosition();
@@ -566,6 +566,15 @@ window.GW = window.GW || {};
 			this.LastValue = value;
 
 			this.Code.innerHTML = Prism.highlight(value, Prism.languages[language]);
+
+			this.adjustCodeSize();
+		};
+
+		adjustCodeSize = () => {
+			this.Code.style.setProperty(
+				"width",
+				getComputedStyle(this.TextArea).getPropertyValue("width")
+			);
 		};
 
 		updateCodePosition = () => {
