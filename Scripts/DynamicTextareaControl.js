@@ -13,9 +13,13 @@ window.GW = window.GW || {};
 		static Style = `${DynamicTextareaEl.Name} {
 			position: relative;
 			z-index: 0;
-			box-sizing: border-box;
+			box-sizing: content-box;
 			display: flex;
 			width: fit-content;
+
+			* {
+				box-sizing: content-box;
+			}
 
 			[id$="asiInstruct"] {
 				display: none;
