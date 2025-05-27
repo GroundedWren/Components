@@ -26,6 +26,10 @@ window.GW.Controls = window.GW.Controls || {};
 						display: inline-flex;
 						min-width: 1em;
 
+						> * {
+							flex-grow: 1;
+						}
+
 						input {
 							display: none;
 						}
