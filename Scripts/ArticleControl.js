@@ -544,7 +544,7 @@ window.GW = window.GW || {};
 				else if (currentLevel < articleEntry.Level){
 					currentParent = this.#createElement("ol", {
 						"role": "group",
-						"aria-labelledby": this.getId(`a-${articleEntry.Heading.id}`)
+						"aria-labelledby": this.getId(`a-${prevArticleEntry.Heading.id}`)
 					});
 					currentNode.append(currentParent);
 

@@ -8,7 +8,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Open Test Page.html",
-            "file": ".\\Pages\\DynamicTextarea.html",
+            "file": ".\\Pages\\Article.html",
 			"runtimeArgs": ["--disable-web-security"]
         }
     ]
