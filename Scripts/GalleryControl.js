@@ -7,39 +7,8 @@
 window.GW = window.GW || {};
 window.GW.Controls = window.GW.Controls || {};
 (function Gallery(ns) {
-	//#region Data
-	/**
-	* FOR YOU TO UPDATE
-	* 
-	* Modify this object to describe the images you want to display on your page!
-	* If you want multiple image galleries, you can create other objects below this to describe them.
-	* "Example1" should be changed to the "name" you give to your <gw-gallery> element :)
-	*/
-	ns.Data = ns.Data || {};
-	ns.Data.Example1 = {
-		ImageList: [ //The filenames of your images in the order you want them to appear. The default is for the gallery to start at the latest (last) image.
-			"Slide1",
-			"Slide2",
-		],
-		ImageFolder: "https://groundedwren.neocities.org/img", //Where all the image files on your site live
-		ImageInfo: {
-			"Slide1": {
-				Title: "Title One", //This is the display name for your image
-				Date: new Date("October 10, 2023"), //This is the date which will display by your image title
-				Alt: "Alternative text 1", //This is text displayed to those using screen readers or visually when the image doesn't load
-				Extension: "png" //The file type of your image
-			},
-			"Slide2": {
-				Title: "Title Two",
-				Date: new Date("October 11, 2023"),
-				Alt: "Alternative text 2",
-				Extension: "png"
-			},
-		}
-	};
-	//#endregion
-
 	//#region GalleryEl
+	ns.Data = ns.Data || {};
 	ns.GalleryEl = class GalleryEl extends HTMLElement {
 		//static properties
 		static InstanceCount = 0;
@@ -121,10 +90,10 @@ window.GW.Controls = window.GW.Controls || {};
 						@container(max-width: ${this.ReflowWidth || "0px"}) {
 							.gallery {
 								grid-template-columns: 1fr 1fr;
-								grid-template-rows: 1fr auto;
+								grid-template-rows: auto 1fr;
 							}
 							.figure-container {
-								grid-row: 1;
+								grid-row: 2;
 								grid-column: 1 / -1;
 							}
 						}
@@ -334,4 +303,3 @@ window.GW.Controls = window.GW.Controls || {};
 	customElements.define("gw-gallery-figure", ns.FigureEl);
 	//endregion
 }) (window.GW.Controls.Gallery = window.GW.Controls.Gallery || {});
-GW?.Controls?.Veil?.clearDefer("GW.Controls.Gallery");
