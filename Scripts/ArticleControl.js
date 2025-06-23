@@ -314,6 +314,8 @@ window.GW = window.GW || {};
 
 		static UpOneIconMakrup = `<span role="img">${ArticleEl.UpSvgMarkup}</span>`;
 		static UpAllIconMakrup = `<span role="img">${ArticleEl.UpSvgMarkup}${ArticleEl.UpSvgMarkup}</span>`;
+		static DownOneIconMakrup = `<span role="img">${ArticleEl.DownSvgMarkup}</span>`;
+		static DownAllIconMakrup = `<span role="img">${ArticleEl.DownSvgMarkup}${ArticleEl.DownSvgMarkup}</span>`;
 
 		InstanceId; // Identifier for this instance of the element
 		IsInitialized; // Whether the element has rendered its content
@@ -421,6 +423,8 @@ window.GW = window.GW || {};
 					<span id="${this.getId("spnHLnkLbl")}" style="display: none;">page heading</span>
 					<span id="${this.getId("spnPrevLnkLbl")}" style="display: none;">previous heading</span>
 					<span id="${this.getId("spnFirstLnkLbl")}" style="display: none;">first heading</span>
+					<span id="${this.getId("spnNextLnkLbl")}" style="display: none;">next heading</span>
+					<span id="${this.getId("spnLastLnkLbl")}" style="display: none;">last heading</span>
 					<div>
 						<${navHTag} id="${this.getId("hContents")}">Contents</${navHTag}>
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
@@ -457,6 +461,16 @@ window.GW = window.GW || {};
 				articleEntry.Heading.id = articleEntry.Heading.id || this.#createIdForElem(articleEntry.Heading);
 				articleEntry.Heading.setAttribute("tabindex", "-1");
 				articleEntry.Element.setAttribute("aria-labelledby", articleEntry.Heading.id);
+
+				if(prevArticleEntry) {
+					prevArticleEntry.Element.querySelector(`.nav-links`).insertAdjacentHTML("afterbegin", `
+						<a
+							aria-labelledby="${this.getId("spnNextLnkLbl")}"
+							href="#${articleEntry.Heading.id}"
+						>${ArticleEl.DownOneIconMakrup}
+						</a>
+					`);
+				}
 
 				//hGroup
 				const hParent = articleEntry.Heading.parentElement;
@@ -496,17 +510,17 @@ window.GW = window.GW || {};
 				}, [articleEntry]));
 				
 				//nav-links
-				const upOneLinkKey = `a-one-${articleEntry.Heading.id}`;
-				const upAllLinkKey = `a-all-${articleEntry.Heading.id}`;
 				hGroup.insertAdjacentHTML("beforeend",
 					`<p class="nav-links">
 						${prevArticleEntry
 							? `
-								<a id="${this.getId(upOneLinkKey)}"
+								<a
+									aria-labelledby="${this.getId("spnPrevLnkLbl")}"
 									href="#${prevArticleEntry.Heading.id}"
 								>${ArticleEl.UpOneIconMakrup}
 								</a>
-								<a id="${this.getId(upAllLinkKey)}"
+								<a
+									aria-labelledby="${this.getId("spnFirstLnkLbl")}"
 									href="#${firstArticleEntry.Heading.id}"
 								>${ArticleEl.UpAllIconMakrup}
 								</a>`
@@ -514,8 +528,6 @@ window.GW = window.GW || {};
 						}
 					</p>`
 				);
-				this.getRef(upOneLinkKey)?.setAttribute("aria-labelledby", this.getId("spnPrevLnkLbl"));
-				this.getRef(upAllLinkKey)?.setAttribute("aria-labelledby", this.getId("spnFirstLnkLbl"));
 
 				//Treenav
 				const node = this.#createElement("li", {"role": "none"});
@@ -599,6 +611,18 @@ window.GW = window.GW || {};
 					}
 				});
 			}
+			const allNavs = Array.from(this.ContentEl.querySelectorAll(`.nav-links`));
+			allNavs.pop();
+			allNavs.forEach(nav => {
+				nav.insertAdjacentHTML("afterbegin", `
+					<a
+						aria-labelledby="${this.getId("spnLastLnkLbl")}"
+						href="#${articleEntry.Heading.id}"
+					>${ArticleEl.DownAllIconMakrup}
+					</a>
+				`);
+			});
+			
 			this.NavEl.append(treeRoot);
 
 			this.LayoutEl.append(this.NavEl, this.ContentEl);
