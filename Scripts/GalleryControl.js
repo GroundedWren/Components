@@ -303,3 +303,4 @@ window.GW.Controls = window.GW.Controls || {};
 	customElements.define("gw-gallery-figure", ns.FigureEl);
 	//endregion
 }) (window.GW.Controls.Gallery = window.GW.Controls.Gallery || {});
+GW?.Controls?.Veil?.clearDefer("GW.Controls.Gallery");
