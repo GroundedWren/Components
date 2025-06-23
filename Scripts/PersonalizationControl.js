@@ -131,12 +131,61 @@ window.GW = window.GW || {};
 				}
 
 				button, select {
+					--border-start-color: color-mix(in oklab, var(--link-color), #FFFFFF 30%);
+					--border-end-color: color-mix(in oklab, var(--link-color), #000000 20%);
+
 					background-color: var(--button-face-color, #DEDEDE);
 					color: var(--button-text-color, #000000);
-					border: 1px solid var(--link-color, #0000EE);
+					border: 2.5px solid;
+					border-block-start-color: var(--border-start-color);
+					border-inline-start-color: var(--border-start-color);
+					border-block-end-color: var(--border-end-color);
+					border-inline-end-color: var(--border-end-color);
 					cursor: pointer;
 					min-width: 30px;
 					min-height: 30px;
+
+					&:hover {
+						background-color: color-mix(in oklab, var(--button-face-color), var(--selected-color) 35%);
+					}
+					&:active, &:open {
+						background-color: color-mix(in oklab, var(--button-face-color), var(--selected-color) 65%);
+						--border-start-color: color-mix(in oklab, var(--link-color), #000000 20%);
+						--border-end-color: color-mix(in oklab, var(--link-color), #FFFFFF 30%);
+					}
+				}
+
+				button:is([aria-expanded], [aria-pressed]) {
+					display: flex;
+					flex-direction: row;
+					gap: 3px;
+					align-items: center;
+					justify-content: center;
+
+					&::before {
+						content: "";
+						display: inline-block;
+						width: 0.6em;
+						height: 0.6em;
+						transform: rotate(45deg);
+						border: 1px solid var(--border-color);
+					}
+
+					&:is([aria-expanded="true"], [aria-pressed="true"]) {
+						&::before {
+							background-color: var(--border-color);
+						}
+					}
+				}
+				button:is([aria-expanded="true"], [aria-pressed="true"]), details[open] summary {
+					--border-start-color: color-mix(in oklab, var(--link-color), #000000 20%);
+					--border-end-color: color-mix(in oklab, var(--link-color), #FFFFFF 30%);
+
+					background-color: var(--selected-color);
+
+					&:hover {
+						background-color: color-mix(in oklab, var(--selected-color), var(--button-face-color) 20%);
+					}
 				}
 
 				/** https://browserstrangeness.bitbucket.io/css_hacks.html#safari **/
@@ -145,11 +194,6 @@ window.GW = window.GW || {};
 						background-color: white;
 						color: black;
 					}
-				}
-
-				button[aria-expanded="true"], button[aria-pressed="true"] {
-					background-color: var(--selected-color, #90CBDB);
-					box-shadow: 0px 0px 3px 1px var(--link-color, #0000EE) inset
 				}
 
 				:focus-visible, *[tabindex="-1"]:focus {
