@@ -109,7 +109,7 @@ window.GW.Controls = window.GW.Controls || {};
 		renderContent() {
 			//Markup
 			this.innerHTML = `
-			<section id="${this.IdKey}-container" class="gw-gallery-container" aria-label="${this.Name} image gallery">
+			<section id="${this.IdKey}-container" class="gw-gallery-container" aria-label="${this.Name}" aria-roledescription="Carousel">
 				<div class="gallery">
 					<button id="${this.IdKey}-prevImg" class="nav-button" aria-labelledby="prevTitle">
 						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512">
@@ -276,7 +276,7 @@ window.GW.Controls = window.GW.Controls || {};
 
 			//Markup
 			this.innerHTML = `
-			<figure class="gw-gallery-figure">
+			<figure class="gw-gallery-figure" aria-roledescription="slide">
 				<img
 					alt="${imageInfo.Alt}"
 					style="min-width: ${this.MinImgWidth || auto}; max-height: ${this.MaxImgHeight || "none"}; min-height: ${this.MinImgHeight || "auto"}; "
