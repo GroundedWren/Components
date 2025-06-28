@@ -113,6 +113,8 @@ window.GW = window.GW || {};
 				}
 
 				> *:nth-child(2) {
+					container-type: inline-size;
+					
 					display: flex;
 					flex-direction: column;
 					gap: 5px;
@@ -257,6 +259,9 @@ window.GW = window.GW || {};
 										height: 24px;
 										width: 24px;
 									}
+									@container (max-width: 500px) {
+										padding: 2px;
+									}
 								}
 							}
 							p.nav-links {
@@ -280,6 +285,13 @@ window.GW = window.GW || {};
 												margin-block-start: -10px;
 											}
 										}
+									}
+								}
+								
+								@container (max-width: 500px) {
+									gap: 2px;
+									a:is([aria-labelledby$="spnPrevLnkLbl"], [aria-labelledby$="spnNextLnkLbl"]) {
+										display: none;
 									}
 								}
 							}
