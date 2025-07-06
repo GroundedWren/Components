@@ -17,6 +17,8 @@ window.GW.Controls = window.GW.Controls || {};
 		CurKeySequence = [];
 		LastKeyTimestamp = new Date(-8640000000000000); //Earliest representable date
 
+		#clickTimeout;
+
 		constructor() {
 			super();
 			this.InstanceId = OptionListboxEl.InstanceCount++;
@@ -153,7 +155,7 @@ window.GW.Controls = window.GW.Controls || {};
 			});
 
 			if(!this.IsInitialized) {
-				new MutationObserver(this.renderContent).observe(
+				new MutationObserver(() => this.renderContent()).observe(
 					this,
 					{childList: true, subtree: true}
 				);
@@ -277,16 +279,25 @@ window.GW.Controls = window.GW.Controls || {};
 				this.querySelector(`#${this.ActiveDescendant}`).setAttribute("tabindex", "-1");
 			}
 			optionEl.setAttribute("tabindex", "0");
-			if(this.IsInitialized) {
+			if(this.IsInitialized && this.matches(`:focus-within`)) {
 				optionEl.focus();
 			}
 			this.ActiveDescendant = optionEl.id;
 		}
 
-		clickOption = function clickOption(optionEl) {
+		clickOption(optionEl) {
 			if(!optionEl.matches(`[role="option"]`)) {
 				return;
 			}
+
+			if(this.#clickTimeout) {
+				clearTimeout(this.#clickTimeout);
+			}
+			this.#clickTimeout = setTimeout(() => this.#performClick(optionEl), 0);
+		}
+
+		#performClick(optionEl) {
+			this.#clickTimeout = null;
 
 			this.setActiveOption(optionEl);
 
