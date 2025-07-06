@@ -86,6 +86,10 @@ window.GW.Controls = window.GW.Controls || {};
 			}
 		}
 
+		get Value() {
+			return [...this.querySelectorAll(`input:checked`)].map(inputEl => inputEl.value);
+		}
+
 		connectedCallback() {
 			if(!this.IsInitialized) {
 				if(document.readyState === "loading") {
@@ -148,6 +152,7 @@ window.GW.Controls = window.GW.Controls || {};
 				);
 
 				this.#overwriteInputChecked(labelEl, inputEl);
+				this.#overwriteInputClick(labelEl, inputEl);
 
 				Object.entries({
 					"id": labelEl.id || this.getId(this.IdIter++),
@@ -208,6 +213,7 @@ window.GW.Controls = window.GW.Controls || {};
 			optionEl.setAttribute("aria-selected", optionEl.getAttribute("aria-selected") !== "true");
 			this.updateSelsDesc();
 			this.setActiveOption(optionEl);
+			setTimeout(() => this.dispatchEvent(new Event("option-click")), 0);
 		};
 
 		onOptionKeydown = (event) => {
@@ -323,7 +329,13 @@ window.GW.Controls = window.GW.Controls || {};
 			const selectionsList = this.LabelElAry.filter(
 				label => label.getAttribute("aria-selected") === "true"
 			).map(label => label.innerText).join(", ");
-			this.SelDescEl.innerHTML = selectionsList ? `Selections: ${selectionsList}` : "No selections"
+
+			const oldSelDesc = this.SelDescEl.innerHTML;
+			this.SelDescEl.innerHTML = selectionsList ? `Selections: ${selectionsList}` : "No selections";
+
+			if(oldSelDesc && this.SelDescEl.innerHTML !== oldSelDesc) {
+				setTimeout(() => this.dispatchEvent(new Event("selection-change")), 0);
+			}
 		}
 
 		#overwriteInputChecked(labelEl, inputEl) {
@@ -354,6 +366,37 @@ window.GW.Controls = window.GW.Controls || {};
 			labelEl.setAttribute("aria-selected", value ? "true" : "false");
 			this.updateSelsDesc();
 		}
+
+		#overwriteInputClick(labelEl, inputEl) {
+			const clickDescriptor = Object.getOwnPropertyDescriptor(
+				Object.getPrototypeOf(Object.getPrototypeOf(inputEl)),
+				"click"
+			);
+
+			const originalClick = clickDescriptor.value;
+			clickDescriptor.value = this.#createDelegate(
+				inputEl,
+				function(clickDescriptor, labelEl, customHandler, originalClick) {
+					const newClick = clickDescriptor.value;
+					clickDescriptor.value = originalClick;
+					Object.defineProperty(this, "click", clickDescriptor);
+
+					this.click();
+
+					clickDescriptor.value = newClick;
+					Object.defineProperty(this, "click", clickDescriptor);
+
+					customHandler(labelEl);
+				},
+				[clickDescriptor, labelEl, this.#customInputClick, originalClick]
+			);
+			Object.defineProperty(inputEl, "click", clickDescriptor);
+		}
+		#customInputClick = (labelEl) => {
+			labelEl.setAttribute("aria-selected", labelEl.querySelector(`input`).checked ? "true" : "false");
+			this.updateSelsDesc();
+		};
+
 		#createDelegate = function(context, method, args) {
 			return function generatedFunction() {
 				return method.apply(context, (args || []).concat(...arguments));

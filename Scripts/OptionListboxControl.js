@@ -80,6 +80,16 @@ window.GW.Controls = window.GW.Controls || {};
 			}
 		}
 
+		get Value() {
+			const checkedInput = this.querySelector(`[role="option"][aria-selected="true"] input`);
+			if(checkedInput) {
+				return checkedInput.value;
+			}
+			else {
+				return null;
+			}
+		}
+
 		connectedCallback() {
 			if(!this.IsInitialized) {
 				if(document.readyState === "loading") {
@@ -134,6 +144,7 @@ window.GW.Controls = window.GW.Controls || {};
 				);
 
 				this.#overwriteInputChecked(inputEl);
+				this.#overwriteInputClick(inputEl);
 
 				Object.entries({
 					"id": labelEl.id || this.getId(this.IdIter++),
@@ -302,8 +313,8 @@ window.GW.Controls = window.GW.Controls || {};
 			this.setActiveOption(optionEl);
 
 			const isNowSelected = optionEl.getAttribute("aria-selected") !== "true";
-			optionEl.setAttribute("aria-selected", isNowSelected);
 			optionEl.querySelector("input").checked = isNowSelected;
+			optionEl.setAttribute("aria-selected", isNowSelected);
 
 			if(isNowSelected) {
 				this.LabelElAry.forEach(labelEl => {
@@ -324,6 +335,8 @@ window.GW.Controls = window.GW.Controls || {};
 			checkedDescriptor.set = this.#createDelegate(
 				inputEl,
 				function(checkedDescriptor, originalSet, customHandler, value) {
+					const oldValue = this.Value;
+
 					const newSet = checkedDescriptor.set;
 					checkedDescriptor.set = originalSet;
 					Object.defineProperty(this, "checked", checkedDescriptor);
@@ -332,14 +345,14 @@ window.GW.Controls = window.GW.Controls || {};
 
 					checkedDescriptor.set = newSet;
 					Object.defineProperty(this, "checked", checkedDescriptor);
-
-					customHandler();
+					
+					customHandler(oldValue);
 				},
 				[checkedDescriptor, originalSet, this.#customInputChecked]
 			);
 			Object.defineProperty(inputEl, "checked", checkedDescriptor);
 		}
-		#customInputChecked = () => {
+		#customInputChecked = (oldValue) => {
 			this.IsInitialized = false;
 			this.LabelElAry.forEach(labelEl => {
 				const inputEl = labelEl.querySelector("input");
@@ -349,7 +362,43 @@ window.GW.Controls = window.GW.Controls || {};
 				}
 			});
 			this.IsInitialized = true;
+
+			if(this.Value !== oldValue) {
+				this.dispatchEvent(new Event("selection-change"))
+			}
 		}
+
+		#overwriteInputClick(inputEl) {
+			const clickDescriptor = Object.getOwnPropertyDescriptor(
+				Object.getPrototypeOf(Object.getPrototypeOf(inputEl)),
+				"click"
+			);
+
+			const originalClick = clickDescriptor.value;
+			clickDescriptor.value = this.#createDelegate(
+				inputEl,
+				function(clickDescriptor, customHandler, originalClick) {
+					const oldValue = this.Value;
+
+					const newClick = clickDescriptor.value;
+					clickDescriptor.value = originalClick;
+					Object.defineProperty(this, "click", clickDescriptor);
+
+					this.click();
+
+					clickDescriptor.value = newClick;
+					Object.defineProperty(this, "click", clickDescriptor);
+
+					customHandler();
+				},
+				[clickDescriptor, this.#customInputClick, originalClick]
+			);
+			Object.defineProperty(inputEl, "click", clickDescriptor);
+		}
+		#customInputClick = (oldValue) => {
+			this.#customInputChecked();
+		};
+
 		#createDelegate = function(context, method, args) {
 			return function generatedFunction() {
 				return method.apply(context, (args || []).concat(...arguments));
