@@ -308,7 +308,7 @@ window.GW.Controls = window.GW.Controls || {};
 				this.querySelector(`#${this.ActiveDescendant}`).setAttribute("tabindex", "-1");
 			}
 			optionEl.setAttribute("tabindex", "0");
-			if(this.IsInitialized) {
+			if(this.IsInitialized && this.matches(`:focus-within`)) {
 				optionEl.focus();
 			}
 			setTimeout(() => {
