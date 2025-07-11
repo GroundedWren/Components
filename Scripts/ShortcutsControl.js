@@ -12,7 +12,10 @@ window.GW.Controls = window.GW.Controls || {};
 	window.addEventListener("load", function shortcutsControlOnLoad() {
 		document.body.insertAdjacentHTML(
 			"beforeend",
-			`<aside id="asiGWShortcutsLive" aria-live="polite" style="display: contents;"></aside>`
+			`<aside id="asiGWShortcutsLive"
+				aria-live="polite"
+				style="display: contents;"
+			></aside>`
 		);
 		ns.AsiShortcutsLive = document.getElementById("asiGWShortcutsLive");
 	});
@@ -85,6 +88,13 @@ window.GW.Controls = window.GW.Controls || {};
 					<style>
 						gw-shortcuts {
 							display: contents;
+						}
+						#asiGWShortcutsLive {
+							popover {
+								 max-height: 100%;
+								 max-width: 100%;
+								 overflow: auto;
+							}
 						}
 					</style>
 				`);
@@ -172,4 +182,3 @@ window.GW.Controls = window.GW.Controls || {};
 	};
 	customElements.define("gw-shortcuts", ns.ShortcutsEl);
 }) (window.GW.Controls.Shortcuts = window.GW.Controls.Shortcuts || {});
-GW?.Controls?.Veil?.clearDefer("GW.Controls.Search");
