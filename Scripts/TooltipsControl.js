@@ -221,10 +221,11 @@ window.GW = window.GW || {};
 					case 'Backspace':
 						if(this.classList.contains("shown")) {
 							this.forcedHidden = true;
-							if(this.matches(":focus-within")) {
+							if(this.matches(":focus-within") && this.toolEl.getAttribute("tabindex") !== "-1") {
 								this.toolEl.focus();
 							}
 							setTimeout(this.doHide, 0);
+							event.preventDefault();
 						}
 						break;
 					case 'F1':
