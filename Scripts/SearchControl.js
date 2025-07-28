@@ -51,6 +51,9 @@ window.GW.Controls = window.GW.Controls || {};
 						
 						[popover="auto"] {
 							text-align: center;
+							overflow: auto;
+							max-height: 100%;
+							max-width: 100%;
 							ol {
 								text-align: start;
 								padding-inline: 40px;
