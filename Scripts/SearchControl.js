@@ -82,7 +82,7 @@ window.GW.Controls = window.GW.Controls || {};
 		}
 
 		get SearchData() {
-			return ns.Data[this.getAttribute("dataKey")];
+			return ns.Data[this.getAttribute("dataKey")] || {};
 		}
 
 		connectedCallback() {
