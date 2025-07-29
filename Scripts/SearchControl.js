@@ -136,7 +136,12 @@ window.GW.Controls = window.GW.Controls || {};
 				? `<ol aria-labelledby="${this.getId("strMatch")}">
 						${matches.map(match => {
 							let pageObj = this.SearchData[match.Key];
-							return `<li><em>${pageObj.Category}</em> / <strong><a href="${pageObj.URL}" tabindex="0">${match.Key}</a></strong></li>`
+							return `
+							<li>
+								<em>${pageObj.Category}</em> / <strong>
+									<a href="${pageObj.URL}" tabindex="0">${pageObj.DisplayName || match.Key}</a>
+								</strong>
+							</li>`
 						}).join("")}
 					</ol>`
 				: `<br><em>No matches</em>`
