@@ -23,6 +23,7 @@ window.GW = window.GW || {};
 						.radio {
 							width: 16px;
 							height: 16px;
+							margin-inline: 3px;
 							path {
 								fill: var(--icon-color, #000000);
 							}
