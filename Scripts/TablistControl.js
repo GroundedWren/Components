@@ -139,6 +139,7 @@ window.GW = window.GW || {};
 			if(newTab) {
 				event.preventDefault();
 				newTab.click();
+				newTab.focus();
 			}
 		};
 
@@ -149,7 +150,6 @@ window.GW = window.GW || {};
 				tabEl.setAttribute("tabindex", tabEl === clickedTab ? "0" : "-1");
 				this.updateIcon(tabEl);
 			});
-			clickedTab.focus();
 		};
 
 		updateIcon(tabEl) {
