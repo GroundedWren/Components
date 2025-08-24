@@ -86,24 +86,25 @@ window.GW = window.GW || {};
 			}
 
 			TEMPLATE.InstanceMap[this.InstanceId] = this;
-			if(!this.IsInitialized) {
-				if(document.readyState === "loading") {
-					document.addEventListener("DOMContentLoaded", () => {
-						if(!this.IsInitialized) {
-							this.renderContent();
-						}
-					});
-				}
-				else {
-					this.renderContent();
-				}
+			if(document.readyState === "loading") {
+				document.addEventListener("DOMContentLoaded", () => {
+					this.#initialize();
+				});
 			}
+			else {
+				this.#initialize();
+			}
+		}
+
+		/** First-time setup */
+		#initialize() {
+			if(this.IsInitialized) { return; }
+			this.IsInitialized = true;
+			this.renderContent();
 		}
 
 		/** Invoked when the element is ready to render */
 		renderContent() {
-			// DOM manipulation here
-			this.IsInitialized = true;
 		}
 	}
 	if(!customElements.get(ns.TEMPLATE.Name)) {
