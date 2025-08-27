@@ -1,0 +1,69 @@
+/**
+* Author: Vera Konigin
+* Site: https://groundedwren.neocities.org
+* Contact: vera@groundedwren.com
+* 
+* File Description: A grid layout for user input
+*/
+
+.input-grid {
+	display: grid;
+	grid-template-columns: 1fr var(--input-grid-right-col-width, auto);
+	grid-auto-rows: minmax(24px, auto);
+	row-gap: 5px;
+	user-select: none;
+
+	input, select {
+		justify-self: start;
+		margin-inline-start: 5px;
+	}
+
+	> label {
+		text-align: end;
+		display: contents;
+
+		> span {
+			display: flex;
+			align-items: center;
+			justify-content: end;
+		}
+
+		&:has(input[type="checkbox"]) {
+			&:has(:focus-within) {
+				&::before {
+					background-color: var(--mark-color);
+				}
+			}
+			&::before {
+				content: "";
+				margin-inline-end: -5px;
+
+			}
+			> span {
+				display: flex;
+				justify-self: start;
+				align-items: stretch;
+				margin-inline-start: 5px;
+
+				&:has(input:checked) {
+					background-color: var(--selected-color);
+					justify-self: start;
+				}
+			}
+		}
+
+		&:has(:focus-within) {
+			> span {
+				background-color: var(--mark-color);
+			}
+			input, select {
+				outline-width: 2px !important;
+				outline-color: var(--focus-color) !important;
+				outline-style: solid !important;
+				outline-offset: 1px !important;
+				position: relative !important;
+				z-index: 100 !important;
+			}
+		}
+	}
+}
