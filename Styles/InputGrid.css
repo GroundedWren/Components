@@ -31,7 +31,7 @@
 		&:has(input[type="checkbox"]) {
 			&:has(:focus-within) {
 				&::before {
-					background-color: var(--mark-color);
+					background-color: var(--mark-color, #D2FCC5);
 				}
 			}
 			&::before {
@@ -46,7 +46,7 @@
 				margin-inline-start: 5px;
 
 				&:has(input:checked) {
-					background-color: var(--selected-color);
+					background-color: var(--selected-color, #90CBDB);
 					justify-self: start;
 				}
 			}
@@ -54,11 +54,11 @@
 
 		&:has(:focus-within) {
 			> span {
-				background-color: var(--mark-color);
+				background-color: var(--mark-color, #D2FCC5);
 			}
 			input, select {
 				outline-width: 2px !important;
-				outline-color: var(--focus-color) !important;
+				outline-color: var(--focus-color, #FF0701) !important;
 				outline-style: solid !important;
 				outline-offset: 1px !important;
 				position: relative !important;
