@@ -25,6 +25,7 @@
 	--accent-color: #D5B3D9;
 	--invalid-color: #5C01D8;
 	--invalid-text-background-color: #ff80c0;
+	--warn-color: #EDC200;
 	
 	input {
 		color-scheme: light;
@@ -51,6 +52,7 @@
 		--accent-color: #8D4A95;
 		--invalid-color: #A35FFE;
 		--invalid-text-background-color: #660000;
+		--warn-color: #766000;
 		
 		input {
 			color-scheme: dark;
