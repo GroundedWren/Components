@@ -12,10 +12,6 @@
 		:root {
 			--accent-color: purple;
 		}
-		img {
-			height: 300px;
-			width: 300px;
-		}
 	</style>
 </head>
 <body>
@@ -23,7 +19,13 @@
 		<a class="hide-until-focus full" href="#main">Skip to content</a>
 	</header>
 	<main id="main">
-		<gw-image-loader data-color="#663399" data-color-var="--accent-color" data-transition="250">
+		<gw-image-loader
+			data-color="#663399"
+			data-color-var="--accent-color"
+			data-transition="250"
+			data-w="300"
+			data-h="300"
+		>
 			<img src="https://groundedwren.com/Img/Birds/Traversia_lyalli_grunge.png" alt="borb">
 			<img src="https://groundedwren.com/Img/Games/Chess.png" alt="chess">
 		</gw-image-loader>
