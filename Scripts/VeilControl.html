@@ -47,6 +47,7 @@
 		`);
 		window.addEventListener("DOMContentLoaded", function onDOMContentLoadedVeil() {
 			ns.clearDefer("DOMContentLoaded");
+			setTimeout(() => document.getElementById("styGwLoad")?.remove(), 3000);
 		});
 	}) (window.GW.Controls.Veil = window.GW.Controls.Veil || {});
 </script>
