@@ -24,7 +24,7 @@
 		ns.clearDefer = function clearDefer(key) {
 			delete ns.DeferKeys[key];
 			if(Object.keys(ns.DeferKeys).length === 0) {
-				setTimeout(() => document.getElementById("styGwLoad")?.remove(), 0);
+				requestAnimationFrame(() => document.getElementById("styGwLoad")?.remove());
 			}
 		}
 		
