@@ -17,6 +17,7 @@ html, body {
 	
 	background-color: var(--background-color);
 	color: var(--text-color);
+	fill: var(--text-color);
 }
 html {
 	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
