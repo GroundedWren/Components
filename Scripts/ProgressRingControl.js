@@ -148,12 +148,14 @@ window.GW = window.GW || {};
 
 		get Numerator() {
 			const numerator = parseFloat(this.getAttribute("numerator"));
-			return isNaN(numerator) ? 0 : numerator;
+			const floatNumerator = isNaN(numerator) ? 0 : numerator;
+			return Math.max(floatNumerator <= this.Denominator ? floatNumerator : this.Denominator, 0);
 		}
 
 		get Denominator() {
 			const denominator = parseFloat(this.getAttribute("denominator"));
-			return isNaN(denominator) ? 0 : denominator;
+			const floatDenominator = isNaN(denominator) ? 0 : denominator
+			return Math.max(floatDenominator, 0);
 		}
 
 		get ProgressRatio() {
@@ -298,7 +300,7 @@ window.GW = window.GW || {};
 			if(textEl.getBoundingClientRect().width > (svgEl.getBoundingClientRect().width * textSpaceRatio)) {
 				textEl.setAttribute("textLength", maxTextWidth);
 			}
-			
+
 			this.#toastUpdate();
 		}
 
