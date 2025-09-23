@@ -16,10 +16,10 @@ window.GW = window.GW || {};
 
 		static #VbxWidth = 100;
 		static #VbxHeight = 100;
-		static #RingRadius = 45;
+		static #RingRadius = 43;
 		static #RingCircumference = 2 * Math.PI * ProgressRingEl.#RingRadius;
 		static #RingWidth = 5;
-		static #DotRadius = 5;
+		static #DotRadius = 7;
 
 		static #ToasterId = "gwProgressRingToaster";
 
@@ -28,7 +28,9 @@ window.GW = window.GW || {};
 		static #CommonStyleAttribute = `data-${ProgressRingEl.Name}-style`;
 		static {
 			ProgressRingEl.#CommonStyleSheet.replaceSync(`${ProgressRingEl.Name} {
-				display: contents;
+				display: grid;
+				aspect-ratio: 1 / 1;
+				container-type: size;
 
 				&:is([data-progress-ratio="0"], [data-progress-ratio="1"]) {
 					svg .dot {
@@ -47,7 +49,7 @@ window.GW = window.GW || {};
 					.base {
 						fill: none;
 						stroke: var(--ring-color, lightgray);
-						stroke-width: ${ProgressRingEl.#RingWidth};
+						stroke-width: ${ProgressRingEl.#RingWidth - 1};
 					}
 					.progress {
 						fill: none;
@@ -71,8 +73,15 @@ window.GW = window.GW || {};
 
 					.text {
 						font-family: 'Segoe UI', Arial, Verdana, Tahoma, 'Trebuchet MS', sans-serif;
-						font-size: 1.2em;
 						font-weight: bold;
+
+						font-size: 1.2em;
+						@container(width < 80px) {
+							font-size: 1.3em;
+						}
+						@container(width < 60px) {
+							font-size: 1.45em;
+						}
 					}
 				}
 				&:not([forceAnimate]) {
@@ -270,8 +279,9 @@ window.GW = window.GW || {};
 			textEl.textContent = this.#getTextContent();
 
 			this.#StyleSheet.replaceSync(`${ProgressRingEl.Name}[data-instance="${this.InstanceId}"] {
+				min-width: calc(${textEl.textContent.length}ch + 15px);
+
 				svg {
-					min-width: calc(${textEl.textContent.length}ch + 15px);
 					.progress {
 						stroke-dashoffset: ${ProgressRingEl.#RingCircumference - (this.ProgressRatio * ProgressRingEl.#RingCircumference)};
 					}
@@ -282,13 +292,13 @@ window.GW = window.GW || {};
 			}`);
 
 			textEl.removeAttribute("textLength");
-			const maxTextWidth = (ProgressRingEl.#RingRadius * 2) - ProgressRingEl.#RingWidth;
+			const maxTextWidth = (ProgressRingEl.#RingRadius * 2)
+				- Math.max(ProgressRingEl.#RingWidth * 2, ProgressRingEl.#DotRadius * 2);
 			const textSpaceRatio = maxTextWidth / ProgressRingEl.#VbxWidth;
 			if(textEl.getBoundingClientRect().width > (svgEl.getBoundingClientRect().width * textSpaceRatio)) {
 				textEl.setAttribute("textLength", maxTextWidth);
 			}
-
-
+			
 			this.#toastUpdate();
 		}
 
