@@ -1,5 +1,5 @@
 /**
- * @file 
+ * @file
  * @author Vera Konigin vera@groundedwren.com
  */
  
@@ -9,14 +9,25 @@ window.GW = window.GW || {};
 		static InstanceCount = 0; // Global count of instances created
 		static InstanceMap = {}; // Dynamic map of IDs to instances of the element currently attached
 
-		//Element name
+		// Element name
 		static Name = "gw-template";
-		// Element CSS rules
-		static Style = `${TEMPLATE.Name} {
-		}`;
+
+		// Attributes whose changes we respond to
+		static observedAttributes = [];
+
+		// Element CSSStyleSheet
+		static #CommonStyleSheet = new CSSStyleSheet();
+		static #CommonStyleAttribute = `data-${TEMPLATE.Name}-style`;
+		static {
+			TEMPLATE.#CommonStyleSheet.replaceSync(`${TEMPLATE.Name} {
+			}`);
+		}
 
 		InstanceId; // Identifier for this instance of the element
 		IsInitialized; // Whether the element has rendered its content
+
+		#StyleSheet; // CSSStyleSheet for this instance
+		#StyleAttribute; // Identifying attribute for this instance's CSSStyleSheet
 
 		/** Creates an instance */
 		constructor() {
@@ -26,6 +37,9 @@ window.GW = window.GW || {};
 				Object.setPrototypeOf(this, customElements.get(TEMPLATE.Name).prototype);
 			}
 			this.InstanceId = TEMPLATE.InstanceCount++;
+
+			this.#StyleSheet = new CSSStyleSheet();
+			this.#StyleAttribute = `data-${this.getId("style")}`;
 		}
 
 		/** Shortcut for the root node of the element */
@@ -75,15 +89,22 @@ window.GW = window.GW || {};
 		disconnectedCallback() {
 			delete TEMPLATE.InstanceMap[this.InstanceId];
 		}
+		/** Handler invoked when any of the observed attributes are changed */
+		attributeChangedCallback(name, oldValue, newValue) {
+			
+		}
 
 		/** Performs setup when the element has been sited */
 		onAttached() {
-			if(!this.Root.querySelector(`style.${TEMPLATE.Name}`)) {
-				this.Head.insertAdjacentHTML(
-					"beforeend",
-					`<style class=${TEMPLATE.Name}>${TEMPLATE.Style}</style>`
-				);
+			if(!this.Head.hasAttribute(TEMPLATE.#CommonStyleAttribute)) {
+				this.Head.setAttribute(TEMPLATE.#CommonStyleAttribute, "");
+				this.Root.adoptedStyleSheets.push(TEMPLATE.#CommonStyleSheet);
 			}
+			if(!this.Head.hasAttribute(this.#StyleAttribute)) {
+				this.Head.setAttribute(this.#StyleAttribute, "");
+				this.Root.adoptedStyleSheets?.push(this.#StyleSheet);
+			}
+			this.setAttribute("data-instance", this.InstanceId);
 
 			TEMPLATE.InstanceMap[this.InstanceId] = this;
 			if(document.readyState === "loading") {
@@ -99,12 +120,10 @@ window.GW = window.GW || {};
 		/** First-time setup */
 		#initialize() {
 			if(this.IsInitialized) { return; }
-			this.IsInitialized = true;
-			this.renderContent();
-		}
 
-		/** Invoked when the element is ready to render */
-		renderContent() {
+			this.innerHTML = ``;
+
+			this.IsInitialized = true;
 		}
 	}
 	if(!customElements.get(ns.TEMPLATE.Name)) {
