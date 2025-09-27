@@ -107,10 +107,12 @@ window.GW = window.GW || {};
 		#initialize() {
 			if(this.IsInitialized) { return; }
 
-			this.setAttribute("id", this.getId());
+			if(!this.getAttribute("id")) {
+				this.setAttribute("id", this.getId());
+			}
 
 			this.insertAdjacentHTML("afterbegin", `<style>
-				${`#${this.getId()}`} {
+				${`#${this.getAttribute("id")}`} {
 					img {
 						&:not(.loaded) {
 							opacity: 0;
