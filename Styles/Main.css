@@ -315,23 +315,3 @@ label:not(.input-vertical) {
 label:has(input:checked) {
 	background-color: var(--selected-color);
 }
-
-.bubble-container {
-	position: relative;
-
-	.bubble {
-		position: absolute;
-		background-color: var(--background-color);
-		padding: 4px;
-		border: 1px solid var(--border-color);
-		min-width: 200px;
-		right: 0;
-		z-index: 2;
-	}
-
-	.bubbler:not(:is([aria-expanded="true"], [open])) {
-		.bubble {
-			display: none;
-		}
-	}
-}
