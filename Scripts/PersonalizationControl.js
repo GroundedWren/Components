@@ -67,6 +67,8 @@ window.GW = window.GW || {};
 
 			this.lightThemeBtn.setAttribute("aria-pressed", this.currentTheme === "theme-light");
 			this.darkThemeBtn.setAttribute("aria-pressed", this.currentTheme === "theme-dark");
+
+			this.dispatchEvent(new Event("theme-set"));
 		}
 
 		setFontSize(fontSize) {
