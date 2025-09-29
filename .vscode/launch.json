@@ -8,7 +8,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Open Test Page.html",
-            "file": ".\\Pages\\ProgressRing.html",
+            "file": ".\\Pages\\BgImage.html",
 			"runtimeArgs": ["--disable-web-security"]
         }
     ]
