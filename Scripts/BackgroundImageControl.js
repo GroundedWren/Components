@@ -162,10 +162,11 @@ window.GW = window.GW || {};
 			this.setAttribute("data-instance", this.InstanceId);
 
 			if(!this.hasAttribute("image")) {
-				if(window.matchMedia(`(prefers-color-scheme: dark)`).matches) {
+				const matchesDark = window.matchMedia(`(prefers-color-scheme: dark)`).matches
+				if(matchesDark && this.hasAttribute("dark")) {
 					this.setAttribute("image", this.getAttribute("dark") || attrGroups[0].NAME);
 				}
-				else {
+				else if(!matchesDark && this.hasAttribute("light")) {
 					this.setAttribute("image", this.getAttribute("light") || attrGroups[0].NAME);
 				}
 			}
