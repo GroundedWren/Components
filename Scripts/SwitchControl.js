@@ -13,6 +13,7 @@ window.GW = window.GW || {};
 		LabelIdx = 0;
 		ParentLabelObserver = null;
 		ForLabelObserver = null;
+		#LastCheckedState = null;
 
 		constructor() {
 			super();
@@ -220,6 +221,10 @@ window.GW = window.GW || {};
 			}
 
 			this.setAttribute("aria-checked", this.InputEl.checked);
+			if(this.InputEl.checked !== this.#LastCheckedState) {
+				this.#LastCheckedState = this.InputEl.checked;
+				this.InputEl.dispatchEvent(new Event("switch"));
+			}
 		};
 
 		setupParentLabelObserver() {
