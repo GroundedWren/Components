@@ -60,7 +60,7 @@ window.GW = window.GW || {};
 						transform-origin: center;
 						transform: scaleX(-1) scaleY(-1) rotate(90deg);
 
-						transition: stroke-dashoffset var(--animation-duration, 1s);
+						transition: stroke-dashoffset var(--animation-duration, 1s) linear;
 					}
 					.dot {
 						fill: var(--dot-color, green);
@@ -68,7 +68,7 @@ window.GW = window.GW || {};
 
 						transform-origin: center;
 						--opacity-step-position: start;
-						transition: transform var(--animation-duration, 1s), opacity var(--animation-duration, 1s) steps(1, var(--opacity-step-position));
+						transition: transform var(--animation-duration, 1s) linear, opacity var(--animation-duration, 1s) steps(1, var(--opacity-step-position));
 					}
 
 					.text {
@@ -107,6 +107,8 @@ window.GW = window.GW || {};
 		#IsToastDebouncing;
 		#IsToastDebounced;
 		#LastToastText;
+
+		#DisplayTextCallback;
 
 		/** Creates an instance */
 		constructor() {
@@ -147,15 +149,21 @@ window.GW = window.GW || {};
 		}
 
 		get Numerator() {
-			const numerator = parseFloat(this.getAttribute("numerator"));
-			const floatNumerator = isNaN(numerator) ? 0 : numerator;
+			const floatNumerator = this.FloatNumerator;
 			return Math.max(floatNumerator <= this.Denominator ? floatNumerator : this.Denominator, 0);
+		}
+		get FloatNumerator() {
+			const numerator = parseFloat(this.getAttribute("numerator"));
+			return isNaN(numerator) ? 0 : numerator;
 		}
 
 		get Denominator() {
-			const denominator = parseFloat(this.getAttribute("denominator"));
-			const floatDenominator = isNaN(denominator) ? 0 : denominator
+			const floatDenominator = this.FloatDenominator;
 			return Math.max(floatDenominator, 0);
+		}
+		get FloatDenominator() {
+			const denominator = parseFloat(this.getAttribute("denominator"));
+			return isNaN(denominator) ? 0 : denominator
 		}
 
 		get ProgressRatio() {
@@ -166,6 +174,11 @@ window.GW = window.GW || {};
 
 		get #ProgressRingToaster() {
 			return document.getElementById(ProgressRingEl.#ToasterId);
+		}
+
+		set DisplayTextCallback(value) {
+			this.#DisplayTextCallback = value;
+			this.#updateState()
 		}
 
 		/**
@@ -305,6 +318,14 @@ window.GW = window.GW || {};
 		}
 
 		#getTextContent() {
+			if(this.#DisplayTextCallback) {
+				return this.#DisplayTextCallback({
+					Numerator: this.Numerator,
+					Denominator: this.Denominator,
+					FloatNumerator: this.FloatNumerator,
+					FloatDenominator: this.FloatDenominator
+				});
+			}
 			if(this.hasAttribute("percent")) {
 				return `${Math.round(this.ProgressRatio*100)}%`;
 			}
