@@ -172,6 +172,10 @@ window.GW = window.GW || {};
 			return isFinite(ratio) ? ratio % 1 + completeAdjustment : 0;
 		}
 
+		get ScreenReaderNotificaitonsOn() {
+			return !this.hasAttribute("disableSRNotif");
+		}
+
 		get #ProgressRingToaster() {
 			return document.getElementById(ProgressRingEl.#ToasterId);
 		}
@@ -333,6 +337,10 @@ window.GW = window.GW || {};
 		}
 
 		#toastUpdate() {
+			if(!this.ScreenReaderNotificaitonsOn) {
+				return;
+			}
+
 			if(this.#LastToastText === this.#getTextContent()) {
 				return;
 			}
