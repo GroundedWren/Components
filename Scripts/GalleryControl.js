@@ -47,7 +47,6 @@ window.GW.Controls = window.GW.Controls || {};
 							display: grid;
 							grid-template-columns: auto 1fr auto;
 							gap: 10px;
-							justify-items: center;
 							align-items: stretch;
 						}
 		
@@ -63,6 +62,10 @@ window.GW.Controls = window.GW.Controls || {};
 							width: 35px;
 							path {
 								fill: var(--icon-color);
+							}
+
+							&:last-of-type {
+								justify-self: end;
 							}
 						}
 					}
@@ -160,7 +163,7 @@ window.GW.Controls = window.GW.Controls || {};
 				this.loadImage(imageList[newIdx]);
 			};
 
-			window.addEventListener("load", () => {  
+			window.addEventListener("DOMContentLoaded", () => {  
 				const urlParams = new URLSearchParams(window.location.search);
 				const imageList = ns.Data[this.Name].ImageList;
 				const fallbackImgIdx = (!isNaN(this.StartAt) && this.StartAt >= 0 && this.StartAt < imageList.length)
@@ -183,6 +186,10 @@ window.GW.Controls = window.GW.Controls || {};
 			galFig.MinImgWidth = this.MinImgWidth;
 			galFig.MinImgHeight = this.MinImgHeight;
 			galFig.MaxImgHeight = this.MaxImgHeight;
+
+			if(!this.FigureContainer.children.length) {
+				this.FigureContainer.replaceChildren(galFig);
+			}
 
 			galFig.ImgLoadedCallback = () => {
 				this.FigureContainer.replaceChildren(galFig);
@@ -247,8 +254,11 @@ window.GW.Controls = window.GW.Controls || {};
 					.gw-gallery-figure {
 						box-sizing: border-box;
 						margin: 0;
+						display: grid;
+						grid-auto-flow: row;
 		
 						img {
+							justify-self: center;
 							max-width: 100%;
 							min-width: auto;
 		
@@ -279,10 +289,13 @@ window.GW.Controls = window.GW.Controls || {};
 			<figure class="gw-gallery-figure" aria-roledescription="slide">
 				<img
 					alt="${imageInfo.Alt}"
-					style="min-width: ${this.MinImgWidth || auto}; max-height: ${this.MaxImgHeight || "none"}; min-height: ${this.MinImgHeight || "auto"}; "
+					style="min-width: ${this.MinImgWidth || "auto"}; max-height: ${this.MaxImgHeight || "none"}; min-height: ${this.MinImgHeight || "auto"}; "
 				>
 				<figcaption>
-					<span>${imageInfo.Title}</span>
+					<cite>${imageInfo.Cite
+						? `<a href="${imageInfo.Cite}">${imageInfo.Title}</a>`
+						: imageInfo.Title}
+					</cite>
 					<time datetime="${imageInfo.Date.toISOString()}">(${
 						imageInfo.Date.toLocaleDateString(undefined, { year: 'numeric', month: 'numeric', day: 'numeric' })
 					})</time>
