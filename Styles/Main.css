@@ -111,10 +111,10 @@ tbody th {
 	text-align: left;
 }
 
-footer {
+body > footer {
 	border-top: 1px solid color-mix(in oklab, var(--border-color), transparent 80%);
 	font-size: 0.9em;
-	background-color: color-mix(in oklab, var(--background-color-2), transparent 30%);
+	background-color: color-mix(in oklab, var(--background-alt-color), transparent 30%);
 	padding: 2px
 }
 
