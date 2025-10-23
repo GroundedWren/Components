@@ -1,0 +1,57 @@
+/*
+Author: Vera Konigin
+Contact: vera@groundedwren.com
+File Description: Font classes for the personalization control
+*/
+
+.font-small {
+	font-size: 0.8em;
+}
+
+.font-normal {
+	font-size: 1em;
+}
+
+.font-large {
+	font-size: 1.2em;
+}
+
+.font-segoe-ui {
+	font-family: 'Segoe UI', Arial, Verdana, Tahoma, 'Trebuchet MS', sans-serif;
+}
+
+.font-arial {
+	font-family: Arial, 'Segoe UI', Verdana, Tahoma, 'Trebuchet MS', sans-serif;
+}
+
+.font-verdana {
+	font-family: Verdana, 'Segoe UI', Arial, Tahoma, 'Trebuchet MS', sans-serif;
+}
+
+.font-tahoma {
+	font-family: Tahoma, 'Segoe UI', Arial, Verdana, 'Trebuchet MS', sans-serif;
+}
+
+.font-trebuchet-ms {
+	font-family: 'Trebuchet MS', 'Segoe UI', Arial, Verdana, Tahoma, sans-serif;
+}
+
+.font-times-new-roman {
+	font-family: 'Times New Roman', Georgia, Garamond, serif;
+}
+
+.font-georgia {
+	font-family: Georgia, 'Times New Roman', Garamond, serif;
+}
+
+.font-garamond {
+	font-family: Garamond, 'Times New Roman', Georgia, serif;
+}
+
+.font-courier-new {
+	font-family: 'Courier New', monospace;
+}
+
+.font-brush-script-mt {
+	font-family: 'Brush Script MT', cursive;
+}
