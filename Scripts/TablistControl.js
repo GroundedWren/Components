@@ -144,12 +144,17 @@ window.GW = window.GW || {};
 		};
 
 		onTabClick = (event) => {
+			const lastSelTab = this.querySelector(`[aria-selected="true"]`);
+
 			const clickedTab = event.currentTarget;
 			this.TabAry.forEach(tabEl => {
 				tabEl.setAttribute("aria-selected", tabEl === clickedTab);
 				tabEl.setAttribute("tabindex", tabEl === clickedTab ? "0" : "-1");
 				this.updateIcon(tabEl);
 			});
+			if(lastSelTab !== this.querySelector(`[aria-selected="true"]`)) {
+				this.dispatchEvent(new Event("tab-change"));
+			}
 		};
 
 		updateIcon(tabEl) {
