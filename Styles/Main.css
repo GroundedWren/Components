@@ -234,7 +234,9 @@ button[aria-pressed] {
 button:is([aria-expanded="true"], [aria-pressed="true"]), details[open] summary {
 	--border-start-color: color-mix(in oklab, var(--link-color), #000000 20%);
 	--border-end-color: color-mix(in oklab, var(--link-color), #FFFFFF 30%);
+}
 
+button:is([aria-expanded="true"], [aria-pressed="true"], [aria-selected="true"], [aria-checked="true"]), details[open] summary {
 	background-color: var(--selected-color);
 
 	&:hover {
