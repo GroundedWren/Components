@@ -69,6 +69,13 @@ window.GW.Controls = window.GW.Controls || {};
 							}
 						}
 					}
+					[dir="rtl"] {
+						.gw-gallery-container {
+							.nav-button {
+								transform: rotate(180deg);
+							}
+						}
+					}
 				</style>`);
 			}
 		}
@@ -270,10 +277,16 @@ window.GW.Controls = window.GW.Controls || {};
 							opacity: 0;
 							transition: opacity 0.15s linear;
 						}
-		
-						.page-num {
-							float: inline-end;
-							margin-inline-start: 2px;
+
+						figcaption {
+							display: grid;
+							grid-template-columns: auto auto 1fr;
+							gap: 2px;
+							
+							.page-num {
+								white-space: nowrap;
+								justify-self: end;
+							}
 						}
 					}
 				</style>`);
