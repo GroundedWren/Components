@@ -91,25 +91,25 @@ window.GW = window.GW || {};
 							width: max-content;
 
 							&.right {
-								top: -50%;
-								left: 100%;
+								inset-block-start: -50%;
+								inset-inline-start: 100%;
 							}
 							
 							&.top {
-								bottom: 100%;
-								left: 0;
+								inset-block-end: 100%;
+								inset-inline-start: 0;
 							}
 
 							&.left {
-								top: -50%;
-								right: 100%;
+								inset-block-start: -50%;
+								inset-inline-end: 100%;
 							}
 
 							&.bottom {
-								top: auto;
-								left: 0;
-								right: auto;
-								bottom: auto;
+								inset-block-start: auto;
+								inset-inline-start: 0;
+								inset-inline-end: auto;
+								inset-block-end: auto;
 							}
 						}
 						
@@ -128,8 +128,8 @@ window.GW = window.GW || {};
 					
 					#asiGWTooltipsLive {
 						position: absolute;
-						left: -99999999px;
-						top: 0px;
+						inset-inline-start: -99999999px;
+						inset-block-start: 0px;
 					}
 					
 					#GWTooltipsGroupLabel, #GWTooltipsRegionLabel {

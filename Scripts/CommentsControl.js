@@ -32,7 +32,7 @@ window.GW = window.GW || {};
 			
 			.sr-only {
 				position: absolute;
-				left: -99999999px;
+				inset-inline-start: -99999999px;
 			}
 		}
 

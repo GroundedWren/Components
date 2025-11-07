@@ -272,8 +272,8 @@ window.GW.Controls = window.GW.Controls || {};
 						}
 		
 						.page-num {
-							float: right;
-							margin-left: 2px;
+							float: inline-end;
+							margin-inline-start: 2px;
 						}
 					}
 				</style>`);

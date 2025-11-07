@@ -51,19 +51,19 @@ a {
 
 .sr-only {
 	position: absolute !important;
-	left: -99999999px;
-	top: 0px;
+	inset-inline-start: -99999999px;
+	inset-block-start: 0px;
 }
 
 .hide-until-focus {
 	position: absolute;
-	left: -99999999px;
-	top: 0px;
+	inset-inline-start: -99999999px;
+	inset-block-start: 0px;
 	
 	&:focus-within {
 		position: revert;
-		left: revert;
-		top: revert;
+		inset-inline-start: revert;
+		inset-block-start: revert;
 	}
 }
 
@@ -107,16 +107,16 @@ caption {
 	font-style: italic;
 }
 thead {
-	border-bottom: 2px solid;
+	border-block-end: 2px solid;
 	text-align: center;
 	font-weight: bold;
 }
 tbody th {
-	text-align: left;
+	text-align: start;
 }
 
 body > footer {
-	border-top: 1px solid color-mix(in oklab, var(--border-color), transparent 80%);
+	border-block-start: 1px solid color-mix(in oklab, var(--border-color), transparent 80%);
 	font-size: 0.9em;
 	background-color: color-mix(in oklab, var(--background-alt-color), transparent 30%);
 	padding: 2px
@@ -156,31 +156,31 @@ summary, button[aria-expanded] {
 		transform: rotate(45deg);
 	}
 	&::after {
-		border-top: 2px solid var(--border-color);
-		border-right: 2px solid var(--border-color);
+		border-block-start: 2px solid var(--border-color);
+		border-inline-end: 2px solid var(--border-color);
 	}
 	&::before {
-		border-bottom: 2px solid var(--border-color);
-		border-left: 2px solid var(--border-color);
+		border-block-end: 2px solid var(--border-color);
+		border-inline-start: 2px solid var(--border-color);
 	}
 }
 details[open] summary, button[aria-expanded="true"] {
 	&::after {
-		border-top: none;
-		border-right: none;
-		border-bottom: 2px solid var(--border-color);
-		border-left: 2px solid var(--border-color);
+		border-block-start: none;
+		border-inline-end: none;
+		border-block-end: 2px solid var(--border-color);
+		border-inline-start: 2px solid var(--border-color);
 	}
 	&::before {
-		border-bottom: none;
-		border-left: none;
-		border-top: 2px solid var(--border-color);
-		border-right: 2px solid var(--border-color);
+		border-block-end: none;
+		border-inline-start: none;
+		border-block-start: 2px solid var(--border-color);
+		border-inline-end: 2px solid var(--border-color);
 	}
 }
 [dir="rtl"] :is(summary, button[aria-expanded]) {
 	&::before, &::after {
-		transform: rotate(225deg);
+		transform: rotate(-45deg);
 	}
 }
 
@@ -269,10 +269,13 @@ input:is([type="text"], [type="password"], [type="number"], [type="email"], [typ
 	border: 2px groove var(--border-color);
 }
 
+[dir="rtl"] {
+	--invalid-box-shadow-x-offset: 3px;
+}
 :is(input:is([type="text"], [type="password"], [type="number"], [type="email"], [type="date"], [type="time"]), textarea, select):invalid {
-	box-shadow: -3px 0px 0px 0px var(--invalid-color);
+	box-shadow: var(--invalid-box-shadow-x-offset, -3px) 0px 0px 0px var(--invalid-color);
 	&:focus-within {
-		box-shadow: inset 0px 0px 4px 2px var(--invalid-color), -3px 0px 0px 0px var(--invalid-color);
+		box-shadow: inset 0px 0px 4px 2px var(--invalid-color), var(--invalid-box-shadow-x-offset, -3px) 0px 0px 0px var(--invalid-color);
 	}
 }
 

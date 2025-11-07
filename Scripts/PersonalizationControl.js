@@ -129,7 +129,7 @@ window.GW = window.GW || {};
 					width: 100%;
 					justify-content: flex-start;
 					align-items: flex-start;
-					margin-bottom: 6px;
+					margin-block-end: 6px;
 				}
 
 				button, select {

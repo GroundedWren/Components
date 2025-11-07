@@ -92,8 +92,8 @@ window.GW = window.GW || {};
 			}
 			#${ProgressRingEl.#ToasterId} {
 				position: absolute;
-				left: -99999999px;
-				top: 0px;
+				inset-inline-start: -99999999px;
+				inset-block-start: 0px;
 			}	
 			`);
 		}
