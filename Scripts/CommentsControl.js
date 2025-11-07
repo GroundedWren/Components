@@ -23,11 +23,10 @@ window.GW = window.GW || {};
 				flex-direction: column;
 				justify-content: flex-start;
 				align-items: flex-start;
-				margin-left: 5px;
-				margin-right: 5px;
+				margin-inline: 5px;
 				
 				> label {
-					padding-bottom: 2px;
+					padding-block-end: 2px;
 				}
 			}
 			
@@ -43,16 +42,15 @@ window.GW = window.GW || {};
 			}
 			
 			.comment-box-container {
-				margin-top: 5px;
-				margin-left: auto;
-				margin-right: auto;
+				margin-block-start: 5px;
+				margin-inline: auto;
 				width: fit-content;
 			}
 			
 			.comment-form-title {
 				display: flex;
 				justify-content: center;
-				margin-bottom: 5px;
+				margin-block-end: 5px;
 				font-size: 1.25em;
 			}
 			
@@ -117,7 +115,7 @@ window.GW = window.GW || {};
 
 		gw-comment-card {
 			.comment-article {
-				border-left: 2px solid var(--border-color, black);
+				border-inline-start: 2px solid var(--border-color, black);
 				padding: 4px;
 				background-color: var(--background-color, white);
 				display: flex;
