@@ -16,7 +16,7 @@ File Description: Simple content bubble styles
 		z-index: 2;
 	}
 
-	.bubbler:not(:is([aria-expanded="true"], [open])) {
+	&:has(.bubbler:not(:is([aria-expanded="true"], [open]))) {
 		.bubble {
 			display: none;
 		}
