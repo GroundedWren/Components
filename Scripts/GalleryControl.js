@@ -42,6 +42,8 @@ window.GW.Controls = window.GW.Controls || {};
 						}
 						
 						container-type: inline-size;
+						height: 100%;
+						display: grid;
 		
 						.gallery {
 							display: grid;
@@ -261,18 +263,21 @@ window.GW.Controls = window.GW.Controls || {};
 					.gw-gallery-figure {
 						box-sizing: border-box;
 						margin: 0;
+						height: 100%;
+						
 						display: grid;
-						grid-auto-flow: row;
+						grid-template-rows: 1fr auto;
 		
 						img {
 							justify-self: center;
 							max-width: 100%;
+							width: 100%;
 							min-width: auto;
 		
 							max-height: none;
 							min-height: auto;
-		
-							border: 3px solid var(--border-color, black);
+
+							object-fit: contain;
 
 							opacity: 0;
 							transition: opacity 0.15s linear;
