@@ -145,10 +145,11 @@ window.GW = window.GW || {};
 
 		onTabClick = (event) => {
 			const lastSelTab = this.querySelector(`[aria-selected="true"]`);
+			const canUnselect = this.hasAttribute("unselectable");
 
 			const clickedTab = event.currentTarget;
 			this.TabAry.forEach(tabEl => {
-				tabEl.setAttribute("aria-selected", tabEl === clickedTab);
+				tabEl.setAttribute("aria-selected", (tabEl === clickedTab) && (!canUnselect || tabEl !== lastSelTab));
 				tabEl.setAttribute("tabindex", tabEl === clickedTab ? "0" : "-1");
 				this.updateIcon(tabEl);
 			});
