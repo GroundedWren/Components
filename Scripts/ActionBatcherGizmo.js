@@ -87,22 +87,26 @@ window.GW = window.GW || {};
 		
 		IntervalMs = 0; // Action delay in milliseconds
 		RequireLull = true; // Whether batches wait an interval of no new actions to flush
+		InstantFirst = false; // Whether the first action sent in the interval occurs immediately
 		#FlushTimer = null;
 		#IsBlocked = false;
+		#InDebounce = false;
 
 		/**
 		 * Creates an ActionBatcher
 		 * @param {String} name The batcher's identifier
 		 * @param {Number} intervalMs Action delay in milliseconds
 		 * @param {Boolean} requireLull Whether batches wait an interval of no new actions to flush (default true)
+		 * @param {Boolean} instantFirst Whether the first action sent in the interval occurs immediately
 		 */
-		constructor(name, intervalMs, requireLull) {
+		constructor(name, intervalMs, requireLull, instantFirst) {
 			ActionBatcher.#InstanceCount++;
 			this.Name = `ActionBatcher-${ActionBatcher.#InstanceCount}-${name || ""}`;
 			this.IntervalMs = intervalMs || 0;
 			if(requireLull !== undefined) {
 				this.RequireLull = requireLull;
 			}
+			this.InstantFirst = !!instantFirst;
 		}
 
 		/**
@@ -135,13 +139,15 @@ window.GW = window.GW || {};
 		}
 
 		#primeBatchPromise() {
-			if(!this.#StagedActions.size && !this.#FlushTimer) {
+			if(!this.#StagedActions.size && (!this.#FlushTimer || this.#InDebounce)) {
 				this.#log(`Batch promise primed`);
 				this.BatchPromise = new Promise((resolve) => this.#BatchPromiseResolver = resolve);
 			}
 		}
 
 		#startFlushTimer() {
+			this.#InDebounce = false;
+
 			if(this.#FlushTimer) {
 				if(this.RequireLull) {
 					clearTimeout(this.#FlushTimer);
@@ -154,6 +160,11 @@ window.GW = window.GW || {};
 				}
 			}
 			else {
+				if(this.InstantFirst) {
+					this.#log(`Running the first action immediately`);
+					this.#flushBatch();
+					this.#InDebounce = true;
+				}
 				this.#log(`Starting ${this.IntervalMs}ms flush timer`);
 			}
 
@@ -170,12 +181,19 @@ window.GW = window.GW || {};
 		}
 
 		#flushBatch() {
+			const hadActions = !!this.#StagedActions.size;
+			this.#InDebounce = false;
+
 			this.#log(`Flushing batch of ${this.#StagedActions.size} actions`);
 			this.#StagedActions.forEach((action, key) => {
 				this.#log(`Executing "${key}"`);
 				action();
 			});
 			this.#StagedActions.clear();
+
+			if(!hadActions) {
+				return;
+			}
 
 			this.#Listeners.forEach((delegate, key) => {
 				this.#log(`Invoking listener: "${key}"`);
