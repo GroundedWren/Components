@@ -47,7 +47,7 @@ window.GW.Controls = window.GW.Controls || {};
 		}
 		else {
 			popover.innerHTML = `<table><caption>Shortcuts</caption><tbody>${Object.keys(shortsIndex).sort().map(
-				CODE => `<tr><th scope="row">${CODE}</th><td>${shortsIndex[CODE]}</td></tr>`
+				CODE => shortsIndex[CODE] ? `<tr><th scope="row">${CODE}</th><td>${shortsIndex[CODE]}</td></tr>` : ""
 			).join("")}</tbody></table>`;
 		}
 
