@@ -80,11 +80,11 @@ label:has(> :focus-visible), *:not(label) > :focus-visible, *[tabindex="-1"]:foc
 		position: relative !important;
 		z-index: 100 !important;
 
-		&label > :focus-visible {
+		&:is(label) > :focus-visible {
 			outline: none !important;
 		}
 
-		&*[tabindex="-1"]:focus {
+		&[tabindex="-1"]:focus {
 			outline-style: dashed !important;
 		}
 	}
