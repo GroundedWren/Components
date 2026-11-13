@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<title></title>
+	
+	<link href="" rel="stylesheet" type="text/css">
+	<script src="../Scripts/EndnoteControls.js"></script>
+</head>
+<body>
+	<main id="main">
+		<p>Lorem ipsum <gw-endnote data-key="one" data-content-id="a">whatever whaaaaat</gw-endnote> wow wow!</p>
+		<p>Wow wow wow wow!</p>
+		<p>I mean yes<gw-endnote data-key="one" data-content-id="b"></gw-endnote>.</p>
+		<aside style="display: none;">
+			<span id="a" class="gw-endnote">This is an endnote with really long text I mean really really really really really really really really really really really really longs</span>
+			<span id="b" class="gw-endnote">This is a <em>spicy</em> endnote</span>
+		</aside>
+	</main>
+	<footer>
+		<gw-endnote-list data-key="one"></gw-endnote-list>
+	</footer>
+</body>
+</html>
