@@ -307,6 +307,14 @@ window.GW.Controls = window.GW.Controls || {};
 			this.#clickTimeout = setTimeout(() => this.#performClick(optionEl), 0);
 		}
 
+		/** Clears the the selection */
+		clear() {
+			const checkedInput = this.querySelector(`[role="option"][aria-selected="true"] input`);
+			if(checkedInput) {
+				checkedInput.checked = false;
+			}
+		}
+
 		#performClick(optionEl) {
 			this.#clickTimeout = null;
 
