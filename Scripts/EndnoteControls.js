@@ -262,7 +262,7 @@ window.GW = window.GW || {};
 					anchor-name: --${this.getId("anchor")};
 				}
 				
-				#${this.getId("note")} {
+				#${this.getId("note")}, #${this.getId("link")}{
   					position-anchor: --${this.getId("anchor")};
 				}
 			`);
