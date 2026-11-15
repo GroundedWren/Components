@@ -38,7 +38,7 @@ window.GW = window.GW || {};
 
 				> .note {
 					position: absolute;
-					position-area: end span-all
+					position-area: end span-all;
 					position-try-fallbacks: flip-block, flip-inline;
 
 					background-color: color-mix(in oklab, var(--background-color, white) 60%, transparent);
@@ -68,9 +68,9 @@ window.GW = window.GW || {};
 			`);
 		}
 
-		static #renderKeys = [];
+		static #renderKeys = new Set();
 		static requestRender(key) {
-			if(!EndnoteEl.#renderKeys.length) {
+			if(!EndnoteEl.#renderKeys.size) {
 				setTimeout(() => {
 					for(const key of EndnoteEl.#renderKeys) {
 						const allEndnotes = Object.values(EndnoteEl.InstanceMap).filter(
@@ -83,10 +83,10 @@ window.GW = window.GW || {};
 						);
 						allEndnoteLists.forEach(enList => enList.render(allEndnotes));
 					}
-					EndnoteEl.#renderKeys = [];
+					EndnoteEl.#renderKeys.delete(key);
 				}, 0);
 			}
-			EndnoteEl.#renderKeys.push(key);
+			EndnoteEl.#renderKeys.add(key);
 		}
 
 		InstanceId; // Identifier for this instance of the element
@@ -305,11 +305,8 @@ window.GW = window.GW || {};
 	if(!customElements.get(ns.EndnoteEl.Name)) {
 		customElements.define(ns.EndnoteEl.Name, ns.EndnoteEl);
 	}
-}) (window.GW.Controls = window.GW.Controls || {});
-GW?.Controls?.Veil?.clearDefer("GW.Controls.EndnoteEl");
+	GW?.Controls?.Veil?.clearDefer("GW.Controls.EndnoteEl");
 
-window.GW = window.GW || {};
-(function Controls(ns) {
 	ns.EndnoteListEl = class EndnoteListEl extends HTMLElement {
 		static InstanceCount = 0; // Global count of instances created
 		static InstanceMap = {}; // Dynamic map of IDs to instances of the element currently attached
@@ -459,5 +456,5 @@ window.GW = window.GW || {};
 	if(!customElements.get(ns.EndnoteListEl.Name)) {
 		customElements.define(ns.EndnoteListEl.Name, ns.EndnoteListEl);
 	}
+	GW?.Controls?.Veil?.clearDefer("GW.Controls.EndnoteListEl");
 }) (window.GW.Controls = window.GW.Controls || {});
-GW?.Controls?.Veil?.clearDefer("GW.Controls.EndnoteListEl");
