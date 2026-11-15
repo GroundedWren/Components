@@ -19,12 +19,15 @@ window.GW = window.GW || {};
 		static #CommonStyleSheet = new CSSStyleSheet();
 		static #CommonStyleAttribute = `data-${EndnoteEl.Name}-style`;
 		static {
-			EndnoteEl.#CommonStyleSheet.replaceSync(`${EndnoteEl.Name} {
+			EndnoteEl.#CommonStyleSheet.replaceSync(`${EndnoteEl.Name}:not([data-nested="true"]) {
 				--gw-endnote-display: defined-but-invalid;
 
 				display: inline;
-				border: 1px dotted var(--text-color, black);
+				outline: 1px dotted var(--text-color, black);
 				padding: 1px;
+				padding-block-end: 0;
+
+				cursor: pointer;
 
 				&:not(:is(:hover, :focus-within):not(.suppressed)) {
 					> .note {
@@ -41,11 +44,14 @@ window.GW = window.GW || {};
 					position-area: end span-all;
 					position-try-fallbacks: flip-block, flip-inline;
 
-					background-color: color-mix(in oklab, var(--background-color, white) 60%, transparent);
+					background-color: color-mix(in oklab, var(--background-color, white) 80%, transparent);
 					backdrop-filter: blur(10px);
 					padding: 5px;
 					margin-inline: 2px;
 					box-shadow: 2px 2px 8px 0px var(--text-color, black);
+					max-width: 1100px;
+					
+					cursor: initial;
 				}
 
 				> .jump-link {
@@ -64,6 +70,11 @@ window.GW = window.GW || {};
 			}
 			.gw-endnote {
 				display: var(--gw-endnote-display, none);
+
+				p {
+					display: inline;
+					margin: 0;
+				}
 			}
 			`);
 		}
@@ -74,10 +85,10 @@ window.GW = window.GW || {};
 				setTimeout(() => {
 					for(const key of EndnoteEl.#renderKeys) {
 						const allEndnotes = Object.values(EndnoteEl.InstanceMap).filter(
-							endnote => endnote.dataset.key === key
+							endnote => endnote.dataset.key === key && endnote.IsInitialized
 						);
 						allEndnotes.forEach((endnote, index) => { endnote.render(index); });
-
+						
 						const allEndnoteLists = Object.values(ns.EndnoteListEl.InstanceMap).filter(
 							enList => enList.dataset.key === key
 						);
@@ -91,6 +102,8 @@ window.GW = window.GW || {};
 
 		InstanceId; // Identifier for this instance of the element
 		IsInitialized; // Whether the element has rendered its content
+
+		NoteHtml;
 
 		#StyleSheet; // CSSStyleSheet for this instance
 		#StyleAttribute; // Identifying attribute for this instance's CSSStyleSheet
@@ -185,7 +198,7 @@ window.GW = window.GW || {};
 				this.Head.setAttribute(this.#StyleAttribute, "");
 				this.Root.adoptedStyleSheets?.push(this.#StyleSheet);
 				this.Root.addEventListener("keydown", (event) => {
-					if(event.key === "Escape") {
+					if(event.key === "Escape" && this.matches(`:focus-within, :focus, :hover`)) {
 						this.#suppressPopup();
 					}
 				});
@@ -197,27 +210,47 @@ window.GW = window.GW || {};
 			if(document.readyState === "loading") {
 				document.addEventListener("DOMContentLoaded", () => {
 					this.#initialize();
-					EndnoteEl.requestRender(this.dataset.key);
 				});
 			}
 			else {
 				this.#initialize();
-				EndnoteEl.requestRender(this.dataset.key);
 			}
 		}
 
+		#IsPreInitialized
 		#preInitialize() {
-			if(this.IsInitialized) {
+			if(this.IsInitialized || this.#IsPreInitialized) {
 				return;
 			}
+
+			if(this.closest(`.gw-endnote`)
+				&& !this.parentElement.closest(`${EndnoteEl.Name}, ${ns.EndnoteListEl.Name}`)
+			) {
+				// We're nested in an unsited note node.
+				this.dataset.nested = true;
+				return;
+			}
+			
 			requestAnimationFrame(() => {
-				this.insertAdjacentHTML(`beforeend`, `<sup id="${this.getId("sup")}">*</sup>`);
+				this.insertAdjacentHTML(`beforeend`, `<sup id="${this.getId("sup")}" class="gw-endnote-sup">*</sup>`);
 			});
+			this.#IsPreInitialized = true;
 		}
 
 		/** First-time setup */
 		#initialize() {
-			if(this.IsInitialized) { return; }
+			EndnoteEl.requestRender(this.dataset.key);
+			if(this.IsInitialized || !this.#IsPreInitialized) { return; }
+
+			this.id = this.getId("self");
+
+			const closestList = this.closest(`${ns.EndnoteListEl.Name}`);
+			if(!closestList && this.parentElement.closest(`${EndnoteEl.Name}`)) {
+				// We are nested
+				this.dataset.nested = true;
+				return;
+			}
+			this.dataset.nested = false;
 
 			this.#StyleSheet.replaceSync(`
 				${EndnoteEl.Name}[data-instance="${this.InstanceId}"] {
@@ -229,16 +262,18 @@ window.GW = window.GW || {};
 				}
 			`);
 
-			["focusin", "mousein"].forEach(evt => this.addEventListener(evt, () => {
+			["focusin", "mouseenter"].forEach(evt => this.addEventListener(evt, () => {
 				if(this.dataset.showing === "yes") { return; }
 				this.dataset.showing = "yes";
 				this.announce("Endnote bubble shown");
 			}));
 
-			["focusout", "mouseout"].forEach(evt => this.addEventListener(evt, () => {
+			["focusout", "mouseleave"].forEach(evt => this.addEventListener(evt, () => {
 				if(!this.matches(`:focus-within, :hover, :focus`)) {
 					this.dataset.showing = "no";
-					this.announce("Endnote bubble hidden");	
+					if(!this.classList.contains(`suppressed`)) {
+						this.announce("Endnote bubble hidden");	
+					}
 				}
 			}));
 
@@ -249,24 +284,29 @@ window.GW = window.GW || {};
 				`beforeend`,
 				`<aside id="${this.getId("note")}" class="note"></aside>`
 			);
-			this.insertAdjacentHTML("beforeend", `<a
-				id="${this.getId("link")}"
-				href="#${this.getId("listitem")}"
-				class="jump-link"
-			>Jump to endnote</a>`);
-			[this, this.getRef("link")].forEach(el => el.addEventListener("click",
-				(event) => {
-					if(!this.getRef("note").contains(event.target)) {
-						this.Root.getElementById(this.getId("listitem")).focus();
+
+			if(this.Root.querySelector(`gw-endnote-list[data-key="${this.dataset.key}"]`)) {
+				this.insertAdjacentHTML("beforeend", `<a
+					id="${this.getId("link")}"
+					href="#${this.getId("listitem")}"
+					class="jump-link"
+				>Jump to endnote</a>`);
+				[this, this.getRef("link")].forEach(el => el.addEventListener("click",
+					(event) => {
+						if(!this.getRef("note").contains(event.target)) {
+							this.Root.getElementById(this.getId("listitem"))?.focus();
+						}
 					}
-				}
-			));
-			this.getRef("note").append(this.Root.getElementById(this.dataset.contentId));
+				));
+			}
+			this.NoteHTML = this.Root.getElementById(this.dataset.contentId).outerHTML;
+			this.getRef("note").insertAdjacentHTML("beforeend", this.NoteHTML);
 
 			this.IsInitialized = true;
 		}
 
 		render(index) {
+			this.dataset.rendered = true;
 			requestAnimationFrame(() => {
 				this.getRef("sup").innerText = index + 1;
 				this.setAttribute("aria-label", `endnote ${index + 1} context`);
@@ -327,9 +367,24 @@ window.GW = window.GW || {};
 				ol {
 					list-style-position: inside;
 				}
-				
-				li:focus {
-					box-shadow: -3px 0px 0px 0px var(--shadow-color, #585191);
+
+				li {
+					padding-inline-start: 4px;
+					
+					&:focus {
+						box-shadow: -3px 0px 0px 0px var(--mark-color, #585191);
+						background-color: color-mix(in oklab, var(--mark-color, #585191) 20%, transparent);
+					}
+
+					&:not(:hover, :focus, :focus-within) {
+						.return-link {
+							opacity: 0;
+						}
+					}
+					
+					+ li {
+						margin-block-start: 10px;
+					}
 				}
 				
 				.note {
@@ -411,9 +466,7 @@ window.GW = window.GW || {};
 			delete EndnoteListEl.InstanceMap[this.InstanceId];
 		}
 		/** Handler invoked when any of the observed attributes are changed */
-		attributeChangedCallback(name, oldValue, newValue) {
-			
-		}
+		attributeChangedCallback(name, oldValue, newValue) {}
 
 		/** Performs setup when the element has been sited */
 		onAttached() {
@@ -445,12 +498,30 @@ window.GW = window.GW || {};
 		}
 
 		render(noteList) {
-			this.innerHTML = `<ol aria-label="Endnotes">
-				${noteList.map(note => `<li
+			function getNoteLi(note) {
+				return ``;
+			}
+
+			this.innerHTML = `<ol id="${this.getId("list")}"></ol>`;
+			noteList.forEach(note => this.appendNote(note));
+
+			this.querySelectorAll(`${ns.EndnoteEl.Name}:not([data-rendered="true])`).forEach(endnote => {
+				requestAnimationFrame(() => {
+					const enl = this.Root.querySelector(`${EndnoteListEl.Name}[data-key="${endnote.dataset.key}"]`);
+					endnote.render(enl?.querySelectorAll(`li`).length ?? 0);
+					enl.appendNote(endnote);
+				});
+			});
+		}
+
+		appendNote(note) {
+			this.getRef("list").insertAdjacentHTML(
+				"beforeend",
+				`<li
 					id="${note.getId("listitem")}"
 					tabindex="-1"
-				>${note.getRef("note").outerHTML}</li>`).join("")}
-			</ol>`;
+				>${note.NoteHTML}<a href="#${note.id}" class="return-link">Return</a></li>`
+			);
 		}
 	}
 	if(!customElements.get(ns.EndnoteListEl.Name)) {
