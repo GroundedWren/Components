@@ -69,7 +69,8 @@ window.GW = window.GW || {};
 					&:not(:focus-within) {
 						position: absolute;
 						inset-inline-start: -99999999px;
-						inset-block-start: 0px;
+						inset-block-start: -99999999px;
+						position-anchor: none !important;
 					}
 				}
 			}
