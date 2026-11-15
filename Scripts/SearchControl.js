@@ -48,6 +48,12 @@ window.GW.Controls = window.GW.Controls || {};
 								fill: var(--icon-color);
 							}
 						}
+
+						input {
+							field-sizing: content;
+							min-width: 65px;
+							max-width: 200px;
+						}
 						
 						[popover="auto"] {
 							text-align: center;
