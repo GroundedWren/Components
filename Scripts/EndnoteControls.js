@@ -34,6 +34,11 @@ window.GW = window.GW || {};
 						display: none;
 					}
 				}
+				@media (hover: none) {
+					> .note {
+						display: none;
+					}
+				}
 
 				&:hover, &:focus, &:focus-within {
 					background-color: var(--mark-color, azure);
@@ -265,13 +270,15 @@ window.GW = window.GW || {};
 			["focusin", "mouseenter"].forEach(evt => this.addEventListener(evt, () => {
 				if(this.dataset.showing === "yes") { return; }
 				this.dataset.showing = "yes";
-				this.announce("Endnote bubble shown");
+				if(matchMedia("(hover: hover)").matches) {
+					this.announce("Endnote bubble shown");
+				}
 			}));
 
 			["focusout", "mouseleave"].forEach(evt => this.addEventListener(evt, () => {
 				if(!this.matches(`:focus-within, :hover, :focus`)) {
 					this.dataset.showing = "no";
-					if(!this.classList.contains(`suppressed`)) {
+					if(!this.classList.contains(`suppressed`) && matchMedia("(hover: hover)").matches) {
 						this.announce("Endnote bubble hidden");	
 					}
 				}
@@ -316,7 +323,9 @@ window.GW = window.GW || {};
 		static #PopupTriggerEvents = ["mousein", "mouseout", "focus", "blur"];
 		#suppressPopup() {
 			this.classList.add("suppressed");
-			this.announce("Endnote suppressed.");
+			if(matchMedia("(hover: hover)").matches) {
+				this.announce("Endnote suppressed.");
+			}
 			EndnoteEl.#PopupTriggerEvents.forEach((eventType) => {
 				this.addEventListener(eventType, this.#unsuppressPopup);
 			});
