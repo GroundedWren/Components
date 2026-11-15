@@ -305,11 +305,8 @@ window.GW = window.GW || {};
 	if(!customElements.get(ns.EndnoteEl.Name)) {
 		customElements.define(ns.EndnoteEl.Name, ns.EndnoteEl);
 	}
-}) (window.GW.Controls = window.GW.Controls || {});
-GW?.Controls?.Veil?.clearDefer("GW.Controls.EndnoteEl");
+	GW?.Controls?.Veil?.clearDefer("GW.Controls.EndnoteEl");
 
-window.GW = window.GW || {};
-(function Controls(ns) {
 	ns.EndnoteListEl = class EndnoteListEl extends HTMLElement {
 		static InstanceCount = 0; // Global count of instances created
 		static InstanceMap = {}; // Dynamic map of IDs to instances of the element currently attached
@@ -459,5 +456,5 @@ window.GW = window.GW || {};
 	if(!customElements.get(ns.EndnoteListEl.Name)) {
 		customElements.define(ns.EndnoteListEl.Name, ns.EndnoteListEl);
 	}
+	GW?.Controls?.Veil?.clearDefer("GW.Controls.EndnoteListEl");
 }) (window.GW.Controls = window.GW.Controls || {});
-GW?.Controls?.Veil?.clearDefer("GW.Controls.EndnoteListEl");
